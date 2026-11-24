@@ -75,6 +75,18 @@ nav.tabs button[aria-current="page"]{background:var(--sunken);color:var(--ink)}
 .tile.special .sym{color:var(--ink)}
 .tile[disabled]{opacity:.5;cursor:default;transform:none}
 @media (prefers-reduced-motion:reduce){.tile{transition:none}}
+.seg{display:inline-flex;gap:2px;background:var(--sunken);border-radius:999px;padding:3px;margin:0 0 22px;flex-wrap:wrap}
+.seg button{border:0;background:none;border-radius:999px;padding:8px 14px;color:var(--muted);font-weight:500;font-size:14.5px}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.lvl{font-size:13px;color:var(--muted)}
+.login{max-width:380px;margin:12vh auto 0;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:34px 30px}
+.login h1{font-size:24px;font-weight:500;letter-spacing:-.01em;margin:14px 0 6px}
+.login p{margin:0 0 22px;color:var(--muted);font-size:15px}
+.login label{display:block;font-size:13.5px;color:var(--muted);margin:14px 0 6px}
+.login input{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.login input:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+.login .btn{width:100%;margin-top:22px;padding:12px}
+.login .err{background:var(--ko-soft);color:var(--ko);border-radius:10px;padding:10px 12px;margin-top:16px;font-size:14.5px}
 /* quiz */
 .qhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .qhead h2{font-size:18px;font-weight:500}
@@ -129,6 +141,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 @media (max-width:520px){.card{padding:16px}.card h3{font-size:18px}.score .big{font-size:44px}.ans{flex-direction:column;gap:0}.ans .lb{width:auto}.grid{grid-template-columns:repeat(2,1fr)}}
 body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 button{touch-action:manipulation}
+.login input{font-size:16px}
 </style>
 </head>
 <body>
@@ -1962,6 +1975,32 @@ G('organica', 'isomeri-alcani', () => {
   return { q: `Quanti isomeri di struttura esistono per l'alcano ${f}?`, o: opts(String(n), mix(['1', '2', '3', '4', '5', '6'])), e: `${n}: ${nomi}.` };
 });
 
+// Livello di difficoltà: 1 facile, 2 media, 3 difficile
+(function () {
+  var EASY = 'simboli prefissi passaggi classifica-materia famiglie ione-tipico elettroni-valenza lettera-sottolivello serie-spettrali classe-composto anioni tipo-legame legge-nome tipo-colloide leghe allotropi prefissi-carbonio ph-classifica forte-debole endo-eso celle-cubiche tipo-solido cifre-significative kelvin gruppi-funzionali elettrodi-polo neutroni vant-hoff ordine-totale unita-k nome-idrocarburo'.split(' ');
+  var HARD = 'limitante-acqua combustione-metano percentuale bilanciamento gay-lussac graham crioscopia ebullioscopia osmotica bragg raggio-lato costante-k temperatura-spontanea delta-g hess-formazione kc k-inversa titolazione fem spontanea faraday-carica pv-nrt moli-pv massa-molare-densita dalton tempo-dimezzamento ea-inversa ordine-mo incrocio energia-interna calore-passaggio massa-media isomeri-alcani le-chatelier kp-kc stechiometria-moli'.split(' ');
+  GENS.forEach(function (g) { g.lv = EASY.indexOf(g.id) >= 0 ? 1 : HARD.indexOf(g.id) >= 0 ? 3 : 2; });
+  var UNITA = /(\bmol\b|\bg\b|kJ|\batm\b|\bmL\b|\bL\b|\bK\b|°C|\bM\b|%|\bkg\b|\bnm\b|\bpm\b|\bV\b|\bmin\b)/;
+  var FACILE = /^(Qual è (il simbolo|l'unità|il nome|la formula|la geometria|il gruppo)|Come si chiama|Chi |Che cos'è|Che forma|A quale (gruppo|potenza)|Quale (stato|famiglia))/;
+  // punteggio di difficoltà, poi divisione in tre fasce dentro ogni sezione
+  BANK.forEach(function (x) {
+    var q = x.q, n = q.length, tot = x.o.reduce(function (s, o) { return s + o.length; }, 0) / x.o.length, p = 0;
+    if (/\d/.test(q) && UNITA.test(q) && n > 60) p += 3;
+    if (/^Perché/.test(q)) p += 2;
+    if (/\b(NON|ERRATA|FALSA)\b/.test(q)) p += 2;
+    if (/(Bilanci|Calcola|relazione|espressione|ordine (crescente|decrescente)|rispetto a)/.test(q)) p += 1.5;
+    if (x.o.length === 5) p += 0.8;
+    if (FACILE.test(q)) p -= 2;
+    x.p = p + n / 55 + tot / 28;
+  });
+  var perT = {};
+  BANK.forEach(function (x) { (perT[x.t] = perT[x.t] || []).push(x); });
+  Object.keys(perT).forEach(function (t) {
+    var a = perT[t].slice().sort(function (u, v) { return u.p - v.p; }), n = a.length;
+    a.forEach(function (x, i) { x.lv = i < n * 0.36 ? 1 : i < n * 0.70 ? 2 : 3; });
+  });
+})();
+
 </script>
 <script>
 (function(){
@@ -1988,7 +2027,7 @@ var GBYID={};GENS.forEach(function(g){GBYID['g:'+g.id]=g;});
 
 /* ---------- archivio locale ---------- */
 var KEY='chimicaquiz.v1', storageOK=true;
-var db={sessions:[],wrong:[],seen:{},tstat:{}};
+var db={sessions:[],wrong:[],seen:{},tstat:{},lv:0};
 try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&p.sessions)db=Object.assign(db,p);}}catch(e){storageOK=false;}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){storageOK=false;}}
 
@@ -2001,6 +2040,10 @@ function dur(s){s=Math.round(s);if(s<60)return s+' s';var m=Math.floor(s/60),r=s
 function it(n,d){return Number(n).toFixed(d==null?1:d).replace('.',',');}
 function when(ts){var d=new Date(ts);function z(n){return (n<10?'0':'')+n;}return z(d.getDate())+'/'+z(d.getMonth()+1)+'/'+d.getFullYear()+' '+z(d.getHours())+':'+z(d.getMinutes());}
 var LETTERS='ABCDE';
+var LV=['Tutte','Facile','Media','Difficile'];
+/* ---------- accesso ---------- */
+var AUTH_KEY='chimicaquiz.auth', CRED='125wnja', authed=false, loginErr=false;
+try{authed=localStorage.getItem(AUTH_KEY)===CRED;}catch(e){}
 var PIN=/^(Nessuna delle|Nessuno dei|Tutte le)/;
 
 /* ---------- costruzione di una sessione ---------- */
@@ -2008,7 +2051,7 @@ function materialize(src,id){
   var raw=src.fn?src.fn():src, ok=raw.o[0];
   var free=raw.o.filter(function(o){return !PIN.test(o);}), pinned=raw.o.filter(function(o){return PIN.test(o);});
   var o=shuffle(free).concat(pinned);
-  return {id:id,t:src.t,q:raw.q,o:o,ok:o.indexOf(ok),e:raw.e,sel:-1};
+  return {id:id,t:src.t,lv:src.lv||2,q:raw.q,o:o,ok:o.indexOf(ok),e:raw.e,sel:-1};
 }
 function pool(topic){
   var out=[];
@@ -2016,22 +2059,22 @@ function pool(topic){
   GENS.forEach(function(g){if(!topic||g.t===topic){out.push({id:'g:'+g.id,src:g});out.push({id:'g:'+g.id,src:g,again:1});}});
   return out;
 }
-function draw(topic,n){
-  // prima le domande viste meno volte, così le sessioni non si ripetono
-  var cands=pool(topic).map(function(c){return {c:c,k:(db.seen[c.id]||0)+(c.again?1.5:0)+Math.random()*0.9};});
+function draw(topic,n,lv){
+  // prima le domande del livello scelto e, tra queste, quelle viste meno volte
+  var cands=pool(topic).map(function(c){return {c:c,k:(lv&&c.src.lv!==lv?1000+Math.abs(c.src.lv-lv)*100:0)+(db.seen[c.id]||0)+(c.again?1.5:0)+Math.random()*0.9};});
   cands.sort(function(a,b){return a.k-b.k;});
   var picked=cands.slice(0,n).map(function(x){return x.c;});
   return shuffle(picked).map(function(c){return materialize(c.src,c.id);});
 }
 function start(mode,topic){
-  var items;
+  var items, lv=(mode==='sez'||mode==='misto')?(db.lv||0):0;
   if(mode==='errori'){
     var ids=shuffle(db.wrong.filter(function(id){return BYID[id]||GBYID[id];})).slice(0,PER_SESSION);
     items=ids.map(function(id){return materialize(BYID[id]||GBYID[id],id);});
   } else if(mode==='esame') items=draw(null,EXAM_N);
-  else items=draw(mode==='misto'?null:topic,PER_SESSION);
+  else items=draw(mode==='misto'?null:topic,PER_SESSION,lv);
   if(!items.length)return;
-  S={mode:mode,topic:mode==='sez'?topic:mode,items:items,i:0,t0:Date.now(),limit:mode==='esame'?EXAM_SEC:0,ask:null};
+  S={mode:mode,lv:lv,topic:mode==='sez'?topic:mode,items:items,i:0,t0:Date.now(),limit:mode==='esame'?EXAM_SEC:0,ask:null};
   view='quiz';render();tick();
   clearInterval(timer);timer=setInterval(tick,1000);
   window.scrollTo(0,0);
@@ -2056,7 +2099,7 @@ function submit(){
     if(st==='ok'){if(w>=0)db.wrong.splice(w,1);}else if(w<0)db.wrong.push(it.id);
   });
   S.res={ok:ok,ko:ko,blank:blank,sec:sec};
-  db.sessions.push({ts:Date.now(),mode:S.mode,topic:S.topic,n:S.items.length,ok:ok,ko:ko,blank:blank,sec:sec});
+  db.sessions.push({ts:Date.now(),mode:S.mode,lv:S.lv,topic:S.topic,n:S.items.length,ok:ok,ko:ko,blank:blank,sec:sec});
   save();view='review';render();window.scrollTo(0,0);
 }
 
@@ -2072,7 +2115,7 @@ var app=document.getElementById('app');
 function header(){
   var inQuiz=view==='quiz';
   return '<header class="top"><div class="brand"><i></i>Chimica Quiz</div>'+
-    (inQuiz?'':'<nav class="tabs" aria-label="Pagine"><button data-go="home"'+(view==='home'?' aria-current="page"':'')+'>Sezioni</button><button data-go="storico"'+(view==='storico'?' aria-current="page"':'')+'>Storico</button></nav>')+
+    (inQuiz?'':'<nav class="tabs" aria-label="Pagine"><button data-go="home"'+(view==='home'?' aria-current="page"':'')+'>Sezioni</button><button data-go="storico"'+(view==='storico'?' aria-current="page"':'')+'>Storico</button><button data-act="logout">Esci</button></nav>')+
     '</header>';
 }
 function home(){
@@ -2084,9 +2127,13 @@ function home(){
     '<div class="kpi"><b>'+(a.count?mmss(a.avgSec):'–')+'</b><span>tempo medio per sessione</span></div>'+
     '<div class="kpi"><b>'+(a.count?it(a.perQ,0)+' s':'–')+'</b><span>tempo medio per domanda</span></div>'+
     '</div>';
-  h+='<div class="sech"><h2>Sezioni</h2><span class="muted small">'+PER_SESSION+' domande per sessione, correzione alla fine</span></div><div class="grid">';
+  h+='<div class="sech"><h2>Sezioni</h2><span class="muted small">'+PER_SESSION+' domande per sessione, correzione alla fine</span></div>';
+  var lv=db.lv||0;
+  h+='<div class="seg" role="group" aria-label="Difficoltà">';
+  LV.forEach(function(n,i){h+='<button data-lv="'+i+'" aria-pressed="'+(lv===i)+'">'+(i?n:'Tutti')+'</button>';});
+  h+='</div><div class="grid">';
   TOPICS.forEach(function(t){
-    var nq=BANK.filter(function(x){return x.t===t.id;}).length, ng=GENS.filter(function(g){return g.t===t.id;}).length;
+    var nq=BANK.filter(function(x){return x.t===t.id&&(!lv||x.lv===lv);}).length, ng=GENS.filter(function(g){return g.t===t.id&&(!lv||g.lv===lv);}).length;
     var ss=db.sessions.filter(function(s){return s.mode==='sez'&&s.topic===t.id;}), last=ss[ss.length-1], ts=db.tstat[t.id];
     var pct=ts&&ts.r?Math.round(ts.c/ts.r*100):0;
     h+='<button class="tile" data-start="sez" data-topic="'+t.id+'" aria-label="'+esc(t.name)+', '+(nq+ng)+' domande"><span class="sym">'+t.no+'</span><span class="nm">'+esc(t.name)+'</span>'+
@@ -2094,7 +2141,7 @@ function home(){
       '<span class="bar" title="Risposte giuste: '+pct+'%"><i style="width:'+pct+'%"></i></span></button>';
   });
   h+='</div><div class="sech"><h2>Altre sessioni</h2></div><div class="grid">'+
-    '<button class="tile special" data-start="misto"><span class="sym">∑</span><span class="nm">Misto</span><span class="meta">'+PER_SESSION+' domande da tutte le sezioni</span></button>'+
+    '<button class="tile special" data-start="misto"><span class="sym">∑</span><span class="nm">Misto</span><span class="meta">'+PER_SESSION+' domande da tutte le sezioni'+(lv?' · '+LV[lv].toLowerCase():'')+'</span></button>'+
     '<button class="tile special" data-start="errori"'+(nWrong?'':' disabled')+'><span class="sym">↺</span><span class="nm">Ripasso errori</span><span class="meta">'+(nWrong?nWrong+' domand'+(nWrong===1?'a':'e')+' da rivedere':'Nessun errore da rivedere')+'</span></button>'+
     '<button class="tile special" data-start="esame"><span class="sym">25′</span><span class="nm">Simulazione del test</span><span class="meta">'+EXAM_N+' domande, soglia 6 su 9</span></button>'+
     '</div>';
@@ -2107,7 +2154,7 @@ function quiz(){
   h+='<div class="narrow"><div class="qhead"><h2>'+esc(TNAME[S.topic])+'</h2><span class="muted small">Domanda '+(S.i+1)+' di '+n+'</span><span class="clock" id="clock" aria-label="'+(S.limit?'Tempo rimasto':'Tempo trascorso')+'">0:00</span></div>';
   h+='<div class="dots" role="group" aria-label="Vai alla domanda">';
   S.items.forEach(function(x,i){h+='<button data-jump="'+i+'" class="'+(i===S.i?'cur ':'')+(x.sel>=0?'done':'')+'" aria-label="Domanda '+(i+1)+(x.sel>=0?', con risposta':', senza risposta')+'">'+(i+1)+'</button>';});
-  h+='</div><div class="card"><span class="tag">'+esc(t?t.name:'')+'</span><h3>'+esc(q.q)+'</h3><div class="opts">';
+  h+='</div><div class="card"><span class="tag">'+esc(t?t.name:'')+' · '+LV[q.lv]+'</span><h3>'+esc(q.q)+'</h3><div class="opts">';
   q.o.forEach(function(o,i){h+='<button class="opt'+(q.sel===i?' sel':'')+'" data-opt="'+i+'" aria-pressed="'+(q.sel===i)+'"><span class="k">'+LETTERS[i]+'</span><span>'+esc(o)+'</span></button>';});
   h+='</div></div>';
   if(S.ask==='quit') h+='<div class="confirm" role="alert"><p>Vuoi abbandonare? La sessione non verrà registrata.</p><button class="btn" data-act="quit-yes">Abbandona</button><button class="btn ghost" data-act="ask-no">Continua</button></div>';
@@ -2122,7 +2169,7 @@ function quiz(){
 }
 function review(){
   var r=S.res, n=S.items.length, h=header();
-  h+='<div class="narrow"><div class="sech"><h2>Revisione finale</h2><span class="muted small">'+esc(TNAME[S.topic])+'</span></div>';
+  h+='<div class="narrow"><div class="sech"><h2>Revisione finale</h2><span class="muted small">'+esc(TNAME[S.topic])+(S.lv?' · '+LV[S.lv]:'')+'</span></div>';
   h+='<div class="score"><div class="big">'+r.ok+'<small> / '+n+'</small></div><dl>'+
     '<dt>Giuste</dt><dd>'+r.ok+'</dd><dt>Sbagliate</dt><dd>'+r.ko+'</dd><dt>Senza risposta</dt><dd>'+r.blank+'</dd>'+
     '<dt>Tempo</dt><dd>'+mmss(r.sec)+'</dd><dt>Per domanda</dt><dd>'+it(r.sec/n,0)+' s</dd>';
@@ -2133,7 +2180,7 @@ function review(){
   var order=S.items.map(function(x,i){return {x:x,i:i};}).sort(function(a,b){return (a.x.st==='ok')-(b.x.st==='ok')||a.i-b.i;});
   order.forEach(function(p){
     var x=p.x, lab={ok:'Giusta',ko:'Sbagliata',blank:'Senza risposta'}[x.st];
-    h+='<article class="rev '+x.st+'"><div class="rh"><span class="pill '+x.st+'">'+lab+'</span><span>Domanda '+(p.i+1)+' · '+esc(TNAME[x.t]||'')+'</span></div><h4>'+esc(x.q)+'</h4>';
+    h+='<article class="rev '+x.st+'"><div class="rh"><span class="pill '+x.st+'">'+lab+'</span><span>Domanda '+(p.i+1)+' · '+esc(TNAME[x.t]||'')+' · '+LV[x.lv]+'</span></div><h4>'+esc(x.q)+'</h4>';
     if(x.st==='ko')h+='<div class="ans bad"><span class="lb">La tua risposta</span><span>'+LETTERS[x.sel]+') '+esc(x.o[x.sel])+'</span></div>';
     h+='<div class="ans good"><span class="lb">Risposta giusta</span><span>'+LETTERS[x.ok]+') '+esc(x.o[x.ok])+'</span></div>';
     if(x.st==='ok')h+='<details class="why"><summary>Perché</summary><p>'+esc(x.e)+'</p></details>';
@@ -2164,24 +2211,42 @@ function storico(){
     var g=agg(ss), best=ss.reduce(function(m,s){return Math.max(m,s.ok/s.n);},0);
     h+='<tr><td>'+esc(TNAME[k])+'</td><td class="n">'+g.count+'</td><td class="n">'+it(g.pct,0)+'%</td><td class="n">'+it(best*100,0)+'%</td><td class="n">'+mmss(g.avgSec)+'</td></tr>';
   });
-  h+='</tbody></table></div><div class="sech"><h2>Tutte le sessioni</h2><span class="muted small">dalla più recente</span></div><div class="tbl"><table><thead><tr><th>Data</th><th>Sezione</th><th class="n">Giuste</th><th class="n">Sbagliate</th><th class="n">Vuote</th><th class="n">Tempo</th><th class="n">Per domanda</th></tr></thead><tbody>';
+  h+='</tbody></table></div><div class="sech"><h2>Tutte le sessioni</h2><span class="muted small">dalla più recente</span></div><div class="tbl"><table><thead><tr><th>Data</th><th>Sezione</th><th>Livello</th><th class="n">Giuste</th><th class="n">Sbagliate</th><th class="n">Vuote</th><th class="n">Tempo</th><th class="n">Per domanda</th></tr></thead><tbody>';
   db.sessions.slice().reverse().slice(0,200).forEach(function(s){
-    h+='<tr><td class="mono">'+when(s.ts)+'</td><td>'+esc(TNAME[s.topic]||s.topic)+'</td><td class="n">'+s.ok+'/'+s.n+'</td><td class="n">'+s.ko+'</td><td class="n">'+s.blank+'</td><td class="n">'+mmss(s.sec)+'</td><td class="n">'+it(s.sec/s.n,0)+' s</td></tr>';
+    h+='<tr><td class="mono">'+when(s.ts)+'</td><td>'+esc(TNAME[s.topic]||s.topic)+'</td><td>'+(s.lv?LV[s.lv]:'Tutti')+'</td><td class="n">'+s.ok+'/'+s.n+'</td><td class="n">'+s.ko+'</td><td class="n">'+s.blank+'</td><td class="n">'+mmss(s.sec)+'</td><td class="n">'+it(s.sec/s.n,0)+' s</td></tr>';
   });
   h+='</tbody></table></div>';
   h+=wipeAsk?'<div class="confirm" role="alert"><p>Cancellare tutte le sessioni, gli errori da ripassare e le statistiche? Non si può annullare.</p><button class="btn" data-act="wipe-yes">Cancella tutto</button><button class="btn ghost" data-act="wipe-no">Annulla</button></div>'
     :'<button class="btn ghost" data-act="wipe">Cancella lo storico</button>';
   return h;
 }
+function login(){
+  return '<form class="login" id="loginform" autocomplete="off"><div class="brand"><i></i>Chimica Quiz</div><h1>Accedi</h1><p>Inserisci le credenziali per entrare.</p>'+
+    '<label for="lu">Nome utente</label><input id="lu" name="lu" type="text" autocapitalize="none" autocorrect="off" spellcheck="false" required>'+
+    '<label for="lp">Password</label><input id="lp" name="lp" type="password" required>'+
+    (loginErr?'<div class="err" role="alert">Nome utente o password non corretti.</div>':'')+
+    '<button class="btn primary" type="submit">Entra</button></form>';
+}
 function render(){
+  if(!authed){app.innerHTML=login();var f=document.getElementById('lu');if(f&&loginErr)f.focus();return;}
   app.innerHTML=view==='quiz'?quiz():view==='review'?review():view==='storico'?storico():home();
 }
 
 /* ---------- eventi ---------- */
+app.addEventListener('submit',function(ev){
+  ev.preventDefault();
+  var u=document.getElementById('lu'), p=document.getElementById('lp');if(!u||!p)return;
+  if(hash(u.value.trim().toLowerCase()+'\u0001'+p.value)===CRED){authed=true;loginErr=false;try{localStorage.setItem(AUTH_KEY,CRED);}catch(e){}view='home';}
+  else loginErr=true;
+  render();
+});
 app.addEventListener('click',function(ev){
   var b=ev.target.closest('button');if(!b||b.disabled)return;
   var d=b.dataset;
   if(d.go){view=d.go;wipeAsk=false;try{history.replaceState(null,'',d.go==='storico'?'#storico':'#sezioni');}catch(e){}render();window.scrollTo(0,0);return;}
+  if(!authed)return;
+  if(d.act==='logout'){authed=false;loginErr=false;try{localStorage.removeItem(AUTH_KEY);}catch(e){}render();return;}
+  if(d.lv!=null){db.lv=+d.lv;save();render();return;}
   if(d.start){start(d.start,d.topic);return;}
   if(view==='quiz'){
     if(d.opt!=null){var q=S.items[S.i],i=+d.opt;q.sel=q.sel===i?-1:i;S.ask=null;render();tick();return;}
@@ -2190,7 +2255,7 @@ app.addEventListener('click',function(ev){
   }
   if(d.act==='wipe'){wipeAsk=true;render();}
   else if(d.act==='wipe-no'){wipeAsk=false;render();}
-  else if(d.act==='wipe-yes'){db={sessions:[],wrong:[],seen:{},tstat:{}};save();wipeAsk=false;render();}
+  else if(d.act==='wipe-yes'){db={sessions:[],wrong:[],seen:{},tstat:{},lv:db.lv||0};save();wipeAsk=false;render();}
 });
 function act(a){
   if(!a)return;
@@ -2204,7 +2269,7 @@ function act(a){
   render();tick();
 }
 document.addEventListener('keydown',function(ev){
-  if(view!=='quiz'||!S||ev.ctrlKey||ev.metaKey||ev.altKey)return;
+  if(!authed||view!=='quiz'||!S||ev.ctrlKey||ev.metaKey||ev.altKey)return;
   var k=ev.key.toLowerCase(), q=S.items[S.i], idx='12345'.indexOf(k);
   if(idx<0)idx='abcde'.indexOf(k);
   if(k.length===1&&idx>=0&&idx<q.o.length&&!S.ask){q.sel=idx;render();tick();ev.preventDefault();}
