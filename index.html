@@ -95,19 +95,46 @@ code.blk{display:block;white-space:pre;overflow-x:auto;padding:14px 16px;margin:
 .subj button b{font:500 19px/1.2 var(--display);letter-spacing:-.01em}
 .subj button span{font-size:13px;color:var(--muted)}
 .subj button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
-.chat{display:flex;flex-direction:column;gap:12px;margin:18px 0}
-.msg{max-width:88%;padding:12px 15px;border-radius:16px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5;font-size:15.5px}
-.msg.user{align-self:flex-end;background:var(--accent);color:var(--accent-ink);border-bottom-right-radius:6px}
-.msg.ai{align-self:flex-start;background:var(--surface);border:1px solid var(--line);border-bottom-left-radius:6px}
-.msg.ai code.blk{white-space:pre}
-.msg.wait{color:var(--muted);font-style:italic}
-.airow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
-.airow select,.airow input,.aibox textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-.airow select{flex:1 1 200px;min-width:0}
-.airow input{flex:1 1 220px;min-width:0}
-.aibox{display:flex;gap:10px;align-items:flex-end;position:sticky;bottom:0;background:var(--bg);padding:10px 0 14px}
-.aibox textarea{flex:1;min-width:0;resize:vertical;min-height:48px}
-.aierr{background:var(--ko-soft);color:var(--ko);border-radius:10px;padding:12px 14px;font-size:14.5px}
+html.aimode,html.aimode body{height:100%}
+html.aimode .wrap{height:100%;max-width:780px;display:flex;flex-direction:column;padding-bottom:0}
+html.aimode header.top{padding:14px 0 10px;flex:none}
+.aitop{flex:none;display:flex;align-items:flex-start;gap:8px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.aiset{flex:1;min-width:0}
+.aiset summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;max-width:100%;padding:8px 14px;border-radius:999px;background:var(--sunken);font-weight:500;font-size:14.5px}
+.aiset summary::-webkit-details-marker{display:none}
+.aiset summary span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.aiset summary::after{content:"";width:7px;height:7px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:rotate(45deg) translateY(-2px);flex:none}
+.aiset[open] summary::after{transform:rotate(-135deg) translateY(-2px)}
+.aiset .panel{padding:14px 0 4px;display:flex;flex-direction:column;gap:10px}
+.aiset .seg{margin:0;align-self:flex-start}
+.aiset select,.aiset input{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%;min-width:0}
+.aiset .note{margin:0}
+.ainew{flex:none;background:none;border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:14.5px;font-weight:500}
+#chatlog{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:22px;padding:22px 2px;overscroll-behavior:contain}
+.aiempty{margin:auto 0;text-align:center;display:flex;flex-direction:column;gap:18px;align-items:center}
+.aiempty h2{font-size:26px;font-weight:500;letter-spacing:-.01em}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chips button{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:9px 15px;font-size:14.5px;text-align:left}
+.chips button:hover{border-color:var(--muted)}
+.msg{line-height:1.6;font-size:16px;overflow-wrap:anywhere}
+.msg.user{align-self:flex-end;max-width:82%;background:var(--sunken);border-radius:20px;padding:10px 16px;white-space:pre-wrap}
+.msg.ai{align-self:stretch;display:flex;gap:12px;align-items:flex-start}
+.msg.ai .av{flex:none;width:26px;height:26px;border-radius:50%;background:var(--accent);display:grid;place-items:center;margin-top:1px}
+.msg.ai .av::after{content:"";width:9px;height:9px;border-radius:50%;border:2px solid var(--accent-ink)}
+.msg.ai .tx{flex:1;min-width:0;white-space:pre-wrap;padding-top:1px}
+.msg.ai .tx code.blk{margin:8px 0}
+.msg.ai.err .tx{color:var(--ko)}
+.dots3{display:inline-flex;gap:5px;padding:9px 0}
+.dots3 i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:blink 1.2s infinite both}
+.dots3 i:nth-child(2){animation-delay:.2s}.dots3 i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.dots3 i{animation:none;opacity:.6}}
+.composer{flex:none;display:flex;align-items:flex-end;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:8px 8px 8px 18px;box-shadow:0 2px 12px -8px rgba(0,0,0,.25)}
+.composer:focus-within{border-color:var(--accent)}
+.composer textarea{flex:1;min-width:0;border:0;outline:0;background:none;resize:none;font:inherit;font-size:16px;color:var(--ink);line-height:1.45;padding:8px 0;max-height:160px}
+.composer button{flex:none;width:40px;height:40px;border-radius:50%;border:0;background:var(--accent);color:var(--accent-ink);font-size:20px;line-height:1;display:grid;place-items:center}
+.composer button[disabled]{opacity:.35;cursor:default}
+.aihint{flex:none;text-align:center;font-size:12.5px;color:var(--muted);margin:8px 0 12px}
 .rev .askai{margin-top:12px;font-size:14px;padding:7px 14px}
 /* quiz */
 .qhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
@@ -3050,11 +3077,11 @@ function storico(){
 }
 /* ---------- assistente AI ---------- */
 var AI_KEY='quizpertest.ai';
-var AI={prov:'free',mfree:'openai-fast',mor:'openrouter/free',key:'',msgs:[],busy:false,err:'',draft:'',
+var AI={prov:'free',mfree:'auto',mor:'openrouter/free',key:'',msgs:[],busy:false,draft:'',
   list:{free:['openai-fast','grok-4.1-mini:free','step-3.5-flash:free'],or:['openrouter/free']},loaded:{}};
-try{var ap=JSON.parse(localStorage.getItem(AI_KEY)||'null');if(ap){AI.prov=ap.prov==='or'?'or':'free';AI.mfree=ap.mfree||AI.mfree;AI.mor=ap.mor||AI.mor;AI.key=ap.key||'';}}catch(e){}
-function aiSave(){try{localStorage.setItem(AI_KEY,JSON.stringify({prov:AI.prov,mfree:AI.mfree,mor:AI.mor,key:AI.key}));}catch(e){}}
-var AI_FREE=['https://keylessai.thryx.workers.dev/v1','https://text.pollinations.ai/openai'], AI_OR='https://openrouter.ai/api/v1';
+try{var ap=JSON.parse(localStorage.getItem(AI_KEY)||'null');if(ap){AI.prov=ap.prov==='or'?'or':'free';AI.mfree=(ap.v2&&ap.mfree)||AI.mfree;AI.mor=ap.mor||AI.mor;AI.key=ap.key||'';}}catch(e){}
+function aiSave(){try{localStorage.setItem(AI_KEY,JSON.stringify({v2:1,prov:AI.prov,mfree:AI.mfree,mor:AI.mor,key:AI.key}));}catch(e){}}
+var AI_FREE=['https://keylessai.thryx.workers.dev/v1','https://text.pollinations.ai/openai','https://api.airforce/v1'], AI_OR='https://openrouter.ai/api/v1';
 var AI_SYS='Sei un tutor per studenti che preparano i test universitari di chimica generale e di informatica (Python e rappresentazione dei dati). Rispondi in italiano, in modo chiaro e breve, mostrando i passaggi dei calcoli. Se non sei sicuro di qualcosa, dillo.';
 function aiFmt(t){
   var h=esc(t).replace(/```[a-zA-Z0-9]*\n?([\s\S]*?)```/g,function(m,c){return '<code class="blk">'+c.replace(/\n$/,'')+'</code>';});
@@ -3066,55 +3093,136 @@ function aiLoadModels(prov){
   fetch(url).then(function(r){return r.json();}).then(function(j){
     var ids=(j&&j.data||[]).map(function(m){return m.id;}).filter(Boolean);
     if(prov==='or'){ids=ids.filter(function(id){return /:free$/.test(id);}).sort();ids.unshift('openrouter/free');}
-    if(ids.length){AI.list[prov]=ids;if(view==='ai'&&!AI.busy)keepDraft(render);}
+    if(ids.length){AI.list[prov]=ids;var sel=document.getElementById('aimodel');if(sel&&AI.prov===prov)sel.innerHTML=aiOptions();}
   }).catch(function(){});
 }
+function aiCur(){return AI.prov==='or'?AI.mor:AI.mfree;}
+function aiLabel(id){return id==='openrouter/free'||id==='auto'?'Automatico':id;}
+function aiOptions(){
+  var list=AI.list[AI.prov].slice(), cur=aiCur(), h='';
+  if(AI.prov==='free')list.unshift('auto');
+  if(list.indexOf(cur)<0)list.unshift(cur);
+  list.forEach(function(id){h+='<option value="'+esc(id)+'"'+(id===cur?' selected':'')+'>'+esc(aiLabel(id))+'</option>';});
+  return h;
+}
 function keepDraft(fn){var t=document.getElementById('aiq');if(t)AI.draft=t.value;fn();}
-function aiCall(base,headers,model){
-  var ctl=window.AbortController?new AbortController():null, to=setTimeout(function(){if(ctl)ctl.abort();},90000);
+// Chiamata in streaming: la risposta compare mentre viene scritta. Se il servizio risponde tutto insieme, funziona lo stesso.
+function aiCall(base,headers,model,onChunk){
+  var ctl=window.AbortController?new AbortController():null, to=setTimeout(function(){if(ctl)ctl.abort();},120000);
   var msgs=[{role:'system',content:AI_SYS}].concat(AI.msgs.map(function(m){return {role:m.r==='user'?'user':'assistant',content:m.t};}));
   var url=/\/openai$/.test(base)?base:base+'/chat/completions';
-  return fetch(url,{method:'POST',headers:headers,body:JSON.stringify({model:model,messages:msgs,stream:false}),signal:ctl?ctl.signal:undefined})
-    .then(function(r){return r.text().then(function(tx){clearTimeout(to);var j=null;try{j=JSON.parse(tx);}catch(e){}
-      if(!r.ok)throw new Error((j&&j.error&&(j.error.message||j.error))||('Errore '+r.status));
-      var c=j&&j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content;
-      if(!c)throw new Error('Risposta vuota dal servizio.');return String(c).trim();});});
+  function fromJson(tx){var j=null;try{j=JSON.parse(tx);}catch(e){}return j;}
+  return fetch(url,{method:'POST',headers:headers,body:JSON.stringify({model:model,messages:msgs,stream:true}),signal:ctl?ctl.signal:undefined}).then(function(r){
+    if(!r.ok)return r.text().then(function(tx){var j=fromJson(tx);throw new Error((j&&j.error&&(j.error.message||(typeof j.error==='string'&&j.error)))||('Errore '+r.status));});
+    var acc='', raw='', buf='';
+    function eat(chunk){
+      raw+=chunk;buf+=chunk;var lines=buf.split('\n');buf=lines.pop();
+      lines.forEach(function(ln){
+        ln=ln.trim();if(ln.indexOf('data:')!==0)return;
+        var p=ln.slice(5).trim();if(!p||p==='[DONE]')return;
+        var j=fromJson(p);if(!j)return;
+        if(j.error)throw new Error(j.error.message||'Errore del servizio');
+        var c=j.choices&&j.choices[0];if(!c)return;
+        var d=(c.delta&&c.delta.content)||(c.message&&c.message.content)||'';
+        if(d){acc+=d;onChunk(acc);}
+      });
+    }
+    function done(){
+      clearTimeout(to);if(buf)eat('\n');
+      if(!acc){var j=fromJson(raw), c=j&&j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content;
+        if(j&&j.error)throw new Error(j.error.message||'Errore del servizio');
+        if(c){acc=String(c);onChunk(acc);}}
+      if(!acc.trim())throw new Error('Risposta vuota dal servizio.');
+      return acc.trim();
+    }
+    if(!r.body||!r.body.getReader||!window.TextDecoder)return r.text().then(function(tx){eat(tx);return done();});
+    var rd=r.body.getReader(), dec=new TextDecoder();
+    function pump(){return rd.read().then(function(x){if(x.done)return done();eat(dec.decode(x.value,{stream:true}));return pump();});}
+    return pump();
+  });
 }
+function aiMsgHtml(m){
+  return m.r==='user'?'<div class="msg user">'+esc(m.t)+'</div>':'<div class="msg ai'+(m.r==='err'?' err':'')+'"><span class="av" aria-hidden="true"></span><div class="tx">'+(m.r==='err'?esc(m.t):aiFmt(m.t))+'</div></div>';
+}
+var AI_SUG={chimica:['Come si calcola il pH di un acido forte?','Spiegami il reagente limitante con un esempio','Che differenza c\'è tra molarità e molalità?'],informatica:['Spiegami il complemento a due con un esempio','Che differenza c\'è tra lista e tupla?','Come funziona lo slicing delle stringhe?']};
+function aiFill(){
+  var log=document.getElementById('chatlog');if(!log)return;
+  if(!AI.msgs.length&&!AI.busy){
+    log.innerHTML='<div class="aiempty"><h2>Come posso aiutarti?</h2><div class="chips">'+(AI_SUG[db.subj]||AI_SUG.chimica).map(function(t){return '<button type="button" data-sug="'+esc(t)+'">'+esc(t)+'</button>';}).join('')+'</div></div>';
+  } else log.innerHTML=AI.msgs.map(aiMsgHtml).join('');
+  aiBottom();
+}
+function aiBottom(){var log=document.getElementById('chatlog');if(log)log.scrollTop=log.scrollHeight;}
+function aiGrow(){var t=document.getElementById('aiq'), b=document.getElementById('aisend');if(!t)return;t.style.height='auto';t.style.height=Math.min(160,t.scrollHeight)+'px';if(b)b.disabled=AI.busy||!t.value.trim();}
 function aiSend(text){
-  text=text.trim();if(!text||AI.busy)return;
-  if(AI.prov==='or'&&!AI.key){AI.err='Per usare OpenRouter incolla prima la tua chiave.';AI.draft=text;render();return;}
-  AI.msgs.push({r:'user',t:text});AI.busy=true;AI.err='';AI.draft='';render();aiScroll();
-  var p;
-  if(AI.prov==='or')p=aiCall(AI_OR,{'Content-Type':'application/json','Authorization':'Bearer '+AI.key,'X-Title':'Quiz per Test'},AI.mor);
-  else{var h={'Content-Type':'application/json'};
-    p=aiCall(AI_FREE[0],h,AI.mfree).catch(function(){return aiCall(AI_FREE[1],h,'openai-fast');});}
+  text=(text||'').trim();if(!text||AI.busy)return;
+  var log=document.getElementById('chatlog'), t=document.getElementById('aiq');
+  if(AI.prov==='or'&&!AI.key){AI.msgs.push({r:'err',t:'Per usare OpenRouter incolla prima la tua chiave: apri il menu del modello qui in alto.'});aiFill();var ds=document.querySelector('.aiset');if(ds)ds.open=true;return;}
+  AI.msgs=AI.msgs.filter(function(m){return m.r!=='err';});
+  AI.msgs.push({r:'user',t:text});AI.busy=true;AI.draft='';
+  if(t){t.value='';}
+  aiFill();aiGrow();
+  var el=document.createElement('div');el.className='msg ai';el.innerHTML='<span class="av" aria-hidden="true"></span><div class="tx"><span class="dots3" role="status" aria-label="Sto scrivendo"><i></i><i></i><i></i></span></div>';
+  if(log){log.appendChild(el);aiBottom();}
+  var tx=el.querySelector('.tx'), got=false;
+  function onChunk(acc){got=true;var near=log&&(log.scrollHeight-log.scrollTop-log.clientHeight<120);tx.innerHTML=aiFmt(acc);if(near)aiBottom();}
+  // Catena di tentativi: se un modello è al limite o non risponde si passa al successivo, senza dirlo.
+  // La conversazione resta la stessa, perché a ogni richiesta viene inviata tutta la cronologia.
+  var h={'Content-Type':'application/json'}, tries=[], seenT={};
+  function add(base,hd,model){var k=base+'|'+model;if(!seenT[k]){seenT[k]=1;tries.push({base:base,h:hd,model:model});}}
+  if(AI.prov==='or'){
+    var ho={'Content-Type':'application/json','Authorization':'Bearer '+AI.key,'X-Title':'Quiz per Test'};
+    add(AI_OR,ho,AI.mor);add(AI_OR,ho,'openrouter/free');
+    AI.list.or.filter(function(id){return id!==AI.mor&&id!=='openrouter/free';}).slice(0,4).forEach(function(id){add(AI_OR,ho,id);});
+  } else {
+    var ms=AI.list.free.slice();
+    if(AI.mfree!=='auto')ms=[AI.mfree].concat(ms);
+    else if(AI.last&&ms.indexOf(AI.last)>0)ms=[AI.last].concat(ms);
+    ms.slice(0,6).forEach(function(id){add(AI_FREE[0],h,id);});
+    add(AI_FREE[1],h,'openai-fast');
+    ms.filter(function(id){return /:free$/.test(id);}).slice(0,3).forEach(function(id){add(AI_FREE[2],h,id);});
+  }
+  function runChain(){
+    var errs=[], i=0;
+    function next(){
+      if(i>=tries.length){var er=new Error(errs[errs.length-1]||'Nessun modello disponibile');er.all=errs;throw er;}
+      var t=tries[i++];
+      return aiCall(t.base,t.h,t.model,onChunk).then(function(ans){if(AI.prov==='free')AI.last=t.model;return ans;},function(e){
+        if(got)throw e;                       // risposta già iniziata: non si riparte da capo
+        var m=String(e&&e.message||e);errs.push(m);
+        if(AI.prov==='or'&&/401|invalid|No auth|User not found/i.test(m)){var ek=new Error('La chiave OpenRouter non è valida. Controllala nel menu del modello.');ek.fatal=1;throw ek;}
+        return next();
+      });
+    }
+    return next();
+  }
+  function waitFor(errs){ // se tutti chiedono di aspettare pochi secondi, si aspetta e si riprova una volta
+    var best=0;(errs||[]).forEach(function(m){var x=/(?:retry|riprova)[^0-9]{0,20}(\d{1,3})\s*s/i.exec(m);if(x){var v=+x[1];if(!best||v<best)best=v;}});
+    return best&&best<=60?best:0;
+  }
+  var p=runChain().catch(function(e){
+    var w=!e.fatal&&!got&&waitFor(e.all);
+    if(!w)throw e;
+    return new Promise(function(res){setTimeout(res,(w+1)*1000);}).then(runChain);
+  });
   p.then(function(ans){AI.msgs.push({r:'ai',t:ans});})
    .catch(function(e){var m=String(e&&e.message||e);
-     AI.err=/Failed to fetch|NetworkError|Load failed|abort/i.test(m)?'Non riesco a collegarmi al servizio AI. Controlla la connessione; se stai usando la pagina dentro Claude, la chat funziona solo dalla versione su GitHub o dall\'app per PC.':'Il servizio AI ha risposto con un errore: '+m;})
-   .then(function(){AI.busy=false;if(view==='ai'){keepDraft(render);aiScroll();}});
+     AI.msgs.push({r:'err',t:e&&e.fatal?m:/Failed to fetch|NetworkError|Load failed|abort/i.test(m)?'Non riesco a collegarmi ai servizi AI. Controlla la connessione e riprova. Se stai usando la pagina dentro Claude, la chat funziona solo dalla versione su GitHub o dall\'app per PC.':/limit|rate|429|quota|busy/i.test(m)?'In questo momento tutti i modelli gratuiti sono al limite. Riprova tra un minuto.':'Nessun modello è riuscito a rispondere ('+m+'). Riprova tra poco.'});})
+   .then(function(){AI.busy=false;if(view==='ai'){aiFill();aiGrow();var q=document.getElementById('aiq');if(q&&window.matchMedia('(pointer:fine)').matches)q.focus();}});
 }
-function aiScroll(){setTimeout(function(){window.scrollTo(0,document.body.scrollHeight);},30);}
 function aiView(){
   aiLoadModels(AI.prov);
-  var prov=AI.prov, list=AI.list[prov].slice(), cur=prov==='or'?AI.mor:AI.mfree;
-  if(list.indexOf(cur)<0)list.unshift(cur);
-  var h=header()+'<div class="narrow"><div class="sech"><h2>Assistente AI</h2><span class="muted small">modelli gratuiti</span></div>';
-  h+='<div class="seg" role="group" aria-label="Servizio"><button data-aiprov="free" aria-pressed="'+(prov==='free')+'">Senza chiave</button><button data-aiprov="or" aria-pressed="'+(prov==='or')+'">OpenRouter</button></div>';
-  h+='<div class="airow"><select id="aimodel" aria-label="Modello">';
-  list.forEach(function(id){h+='<option value="'+esc(id)+'"'+(id===cur?' selected':'')+'>'+esc(id==='openrouter/free'?'Automatico (un modello gratuito a caso)':id)+'</option>';});
-  h+='</select>';
-  if(prov==='or')h+='<input id="aikey" type="password" autocomplete="off" placeholder="Chiave OpenRouter (sk-or-…)" value="'+esc(AI.key)+'" aria-label="Chiave OpenRouter">';
-  h+='</div>';
-  h+='<p class="note">'+(prov==='or'?'La chiave è gratuita e resta salvata solo su questo dispositivo. <a href="https://openrouter.ai/settings/keys" target="_blank" rel="noopener">Creane una su openrouter.ai</a>.':'Servizio pubblico gratuito gestito da terzi: può essere lento o non disponibile.')+' I messaggi vengono inviati a un servizio esterno: non scrivere dati personali. Le risposte possono contenere errori.</p>';
-  h+='<div class="chat" aria-live="polite">';
-  if(!AI.msgs.length&&!AI.busy)h+='<div class="msg ai">Ciao! Chiedimi di spiegarti un argomento, un esercizio o una domanda che hai sbagliato.</div>';
-  AI.msgs.forEach(function(m){h+='<div class="msg '+(m.r==='user'?'user':'ai')+'">'+(m.r==='user'?esc(m.t):aiFmt(m.t))+'</div>';});
-  if(AI.busy)h+='<div class="msg ai wait">Sto pensando…</div>';
-  h+='</div>';
-  if(AI.err)h+='<div class="aierr" role="alert">'+esc(AI.err)+'</div>';
-  h+='<form class="aibox" id="aiform"><textarea id="aiq" rows="2" placeholder="Scrivi la tua domanda" aria-label="Messaggio"'+(AI.busy?' disabled':'')+'>'+esc(AI.draft)+'</textarea><button class="btn primary" type="submit"'+(AI.busy?' disabled':'')+'>Invia</button></form>';
-  if(AI.msgs.length)h+='<button class="btn ghost" data-act="ai-new"'+(AI.busy?' disabled':'')+'>Nuova chat</button>';
-  return h+'</div>';
+  var prov=AI.prov, h=header();
+  h+='<div class="aitop"><details class="aiset"><summary aria-label="Modello e servizio"><span id="aicur">'+esc(aiLabel(aiCur()))+'</span></summary><div class="panel">'+
+    '<div class="seg" role="group" aria-label="Servizio"><button type="button" data-aiprov="free" aria-pressed="'+(prov==='free')+'">Senza chiave</button><button type="button" data-aiprov="or" aria-pressed="'+(prov==='or')+'">OpenRouter</button></div>'+
+    '<select id="aimodel" aria-label="Modello">'+aiOptions()+'</select>'+
+    (prov==='or'?'<input id="aikey" type="password" autocomplete="off" placeholder="Chiave OpenRouter (sk-or-…)" value="'+esc(AI.key)+'" aria-label="Chiave OpenRouter">':'')+
+    '<p class="note">'+(prov==='or'?'La chiave è gratuita e resta salvata solo su questo dispositivo. <a href="https://openrouter.ai/settings/keys" target="_blank" rel="noopener">Creane una su openrouter.ai</a>.':'Servizi pubblici gratuiti gestiti da terzi. In automatico, se un modello è al limite si passa al successivo senza interrompere la conversazione.')+'</p></div></details>'+
+    '<button type="button" class="ainew" data-act="ai-new">Nuova chat</button></div>';
+  h+='<div id="chatlog" aria-live="polite"></div>';
+  h+='<form class="composer" id="aiform"><textarea id="aiq" rows="1" placeholder="Scrivi un messaggio" aria-label="Messaggio">'+esc(AI.draft)+'</textarea><button id="aisend" type="submit" aria-label="Invia" disabled>↑</button></form>';
+  h+='<p class="aihint">L\'AI può sbagliare: verifica le risposte. Non scrivere dati personali.</p>';
+  return h;
 }
 function login(){
   return '<form class="login" id="loginform" autocomplete="off"><div class="brand"><i></i>Quiz per Test</div><h1>Accedi</h1><p>Inserisci le credenziali per entrare.</p>'+
@@ -3124,8 +3232,10 @@ function login(){
     '<button class="btn primary" type="submit">Entra</button></form>';
 }
 function render(){
-  if(!authed){app.innerHTML=login();var f=document.getElementById('lu');if(f&&loginErr)f.focus();return;}
+  if(!authed){document.documentElement.classList.remove('aimode');app.innerHTML=login();var f=document.getElementById('lu');if(f&&loginErr)f.focus();return;}
+  document.documentElement.classList.toggle('aimode',view==='ai');
   app.innerHTML=view==='quiz'?quiz():view==='review'?review():view==='storico'?storico():view==='ai'?aiView():home();
+  if(view==='ai'){aiFill();aiGrow();}
 }
 
 /* ---------- eventi ---------- */
@@ -3143,11 +3253,12 @@ app.addEventListener('click',function(ev){
   if(d.go){if(!authed)return;view=d.go;wipeAsk=false;try{history.replaceState(null,'',d.go==='storico'?'#storico':d.go==='ai'?'#assistente':'#sezioni');}catch(e){}render();window.scrollTo(0,0);return;}
   if(!authed)return;
   if(d.act==='logout'){authed=false;loginErr=false;try{localStorage.removeItem(AUTH_KEY);}catch(e){}render();return;}
-  if(d.aiprov){AI.prov=d.aiprov;AI.err='';aiSave();keepDraft(render);return;}
-  if(d.act==='ai-new'){AI.msgs=[];AI.err='';AI.draft='';render();return;}
+  if(d.aiprov){AI.prov=d.aiprov;aiSave();keepDraft(render);var ds=document.querySelector('.aiset');if(ds)ds.open=true;return;}
+  if(d.act==='ai-new'){if(AI.busy)return;AI.msgs=[];AI.draft='';render();return;}
+  if(d.sug){aiSend(d.sug);return;}
   if(d.ask!=null&&S&&S.items[+d.ask]){var x=S.items[+d.ask];
     AI.draft='Non ho capito questa domanda:\n'+x.q.replace(/`/g,'')+'\n\nOpzioni: '+x.o.map(function(o,i){return LETTERS[i]+') '+o.replace(/`/g,'');}).join('; ')+'\nRisposta giusta: '+LETTERS[x.ok]+') '+x.o[x.ok].replace(/`/g,'')+'\n\nMe la spieghi passo per passo?';
-    view='ai';render();window.scrollTo(0,0);return;}
+    view='ai';render();return;}
   if(d.lv!=null){db.lv=+d.lv;save();render();return;}
   if(d.subj){db.subj=d.subj;save();render();return;}
   if(d.start){start(d.start,d.topic);return;}
@@ -3173,9 +3284,10 @@ function act(a){
 }
 app.addEventListener('change',function(ev){
   var t=ev.target;
-  if(t.id==='aimodel'){if(AI.prov==='or')AI.mor=t.value;else AI.mfree=t.value;aiSave();}
+  if(t.id==='aimodel'){if(AI.prov==='or')AI.mor=t.value;else AI.mfree=t.value;aiSave();var c=document.getElementById('aicur');if(c)c.textContent=aiLabel(t.value);}
   else if(t.id==='aikey'){AI.key=t.value.trim();aiSave();}
 });
+app.addEventListener('input',function(ev){if(ev.target.id==='aiq')aiGrow();});
 app.addEventListener('keydown',function(ev){
   if(ev.target.id==='aiq'&&ev.key==='Enter'&&!ev.shiftKey&&!ev.isComposing&&window.matchMedia('(pointer:fine)').matches){ev.preventDefault();aiSend(ev.target.value);}
 });
