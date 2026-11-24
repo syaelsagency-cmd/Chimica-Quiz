@@ -200,6 +200,8 @@ html.aimode header.top{flex:none;margin-bottom:6px}
 .msg.ai .av .ic{width:15px;height:15px}
 .msg.ai .tx{flex:1;min-width:0;white-space:pre-wrap;padding-top:1px}
 .msg.ai .tx code.blk{margin:8px 0}
+.msg .mh{display:block;font-size:1.06em;font-weight:650;letter-spacing:-.01em}
+.msg sup,.msg sub{font-size:.72em;line-height:0}
 .msg.ai.err .tx{color:var(--ko)}
 .dots3{display:inline-flex;gap:5px;padding:9px 0}
 .dots3 i{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:blink 1.2s infinite both}
@@ -3272,10 +3274,33 @@ var AI={prov:'free',mfree:'auto',mor:'openrouter/free',key:'',msgs:[],busy:false
 try{var ap=JSON.parse(localStorage.getItem(AI_KEY)||'null');if(ap){AI.prov=ap.prov==='or'?'or':'free';AI.mfree=(ap.v2&&ap.mfree)||AI.mfree;AI.mor=ap.mor||AI.mor;AI.key=ap.key||'';}}catch(e){}
 function aiSave(){try{localStorage.setItem(AI_KEY,JSON.stringify({v2:1,prov:AI.prov,mfree:AI.mfree,mor:AI.mor,key:AI.key}));}catch(e){}}
 var AI_FREE=['https://keylessai.thryx.workers.dev/v1','https://text.pollinations.ai/openai','https://api.airforce/v1'], AI_OR='https://openrouter.ai/api/v1';
-var AI_SYS='Sei un tutor per studenti che preparano i test universitari di chimica generale e di informatica (Python e rappresentazione dei dati). Rispondi in italiano, in modo chiaro e breve, mostrando i passaggi dei calcoli. Se non sei sicuro di qualcosa, dillo.';
+var AI_SYS='Sei un tutor per studenti che preparano i test universitari di chimica generale e di informatica (Python e rappresentazione dei dati). Rispondi in italiano, in modo chiaro e breve, mostrando i passaggi dei calcoli. Se non sei sicuro di qualcosa, dillo. Non usare LaTeX né tabelle: scrivi le formule in testo semplice con caratteri Unicode (per esempio 1s² 2s¹, H₂O, →, ×). Per il codice usa i blocchi con tre apici inversi.';
+// Le risposte dei modelli arrivano spesso in Markdown e LaTeX: qui diventano testo leggibile (apici, pedici, simboli, titoli, elenchi).
+var TEXSYM={cdot:'·',times:'×',div:'÷',rightarrow:'→',to:'→',longrightarrow:'→',leftarrow:'←',rightleftharpoons:'⇌',leftrightarrow:'↔',Rightarrow:'⇒',approx:'≈',simeq:'≃',sim:'~',neq:'≠',ne:'≠',leq:'≤',le:'≤',geq:'≥',ge:'≥',pm:'±',infty:'∞',Delta:'Δ',delta:'δ',alpha:'α',beta:'β',gamma:'γ',lambda:'λ',mu:'μ',nu:'ν',pi:'π',rho:'ρ',sigma:'σ',theta:'θ',omega:'ω',Omega:'Ω',epsilon:'ε',varepsilon:'ε',eta:'η',tau:'τ',phi:'φ',chi:'χ',psi:'ψ',kappa:'κ',Sigma:'Σ',circ:'°',degree:'°',ldots:'…',dots:'…',cdots:'⋯',quad:'  ',qquad:'   ',sum:'Σ',int:'∫',propto:'∝',equiv:'≡',uparrow:'↑',downarrow:'↓',partial:'∂',ell:'ℓ',hbar:'ħ',left:'',right:'',displaystyle:'',log:'log',ln:'ln',exp:'exp',sin:'sin',cos:'cos',tan:'tan',lim:'lim',min:'min',max:'max'};
+function texCore(s,math){
+  var i;
+  for(i=0;i<4;i++){
+    s=s.replace(/\\(?:text|mathrm|mathbf|mathit|textbf|ce|operatorname|boxed|mathsf)\s*\{([^{}]*)\}/g,'$1')
+      .replace(/\^\{([^{}]*)\}/g,'<sup>$1</sup>').replace(/_\{([^{}]*)\}/g,'<sub>$1</sub>')
+      .replace(/\\sqrt\s*\{([^{}]*)\}/g,'√($1)')
+      .replace(/\\[dt]?frac\s*\{([^{}]*)\}\s*\{([^{}]*)\}/g,function(m,a,b){function w(x){return /^[\w.,°%]+$/.test(x.replace(/<[^>]+>/g,''))?x:'('+x+')';}return w(a)+'/'+w(b);});
+  }
+  if(math)s=s.replace(/\^([A-Za-z0-9+\-−])/g,'<sup>$1</sup>').replace(/_([A-Za-z0-9])/g,'<sub>$1</sub>').replace(/\\\\/g,'\n');
+  s=s.replace(/\\!/g,'').replace(/\\[,;: ]/g,' ').replace(/\\([%{}#_$])/g,'$1');
+  return s.replace(/\\([A-Za-z]+)/g,function(m,n){return TEXSYM.hasOwnProperty(n)?TEXSYM[n]:(math?n:m);});
+}
 function aiFmt(t){
-  var h=esc(t).replace(/```[a-zA-Z0-9]*\n?([\s\S]*?)```/g,function(m,c){return '<code class="blk">'+c.replace(/\n$/,'')+'</code>';});
-  return h.replace(/`([^`\n]+)`/g,'<code>$1</code>').replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>');
+  var keep=[];
+  function stash(x){keep.push(x);return '\u0000'+(keep.length-1)+'\u0000';}
+  var h=esc(t).replace(/```[a-zA-Z0-9]*\n?([\s\S]*?)```/g,function(m,c){return stash('<code class="blk">'+c.replace(/\n$/,'')+'</code>');})
+    .replace(/`([^`\n]+)`/g,function(m,c){return stash('<code>'+c+'</code>');});
+  h=h.replace(/\\\[([\s\S]*?)\\\]|\$\$([\s\S]*?)\$\$/g,function(m,a,b){return texCore((a||b||'').trim(),1);})
+    .replace(/\\\(([\s\S]*?)\\\)/g,function(m,a){return texCore(a,1);})
+    .replace(/\$([^$\n]{1,120})\$/g,function(m,a){return texCore(a,1);});
+  h=texCore(h,0);
+  h=h.replace(/^#{1,6}\s+(.+)$/gm,'<strong class="mh">$1</strong>').replace(/^\s*([-*_])\1{2,}\s*$/gm,'').replace(/^(\s*)[-*]\s+/gm,'$1• ')
+    .replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>').replace(/(^|[\s(])\*([^*\s][^*\n]*)\*(?=[\s).,;:!?]|$)/gm,'$1<i>$2</i>');
+  return h.replace(/\n{3,}/g,'\n\n').replace(/\u0000(\d+)\u0000/g,function(m,i){return keep[+i];});
 }
 function aiLoadModels(prov){
   if(AI.loaded[prov])return;AI.loaded[prov]=true;
