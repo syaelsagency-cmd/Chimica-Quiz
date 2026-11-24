@@ -95,6 +95,20 @@ code.blk{display:block;white-space:pre;overflow-x:auto;padding:14px 16px;margin:
 .subj button b{font:500 19px/1.2 var(--display);letter-spacing:-.01em}
 .subj button span{font-size:13px;color:var(--muted)}
 .subj button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.chat{display:flex;flex-direction:column;gap:12px;margin:18px 0}
+.msg{max-width:88%;padding:12px 15px;border-radius:16px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5;font-size:15.5px}
+.msg.user{align-self:flex-end;background:var(--accent);color:var(--accent-ink);border-bottom-right-radius:6px}
+.msg.ai{align-self:flex-start;background:var(--surface);border:1px solid var(--line);border-bottom-left-radius:6px}
+.msg.ai code.blk{white-space:pre}
+.msg.wait{color:var(--muted);font-style:italic}
+.airow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.airow select,.airow input,.aibox textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.airow select{flex:1 1 200px;min-width:0}
+.airow input{flex:1 1 220px;min-width:0}
+.aibox{display:flex;gap:10px;align-items:flex-end;position:sticky;bottom:0;background:var(--bg);padding:10px 0 14px}
+.aibox textarea{flex:1;min-width:0;resize:vertical;min-height:48px}
+.aierr{background:var(--ko-soft);color:var(--ko);border-radius:10px;padding:12px 14px;font-size:14.5px}
+.rev .askai{margin-top:12px;font-size:14px;padding:7px 14px}
 /* quiz */
 .qhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .qhead h2{font-size:18px;font-weight:500}
@@ -2919,7 +2933,7 @@ var app=document.getElementById('app');
 function header(){
   var inQuiz=view==='quiz';
   return '<header class="top"><div class="brand"><i></i>Quiz per Test</div>'+
-    (inQuiz?'':'<nav class="tabs" aria-label="Pagine"><button data-go="home"'+(view==='home'?' aria-current="page"':'')+'>Sezioni</button><button data-go="storico"'+(view==='storico'?' aria-current="page"':'')+'>Storico</button><button data-act="logout">Esci</button></nav>')+
+    (inQuiz?'':'<nav class="tabs" aria-label="Pagine"><button data-go="home"'+(view==='home'?' aria-current="page"':'')+'>Sezioni</button><button data-go="storico"'+(view==='storico'?' aria-current="page"':'')+'>Storico</button><button data-go="ai"'+(view==='ai'?' aria-current="page"':'')+'>AI</button><button data-act="logout">Esci</button></nav>')+
     '</header>';
 }
 function subjSwitch(){
@@ -2997,7 +3011,7 @@ function review(){
     if(x.st==='ko')h+='<div class="ans bad"><span class="lb">La tua risposta</span><span>'+LETTERS[x.sel]+') '+fmt(x.o[x.sel])+'</span></div>';
     h+='<div class="ans good"><span class="lb">Risposta giusta</span><span>'+LETTERS[x.ok]+') '+fmt(x.o[x.ok])+'</span></div>';
     if(x.st==='ok')h+='<details class="why"><summary>Perché</summary><p>'+fmt(x.e)+'</p></details>';
-    else h+='<div class="corr"><b>Correzione</b>'+fmt(x.e)+'</div>';
+    else h+='<div class="corr"><b>Correzione</b>'+fmt(x.e)+'</div><button class="btn ghost askai" data-ask="'+p.i+'">Chiedi una spiegazione all\'AI</button>';
     h+='</article>';
   });
   var nWrong=wrongIds().length;
@@ -3034,6 +3048,74 @@ function storico(){
     :'<button class="btn ghost" data-act="wipe">Cancella lo storico</button>';
   return h;
 }
+/* ---------- assistente AI ---------- */
+var AI_KEY='quizpertest.ai';
+var AI={prov:'free',mfree:'openai-fast',mor:'openrouter/free',key:'',msgs:[],busy:false,err:'',draft:'',
+  list:{free:['openai-fast','grok-4.1-mini:free','step-3.5-flash:free'],or:['openrouter/free']},loaded:{}};
+try{var ap=JSON.parse(localStorage.getItem(AI_KEY)||'null');if(ap){AI.prov=ap.prov==='or'?'or':'free';AI.mfree=ap.mfree||AI.mfree;AI.mor=ap.mor||AI.mor;AI.key=ap.key||'';}}catch(e){}
+function aiSave(){try{localStorage.setItem(AI_KEY,JSON.stringify({prov:AI.prov,mfree:AI.mfree,mor:AI.mor,key:AI.key}));}catch(e){}}
+var AI_FREE=['https://keylessai.thryx.workers.dev/v1','https://text.pollinations.ai/openai'], AI_OR='https://openrouter.ai/api/v1';
+var AI_SYS='Sei un tutor per studenti che preparano i test universitari di chimica generale e di informatica (Python e rappresentazione dei dati). Rispondi in italiano, in modo chiaro e breve, mostrando i passaggi dei calcoli. Se non sei sicuro di qualcosa, dillo.';
+function aiFmt(t){
+  var h=esc(t).replace(/```[a-zA-Z0-9]*\n?([\s\S]*?)```/g,function(m,c){return '<code class="blk">'+c.replace(/\n$/,'')+'</code>';});
+  return h.replace(/`([^`\n]+)`/g,'<code>$1</code>').replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>');
+}
+function aiLoadModels(prov){
+  if(AI.loaded[prov])return;AI.loaded[prov]=true;
+  var url=prov==='or'?AI_OR+'/models':AI_FREE[0]+'/models';
+  fetch(url).then(function(r){return r.json();}).then(function(j){
+    var ids=(j&&j.data||[]).map(function(m){return m.id;}).filter(Boolean);
+    if(prov==='or'){ids=ids.filter(function(id){return /:free$/.test(id);}).sort();ids.unshift('openrouter/free');}
+    if(ids.length){AI.list[prov]=ids;if(view==='ai'&&!AI.busy)keepDraft(render);}
+  }).catch(function(){});
+}
+function keepDraft(fn){var t=document.getElementById('aiq');if(t)AI.draft=t.value;fn();}
+function aiCall(base,headers,model){
+  var ctl=window.AbortController?new AbortController():null, to=setTimeout(function(){if(ctl)ctl.abort();},90000);
+  var msgs=[{role:'system',content:AI_SYS}].concat(AI.msgs.map(function(m){return {role:m.r==='user'?'user':'assistant',content:m.t};}));
+  var url=/\/openai$/.test(base)?base:base+'/chat/completions';
+  return fetch(url,{method:'POST',headers:headers,body:JSON.stringify({model:model,messages:msgs,stream:false}),signal:ctl?ctl.signal:undefined})
+    .then(function(r){return r.text().then(function(tx){clearTimeout(to);var j=null;try{j=JSON.parse(tx);}catch(e){}
+      if(!r.ok)throw new Error((j&&j.error&&(j.error.message||j.error))||('Errore '+r.status));
+      var c=j&&j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content;
+      if(!c)throw new Error('Risposta vuota dal servizio.');return String(c).trim();});});
+}
+function aiSend(text){
+  text=text.trim();if(!text||AI.busy)return;
+  if(AI.prov==='or'&&!AI.key){AI.err='Per usare OpenRouter incolla prima la tua chiave.';AI.draft=text;render();return;}
+  AI.msgs.push({r:'user',t:text});AI.busy=true;AI.err='';AI.draft='';render();aiScroll();
+  var p;
+  if(AI.prov==='or')p=aiCall(AI_OR,{'Content-Type':'application/json','Authorization':'Bearer '+AI.key,'X-Title':'Quiz per Test'},AI.mor);
+  else{var h={'Content-Type':'application/json'};
+    p=aiCall(AI_FREE[0],h,AI.mfree).catch(function(){return aiCall(AI_FREE[1],h,'openai-fast');});}
+  p.then(function(ans){AI.msgs.push({r:'ai',t:ans});})
+   .catch(function(e){var m=String(e&&e.message||e);
+     AI.err=/Failed to fetch|NetworkError|Load failed|abort/i.test(m)?'Non riesco a collegarmi al servizio AI. Controlla la connessione; se stai usando la pagina dentro Claude, la chat funziona solo dalla versione su GitHub o dall\'app per PC.':'Il servizio AI ha risposto con un errore: '+m;})
+   .then(function(){AI.busy=false;if(view==='ai'){keepDraft(render);aiScroll();}});
+}
+function aiScroll(){setTimeout(function(){window.scrollTo(0,document.body.scrollHeight);},30);}
+function aiView(){
+  aiLoadModels(AI.prov);
+  var prov=AI.prov, list=AI.list[prov].slice(), cur=prov==='or'?AI.mor:AI.mfree;
+  if(list.indexOf(cur)<0)list.unshift(cur);
+  var h=header()+'<div class="narrow"><div class="sech"><h2>Assistente AI</h2><span class="muted small">modelli gratuiti</span></div>';
+  h+='<div class="seg" role="group" aria-label="Servizio"><button data-aiprov="free" aria-pressed="'+(prov==='free')+'">Senza chiave</button><button data-aiprov="or" aria-pressed="'+(prov==='or')+'">OpenRouter</button></div>';
+  h+='<div class="airow"><select id="aimodel" aria-label="Modello">';
+  list.forEach(function(id){h+='<option value="'+esc(id)+'"'+(id===cur?' selected':'')+'>'+esc(id==='openrouter/free'?'Automatico (un modello gratuito a caso)':id)+'</option>';});
+  h+='</select>';
+  if(prov==='or')h+='<input id="aikey" type="password" autocomplete="off" placeholder="Chiave OpenRouter (sk-or-…)" value="'+esc(AI.key)+'" aria-label="Chiave OpenRouter">';
+  h+='</div>';
+  h+='<p class="note">'+(prov==='or'?'La chiave è gratuita e resta salvata solo su questo dispositivo. <a href="https://openrouter.ai/settings/keys" target="_blank" rel="noopener">Creane una su openrouter.ai</a>.':'Servizio pubblico gratuito gestito da terzi: può essere lento o non disponibile.')+' I messaggi vengono inviati a un servizio esterno: non scrivere dati personali. Le risposte possono contenere errori.</p>';
+  h+='<div class="chat" aria-live="polite">';
+  if(!AI.msgs.length&&!AI.busy)h+='<div class="msg ai">Ciao! Chiedimi di spiegarti un argomento, un esercizio o una domanda che hai sbagliato.</div>';
+  AI.msgs.forEach(function(m){h+='<div class="msg '+(m.r==='user'?'user':'ai')+'">'+(m.r==='user'?esc(m.t):aiFmt(m.t))+'</div>';});
+  if(AI.busy)h+='<div class="msg ai wait">Sto pensando…</div>';
+  h+='</div>';
+  if(AI.err)h+='<div class="aierr" role="alert">'+esc(AI.err)+'</div>';
+  h+='<form class="aibox" id="aiform"><textarea id="aiq" rows="2" placeholder="Scrivi la tua domanda" aria-label="Messaggio"'+(AI.busy?' disabled':'')+'>'+esc(AI.draft)+'</textarea><button class="btn primary" type="submit"'+(AI.busy?' disabled':'')+'>Invia</button></form>';
+  if(AI.msgs.length)h+='<button class="btn ghost" data-act="ai-new"'+(AI.busy?' disabled':'')+'>Nuova chat</button>';
+  return h+'</div>';
+}
 function login(){
   return '<form class="login" id="loginform" autocomplete="off"><div class="brand"><i></i>Quiz per Test</div><h1>Accedi</h1><p>Inserisci le credenziali per entrare.</p>'+
     '<label for="lu">Nome utente</label><input id="lu" name="lu" type="text" autocapitalize="none" autocorrect="off" spellcheck="false" required>'+
@@ -3043,12 +3125,13 @@ function login(){
 }
 function render(){
   if(!authed){app.innerHTML=login();var f=document.getElementById('lu');if(f&&loginErr)f.focus();return;}
-  app.innerHTML=view==='quiz'?quiz():view==='review'?review():view==='storico'?storico():home();
+  app.innerHTML=view==='quiz'?quiz():view==='review'?review():view==='storico'?storico():view==='ai'?aiView():home();
 }
 
 /* ---------- eventi ---------- */
 app.addEventListener('submit',function(ev){
   ev.preventDefault();
+  if(ev.target.id==='aiform'){if(authed){var q=document.getElementById('aiq');aiSend(q?q.value:'');}return;}
   var u=document.getElementById('lu'), p=document.getElementById('lp');if(!u||!p)return;
   if(hash(u.value.trim().toLowerCase()+'\u0001'+p.value)===CRED){authed=true;loginErr=false;try{localStorage.setItem(AUTH_KEY,CRED);}catch(e){}view='home';}
   else loginErr=true;
@@ -3057,9 +3140,14 @@ app.addEventListener('submit',function(ev){
 app.addEventListener('click',function(ev){
   var b=ev.target.closest('button');if(!b||b.disabled)return;
   var d=b.dataset;
-  if(d.go){view=d.go;wipeAsk=false;try{history.replaceState(null,'',d.go==='storico'?'#storico':'#sezioni');}catch(e){}render();window.scrollTo(0,0);return;}
+  if(d.go){if(!authed)return;view=d.go;wipeAsk=false;try{history.replaceState(null,'',d.go==='storico'?'#storico':d.go==='ai'?'#assistente':'#sezioni');}catch(e){}render();window.scrollTo(0,0);return;}
   if(!authed)return;
   if(d.act==='logout'){authed=false;loginErr=false;try{localStorage.removeItem(AUTH_KEY);}catch(e){}render();return;}
+  if(d.aiprov){AI.prov=d.aiprov;AI.err='';aiSave();keepDraft(render);return;}
+  if(d.act==='ai-new'){AI.msgs=[];AI.err='';AI.draft='';render();return;}
+  if(d.ask!=null&&S&&S.items[+d.ask]){var x=S.items[+d.ask];
+    AI.draft='Non ho capito questa domanda:\n'+x.q.replace(/`/g,'')+'\n\nOpzioni: '+x.o.map(function(o,i){return LETTERS[i]+') '+o.replace(/`/g,'');}).join('; ')+'\nRisposta giusta: '+LETTERS[x.ok]+') '+x.o[x.ok].replace(/`/g,'')+'\n\nMe la spieghi passo per passo?';
+    view='ai';render();window.scrollTo(0,0);return;}
   if(d.lv!=null){db.lv=+d.lv;save();render();return;}
   if(d.subj){db.subj=d.subj;save();render();return;}
   if(d.start){start(d.start,d.topic);return;}
@@ -3083,6 +3171,14 @@ function act(a){
   else if(a==='quit-yes'){clearInterval(timer);S=null;view='home';render();return;}
   render();tick();
 }
+app.addEventListener('change',function(ev){
+  var t=ev.target;
+  if(t.id==='aimodel'){if(AI.prov==='or')AI.mor=t.value;else AI.mfree=t.value;aiSave();}
+  else if(t.id==='aikey'){AI.key=t.value.trim();aiSave();}
+});
+app.addEventListener('keydown',function(ev){
+  if(ev.target.id==='aiq'&&ev.key==='Enter'&&!ev.shiftKey&&!ev.isComposing&&window.matchMedia('(pointer:fine)').matches){ev.preventDefault();aiSend(ev.target.value);}
+});
 document.addEventListener('keydown',function(ev){
   if(!authed||view!=='quiz'||!S||ev.ctrlKey||ev.metaKey||ev.altKey)return;
   var k=ev.key.toLowerCase(), q=S.items[S.i], idx='12345'.indexOf(k);
@@ -3092,8 +3188,8 @@ document.addEventListener('keydown',function(ev){
   else if(k==='arrowleft'){act('prev');ev.preventDefault();}
   else if(k==='escape'&&S.ask){act('ask-no');}
 });
-if(location.hash==='#storico')view='storico';
-window.addEventListener('hashchange',function(){if(view==='quiz')return;view=location.hash==='#storico'?'storico':'home';render();});
+if(location.hash==='#storico')view='storico';else if(location.hash==='#assistente')view='ai';
+window.addEventListener('hashchange',function(){if(view==='quiz'||view==='review')return;view=location.hash==='#storico'?'storico':location.hash==='#assistente'?'ai':'home';render();});
 render();
 })();
 </script>
