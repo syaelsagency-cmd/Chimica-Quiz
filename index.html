@@ -222,6 +222,42 @@ html.aimode header.top{flex:none;margin-bottom:6px}
 .aihint{flex:none;text-align:center;font-size:12px;color:var(--muted);margin:8px 0 12px}
 .rev .askai{margin-top:12px;font-size:13.5px;padding:7px 12px;border-color:var(--line)}
 
+/* lezioni */
+.back{padding:6px 10px 6px 4px;margin:0 0 8px -4px;font-size:13.5px}
+.back .ic{transform:rotate(180deg);width:16px;height:16px}
+.lhead{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.lhead .ti{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:var(--subj-soft);color:var(--subj);flex:none}
+.lhead .ti .ic{width:22px;height:22px}
+.lhead h1{font-size:22px;font-weight:650}
+.lhead .small{display:block;margin-bottom:1px}
+.unit{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:12px}
+.unit h2{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:600}
+.unit .un{flex:none;width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:var(--subj-soft);color:var(--subj);font:600 12.5px/1 var(--mono)}
+.unit h3{font-size:12.5px;font-weight:600;color:var(--muted);margin:16px 0 5px;letter-spacing:0}
+.unit p{margin:0;line-height:1.6}
+.unit ol{margin:0;padding-left:20px;line-height:1.55}
+.unit li{margin:4px 0;padding-left:2px}
+.unit li::marker{color:var(--muted);font-variant-numeric:tabular-nums;font-size:.9em}
+.exq{background:var(--sunken);border:1px solid var(--line-soft);border-radius:10px;padding:12px 14px;line-height:1.55;font-weight:500}
+.sol{margin-top:8px}
+.sol summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:500;color:var(--subj);padding:6px 0}
+.sol summary::-webkit-details-marker{display:none}
+.sol summary::before{content:"";width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform var(--t)}
+.sol[open] summary::before{transform:rotate(45deg)}
+.sol ol{background:var(--ok-soft);border-radius:10px;padding:10px 14px 10px 34px;margin-top:4px}
+.warnl{display:flex;gap:9px;align-items:flex-start;background:var(--warn-soft);border-radius:10px;padding:10px 12px;margin-top:14px!important;font-size:14px}
+.warnl .ic{color:var(--warn);margin-top:2px;width:16px;height:16px}
+.tile.lz .meta{font-size:12px}
+.opt[disabled]{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.right .k{background:var(--ok);color:var(--accent-ink)}
+.opt.wrong{border-color:var(--ko);background:var(--ko-soft)}
+.opt.wrong .k{background:var(--ko);color:var(--accent-ink)}
+.opt.dim{opacity:.55}
+.opt[disabled]:hover{border-color:var(--line-soft)}
+.opt.right[disabled]:hover{border-color:var(--ok)} .opt.wrong[disabled]:hover{border-color:var(--ko)}
+.corr.ok b{color:var(--ok)} .corr.ko b{color:var(--ko)}
+.btn.primary .ic{width:16px;height:16px}
 /* quiz */
 .qhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .qhead h2{font-size:17px;font-weight:600}
@@ -307,6 +343,7 @@ td .ok{color:var(--ok)} td .ko{color:var(--ko)}
   .sech .seg button{flex:1;padding:7px 4px}
   .subj .sx i{display:none}
   .card{padding:16px}.card h3{font-size:17px}
+  .unit{padding:15px 16px}.lhead h1{font-size:20px}
   .ans{flex-direction:column;gap:0}.ans .lb{width:auto}
   .score{gap:18px;padding:16px}
   .qfoot .btn{padding:9px 13px}
@@ -2960,6 +2997,352 @@ G('i-ecc', 'prevenire-gestire', () => {
   });
 })();
 
+// Lezioni: per ogni sezione, una o più unità con "cos'è" (c), "come si fa" (h), esempio (q) svolto (s) e un errore tipico (w).
+var LESSONS={};
+function L(id,units){LESSONS[id]=units;}
+
+/* ===================== CHIMICA ===================== */
+L('fond',[
+ {t:'Cifre significative e notazione scientifica',
+  c:'Le cifre significative sono le cifre di una misura che hanno un significato sperimentale: dicono quanto è precisa. La notazione scientifica scrive un numero come a × 10ⁿ con 1 ≤ a < 10 e rende evidente quante cifre significative ci sono.',
+  h:['Conta le cifre a partire dalla prima diversa da zero: gli zeri a sinistra non contano, quelli in mezzo e quelli finali dopo la virgola sì.','In moltiplicazioni e divisioni il risultato ha tante cifre significative quante il dato che ne ha meno.','In somme e sottrazioni il risultato ha tanti decimali quanti il dato che ne ha meno.','Arrotonda solo alla fine del calcolo, non nei passaggi intermedi.'],
+  q:'Quante cifre significative ha 0,00450? Quanto vale 2,5 × 3,42 con le cifre corrette?',
+  s:['0,00450: gli zeri iniziali non contano, lo zero finale sì. Le cifre sono 4, 5, 0: tre cifre significative.','2,5 × 3,42 = 8,55. Il dato meno preciso (2,5) ha due cifre.','Risultato: 8,6.'],
+  w:'Gli zeri finali contano solo se c\'è la virgola: 1200 è ambiguo, 1,200 × 10³ ha quattro cifre.'},
+ {t:'Conversioni di unità e densità',
+  c:'Convertire significa moltiplicare per un fattore che vale 1, cioè un rapporto tra due quantità uguali espresse in unità diverse. La densità d = m/V collega massa e volume di una sostanza.',
+  h:['Scrivi il dato con la sua unità.','Moltiplica per il fattore di conversione messo in modo che l\'unità vecchia si semplifichi.','Per i prefissi ricorda: k = 10³, m = 10⁻³, μ = 10⁻⁶, n = 10⁻⁹.','Con la densità: m = d × V e V = m / d.'],
+  q:'Converti 72 km/h in m/s. Che massa hanno 25,0 mL di etanolo (d = 0,789 g/mL)?',
+  s:['72 km/h × (1000 m / 1 km) × (1 h / 3600 s) = 20 m/s.','m = d × V = 0,789 g/mL × 25,0 mL = 19,7 g.'],
+  w:'La temperatura in kelvin si ottiene sommando 273,15 ai gradi Celsius, non moltiplicando.'}
+]);
+L('atomo',[
+ {t:'Protoni, neutroni ed elettroni',
+  c:'Il numero atomico Z è il numero di protoni e identifica l\'elemento. Il numero di massa A è la somma di protoni e neutroni. In un atomo neutro gli elettroni sono quanti i protoni; in uno ione cambiano solo gli elettroni.',
+  h:['Protoni = Z.','Neutroni = A − Z.','Elettroni = Z − carica: un catione ne ha di meno, un anione di più.','Gli isotopi hanno lo stesso Z e A diverso, quindi cambia solo il numero di neutroni.'],
+  q:'Quanti protoni, neutroni ed elettroni ha lo ione ⁵⁶Fe³⁺ (Z = 26)?',
+  s:['Protoni = 26.','Neutroni = 56 − 26 = 30.','Elettroni = 26 − 3 = 23.'],
+  w:'La carica positiva significa elettroni persi, non protoni in più.'},
+ {t:'Massa atomica media',
+  c:'La massa atomica riportata nella tavola periodica è la media delle masse degli isotopi naturali, pesata sulle loro abbondanze.',
+  h:['Trasforma ogni abbondanza percentuale in frazione (dividi per 100).','Moltiplica la massa di ogni isotopo per la sua frazione.','Somma i prodotti.'],
+  q:'Il cloro è formato da ³⁵Cl (34,97 u, 75,8%) e ³⁷Cl (36,97 u, 24,2%). Qual è la massa atomica media?',
+  s:['34,97 × 0,758 = 26,507.','36,97 × 0,242 = 8,947.','Somma: 35,45 u, il valore riportato nella tavola periodica.'],
+  w:'La media è sempre più vicina all\'isotopo più abbondante.'}
+]);
+L('mole',[
+ {t:'Mole e massa molare',
+  c:'Una mole contiene 6,022 × 10²³ particelle (numero di Avogadro). La massa molare M è la massa di una mole in grammi e ha lo stesso valore numerico della massa atomica o molecolare in u.',
+  h:['Calcola M sommando le masse atomiche di tutti gli atomi della formula.','Da grammi a moli: n = m / M.','Da moli a particelle: N = n × 6,022 × 10²³.','Per gli atomi di un elemento moltiplica per il pedice nella formula.'],
+  q:'Quante moli e quante molecole ci sono in 36,0 g di H₂O?',
+  s:['M = 2 × 1,0 + 16,0 = 18,0 g/mol.','n = 36,0 / 18,0 = 2,00 mol.','N = 2,00 × 6,022 × 10²³ = 1,20 × 10²⁴ molecole.'],
+  w:'Non confondere molecole e atomi: 2,00 mol di H₂O contengono 4,00 mol di atomi H.'},
+ {t:'Stechiometria e reagente limitante',
+  c:'I coefficienti di una reazione bilanciata sono rapporti tra moli. Il reagente limitante è quello che finisce per primo e decide quanto prodotto si forma.',
+  h:['Bilancia la reazione.','Trasforma le masse dei reagenti in moli.','Dividi le moli di ciascun reagente per il suo coefficiente: il valore più piccolo indica il limitante.','Calcola il prodotto partendo dal limitante con il rapporto dei coefficienti, poi torna ai grammi.'],
+  q:'2 H₂ + O₂ → 2 H₂O. Quanta acqua si forma da 4,0 g di H₂ e 16,0 g di O₂?',
+  s:['Moli: H₂ = 4,0 / 2,0 = 2,0 mol; O₂ = 16,0 / 32,0 = 0,50 mol.','Divido per i coefficienti: H₂ 2,0 / 2 = 1,0; O₂ 0,50 / 1 = 0,50. Il limitante è O₂.','H₂O = 2 × 0,50 = 1,0 mol = 18 g.'],
+  w:'Il limitante non è quello con meno grammi: va deciso sulle moli divise per il coefficiente.'}
+]);
+L('elettr',[
+ {t:'Numeri quantici e orbitali',
+  c:'Ogni elettrone è descritto da quattro numeri quantici: n (livello, dimensione), l (forma: 0 = s, 1 = p, 2 = d, 3 = f), mₗ (orientazione) e mₛ (spin, +½ o −½).',
+  h:['n è un intero da 1 in su.','l va da 0 a n − 1.','mₗ va da −l a +l: gli orbitali di un sottolivello sono 2l + 1.','Ogni orbitale contiene al massimo 2 elettroni con spin opposto (principio di Pauli).'],
+  q:'Quanti orbitali e quanti elettroni può contenere il sottolivello 3d? La combinazione n = 2, l = 2 è possibile?',
+  s:['3d: l = 2, quindi mₗ = −2, −1, 0, +1, +2: cinque orbitali.','Elettroni massimi: 5 × 2 = 10.','n = 2, l = 2 non è possibile, perché l arriva al massimo a n − 1 = 1.'],
+  w:'Il livello n contiene n² orbitali e 2n² elettroni al massimo.'},
+ {t:'Configurazione elettronica',
+  c:'La configurazione elettronica dice come sono distribuiti gli elettroni negli orbitali. Si riempiono prima gli orbitali a energia più bassa (Aufbau), un elettrone per orbitale prima di accoppiarli (regola di Hund).',
+  h:['Conta gli elettroni: Z per l\'atomo neutro, Z meno la carica per uno ione.','Riempi nell\'ordine 1s 2s 2p 3s 3p 4s 3d 4p 5s 4d 5p.','Capienze: s = 2, p = 6, d = 10, f = 14.','Per i cationi dei metalli di transizione togli prima gli elettroni 4s, poi i 3d.','Puoi abbreviare con il gas nobile precedente tra parentesi quadre.'],
+  q:'Scrivi la configurazione di Fe (Z = 26) e di Fe²⁺.',
+  s:['26 elettroni: 1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d⁶, cioè [Ar] 4s² 3d⁶.','Fe²⁺ perde due elettroni, prima quelli 4s.','Fe²⁺: [Ar] 3d⁶.'],
+  w:'Eccezioni da ricordare: Cr è [Ar] 4s¹ 3d⁵ e Cu è [Ar] 4s¹ 3d¹⁰.'}
+]);
+L('period',[
+ {t:'Andamenti periodici',
+  c:'Le proprietà degli elementi cambiano in modo regolare nella tavola. Dipendono da due cose: quanti livelli ha l\'atomo e quanto il nucleo attira gli elettroni esterni (carica nucleare efficace).',
+  h:['Raggio atomico: aumenta scendendo in un gruppo, diminuisce andando a destra in un periodo.','Energia di ionizzazione ed elettronegatività: fanno il contrario, aumentano verso destra e verso l\'alto.','Un catione è più piccolo del suo atomo, un anione è più grande.','Tra ioni con gli stessi elettroni è più piccolo quello con più protoni.'],
+  q:'Ordina per raggio crescente Na, Mg, K. Quale ha l\'energia di ionizzazione più alta?',
+  s:['Na e Mg sono nello stesso periodo: Mg è più a destra, quindi più piccolo.','K è sotto Na nello stesso gruppo, quindi più grande.','Raggio: Mg < Na < K. L\'energia di ionizzazione più alta è quella del più piccolo, Mg.'],
+  w:'Il fluoro è l\'elemento più elettronegativo; i gas nobili hanno le energie di ionizzazione più alte del loro periodo.'}
+]);
+L('nomen',[
+ {t:'Numero di ossidazione',
+  c:'Il numero di ossidazione è la carica che un atomo avrebbe se gli elettroni di legame fossero assegnati all\'atomo più elettronegativo. Serve per dare il nome ai composti e per riconoscere le reazioni redox.',
+  h:['Un elemento libero ha numero di ossidazione 0.','H vale +1 (−1 negli idruri metallici), O vale −2 (−1 nei perossidi).','I metalli alcalini valgono +1, gli alcalino-terrosi +2, il fluoro −1.','La somma è 0 in un composto neutro e uguale alla carica in uno ione.'],
+  q:'Qual è il numero di ossidazione di S in H₂SO₄ e di Mn in KMnO₄?',
+  s:['H₂SO₄: 2(+1) + x + 4(−2) = 0, quindi x = +6.','KMnO₄: (+1) + x + 4(−2) = 0, quindi x = +7.'],
+  w:'In uno ione poliatomico la somma non è zero: in SO₄²⁻ deve dare −2.'},
+ {t:'Dare il nome ai composti',
+  c:'Il nome di un composto dipende dalla sua classe: ossidi, idruri, idracidi, ossoacidi, idrossidi e sali. Per gli acidi e i loro sali contano i suffissi.',
+  h:['Idracidi: acido …idrico (HCl acido cloridrico); il sale finisce in -uro.','Ossoacidi: -oso per il numero di ossidazione più basso, -ico per il più alto; con quattro stati: ipo…oso, …oso, …ico, per…ico.','Sali degli ossoacidi: -oso diventa -ito, -ico diventa -ato.','Con metalli a più stati di ossidazione indica il numero romano: ossido di ferro(III).'],
+  q:'Dai il nome a Fe₂O₃, HClO₄ e NaClO.',
+  s:['Fe₂O₃: il ferro è +3, ossido di ferro(III) (triossido di diferro).','HClO₄: cloro +7, lo stato più alto dei quattro, acido perclorico.','NaClO: sale dell\'acido ipocloroso (Cl +1), ipoclorito di sodio.'],
+  w:'-uro, -ito e -ato sono dei sali; -idrico, -oso e -ico sono degli acidi.'}
+]);
+L('legame',[
+ {t:'Riconoscere il tipo di legame',
+  c:'Il tipo di legame dipende dalla differenza di elettronegatività (ΔEN) tra i due atomi: più è grande, più gli elettroni sono spostati verso un atomo solo.',
+  h:['ΔEN quasi nulla: covalente puro (H₂, Cl₂).','ΔEN intermedia: covalente polare (HCl, H₂O).','ΔEN grande, di solito metallo con non metallo: ionico (NaCl).','Tra atomi di metallo: legame metallico.','Una molecola con legami polari è apolare se la geometria è simmetrica (CO₂, CCl₄).'],
+  q:'Che legame c\'è in KF, in HF e in F₂? CO₂ è polare?',
+  s:['KF: metallo e non metallo con ΔEN grande, ionico.','HF: due non metalli diversi, covalente polare. F₂: atomi uguali, covalente puro.','CO₂ ha due legami polari ma è lineare: i dipoli si annullano, la molecola è apolare.'],
+  w:'Polarità del legame e polarità della molecola sono due cose diverse.'},
+ {t:'Strutture di Lewis e geometria (VSEPR)',
+  c:'La struttura di Lewis mostra come sono distribuiti gli elettroni di valenza. La teoria VSEPR ricava la forma della molecola: le coppie di elettroni attorno all\'atomo centrale si dispongono il più lontano possibile.',
+  h:['Somma gli elettroni di valenza di tutti gli atomi.','Collega gli atomi con legami semplici e completa gli ottetti, usando legami multipli se servono.','Conta le zone di elettroni attorno all\'atomo centrale: legami (un legame multiplo conta uno) più coppie solitarie.','2 zone lineare 180°, 3 trigonale planare 120°, 4 tetraedrica 109,5°.','Le coppie solitarie non si vedono nella forma: 4 zone con 1 coppia danno una piramide trigonale, con 2 coppie una forma angolare.'],
+  q:'Qual è la geometria di NH₃ e di CO₂? Quanti legami σ e π ha CO₂?',
+  s:['NH₃: 8 elettroni di valenza, tre legami N–H e una coppia solitaria: 4 zone, forma a piramide trigonale (circa 107°).','CO₂: O=C=O, due zone attorno al carbonio: lineare, 180°.','Ogni doppio legame è un σ più un π: CO₂ ha 2 σ e 2 π.'],
+  w:'H₂O è angolare (104,5°), non lineare: l\'ossigeno ha due coppie solitarie.'}
+]);
+L('gas',[
+ {t:'Equazione di stato dei gas ideali',
+  c:'PV = nRT lega pressione, volume, moli e temperatura di un gas. Con P in atm e V in litri, R = 0,0821 L·atm/(mol·K). Se n è costante vale P₁V₁/T₁ = P₂V₂/T₂.',
+  h:['Trasforma sempre la temperatura in kelvin.','Controlla che le unità siano coerenti con R.','Isola l\'incognita: P = nRT/V, n = PV/RT e così via.','In condizioni normali (0 °C, 1 atm) una mole occupa 22,4 L.'],
+  q:'Che pressione esercitano 2,00 mol di gas in 10,0 L a 27 °C?',
+  s:['T = 27 + 273 = 300 K.','P = nRT / V = 2,00 × 0,0821 × 300 / 10,0.','P = 4,93 atm.'],
+  w:'Usare i gradi Celsius nella formula è l\'errore più frequente.'},
+ {t:'Miscele di gas e pressioni parziali',
+  c:'In una miscela ogni gas si comporta come se fosse da solo. La pressione totale è la somma delle pressioni parziali (legge di Dalton).',
+  h:['Calcola la frazione molare: xᵢ = nᵢ / n totali.','Pressione parziale: Pᵢ = xᵢ × P totale.','La somma delle frazioni molari è 1 e la somma delle pressioni parziali è la pressione totale.'],
+  q:'Una miscela contiene 1,0 mol di N₂ e 3,0 mol di He a 2,0 atm. Quanto valgono le pressioni parziali?',
+  s:['Moli totali = 4,0.','x(N₂) = 0,25 e x(He) = 0,75.','P(N₂) = 0,25 × 2,0 = 0,50 atm; P(He) = 1,5 atm.'],
+  w:'La frazione molare si calcola con le moli, non con le masse.'}
+]);
+L('liquidi',[
+ {t:'Forze intermolecolari',
+  c:'Le forze tra molecole decidono punto di ebollizione, tensione di vapore e viscosità. Più sono forti, più alto è il punto di ebollizione e più bassa la tensione di vapore.',
+  h:['Forze di London: ci sono sempre e crescono con la massa e la superficie della molecola.','Dipolo-dipolo: solo tra molecole polari.','Legame a idrogeno: quando H è legato a F, O oppure N. È la più forte delle tre.','Confronta prima il tipo di forza, poi, a parità di tipo, la massa molare.'],
+  q:'Ordina per punto di ebollizione crescente CH₄, HCl e H₂O.',
+  s:['CH₄ è apolare: solo forze di London.','HCl è polare: forze dipolo-dipolo.','H₂O forma legami a idrogeno.','Ordine: CH₄ < HCl < H₂O.'],
+  w:'Il legame a idrogeno è una forza tra molecole, non il legame covalente O–H dentro la molecola.'},
+ {t:'Calore e passaggi di stato',
+  c:'Scaldare una sostanza ne alza la temperatura (q = m·c·ΔT). Durante un passaggio di stato la temperatura resta costante e il calore serve a cambiare stato (q = n·ΔH).',
+  h:['Dividi il percorso in tratti: riscaldamento, passaggio di stato, riscaldamento.','Nei tratti a temperatura variabile usa q = m·c·ΔT.','Nei passaggi di stato usa q = n·ΔH di fusione o di vaporizzazione.','Somma i contributi con la stessa unità.'],
+  q:'Quanto calore serve per fondere 36,0 g di ghiaccio a 0 °C e portare l\'acqua a 25 °C? (ΔH fusione = 6,01 kJ/mol; c = 4,18 J/(g·°C))',
+  s:['n = 36,0 / 18,0 = 2,00 mol; fusione: 2,00 × 6,01 = 12,0 kJ.','Riscaldamento: 36,0 × 4,18 × 25 = 3762 J = 3,76 kJ.','Totale: 15,8 kJ.'],
+  w:'Attenzione a kJ e J: convertili prima di sommare.'}
+]);
+L('soluz',[
+ {t:'Concentrazioni e diluizioni',
+  c:'La concentrazione dice quanto soluto c\'è in una soluzione. La più usata è la molarità M = moli di soluto / litri di soluzione; la molalità m = moli di soluto / kg di solvente.',
+  h:['Trasforma la massa di soluto in moli.','Trasforma il volume in litri (o la massa del solvente in kg).','Dividi: M = n / V.','Nelle diluizioni le moli non cambiano: M₁V₁ = M₂V₂.'],
+  q:'Che molarità ha una soluzione con 5,85 g di NaCl in 250 mL? E se ne diluisci 50,0 mL fino a 200 mL?',
+  s:['n = 5,85 / 58,5 = 0,100 mol.','M = 0,100 / 0,250 = 0,400 M.','Diluizione: M₂ = 0,400 × 50,0 / 200 = 0,100 M.'],
+  w:'Nella molarità il volume è quello della soluzione, nella molalità la massa è quella del solo solvente.'},
+ {t:'Proprietà colligative',
+  c:'Sono proprietà che dipendono solo dal numero di particelle di soluto: abbassamento della tensione di vapore, innalzamento ebullioscopico, abbassamento crioscopico e pressione osmotica.',
+  h:['Trova il coefficiente di van \'t Hoff i: 1 per i non elettroliti, il numero di ioni per i sali (NaCl 2, CaCl₂ 3).','ΔTc = i·Kc·m e ΔTe = i·Ke·m, con m molalità.','Pressione osmotica: π = i·M·R·T.','Il punto di congelamento scende, quello di ebollizione sale.'],
+  q:'A che temperatura congela una soluzione acquosa 0,50 m di NaCl? (Kc = 1,86 °C·kg/mol)',
+  s:['NaCl si dissocia in due ioni: i = 2.','ΔTc = 2 × 1,86 × 0,50 = 1,86 °C.','La soluzione congela a −1,86 °C.'],
+  w:'Dimenticare i per gli elettroliti dà un risultato sbagliato di un fattore 2 o 3.'}
+]);
+L('solidi',[
+ {t:'Tipi di solidi e celle cubiche',
+  c:'I solidi cristallini si classificano in base alle particelle che occupano il reticolo e alle forze che le tengono unite. La cella elementare è la più piccola unità che, ripetuta, costruisce il cristallo.',
+  h:['Ionici (NaCl): duri, fragili, conducono solo fusi o in soluzione.','Molecolari (ghiaccio, CO₂): teneri, fondono a bassa temperatura.','Covalenti (diamante, SiO₂): durissimi, punto di fusione molto alto.','Metallici (Cu, Fe): conducono, sono duttili e malleabili.','Atomi per cella: un vertice vale 1/8, una faccia 1/2, il centro 1.'],
+  q:'Quanti atomi contiene la cella cubica a facce centrate? E quella a corpo centrato?',
+  s:['Facce centrate: 8 vertici × 1/8 + 6 facce × 1/2 = 4 atomi.','Corpo centrato: 8 × 1/8 + 1 = 2 atomi.','La cubica semplice ne contiene 1.'],
+  w:'Un atomo sul vertice è condiviso da otto celle, non da quattro.'}
+]);
+L('cinet',[
+ {t:'Legge cinetica e ordine di reazione',
+  c:'La velocità di una reazione dipende dalle concentrazioni secondo v = k[A]ᵐ[B]ⁿ. Gli esponenti m e n sono gli ordini: si trovano dagli esperimenti, non dai coefficienti della reazione.',
+  h:['Scegli due esperimenti in cui cambia una sola concentrazione.','Guarda come cambia la velocità: se raddoppia l\'ordine è 1, se quadruplica è 2, se resta uguale è 0.','L\'ordine totale è la somma degli esponenti.','Ricava k sostituendo i dati di un esperimento.'],
+  q:'Raddoppiando [A] la velocità diventa quattro volte più grande; raddoppiando [B] non cambia. Qual è la legge cinetica?',
+  s:['Per A: 2ᵐ = 4, quindi m = 2.','Per B: 2ⁿ = 1, quindi n = 0.','v = k[A]². Ordine totale 2.'],
+  w:'Un catalizzatore abbassa l\'energia di attivazione e aumenta k, ma non sposta l\'equilibrio.'},
+ {t:'Tempo di dimezzamento (primo ordine)',
+  c:'In una reazione del primo ordine la concentrazione si dimezza sempre nello stesso tempo, qualunque sia il valore di partenza: t½ = 0,693 / k.',
+  h:['Calcola t½ = 0,693 / k (oppure k = 0,693 / t½).','Conta quanti tempi di dimezzamento sono passati.','Dopo n dimezzamenti resta la frazione (1/2)ⁿ.','In generale: ln([A]₀/[A]) = k·t.'],
+  q:'Una reazione del primo ordine ha k = 0,0231 min⁻¹. Quanto reagente resta dopo 90 minuti?',
+  s:['t½ = 0,693 / 0,0231 = 30,0 min.','90 minuti sono 3 tempi di dimezzamento.','Resta (1/2)³ = 1/8, cioè il 12,5%.'],
+  w:'Solo nel primo ordine t½ non dipende dalla concentrazione iniziale.'}
+]);
+L('termo',[
+ {t:'Entalpia di reazione',
+  c:'ΔH è il calore scambiato a pressione costante: negativo se la reazione è esotermica, positivo se è endotermica. Si calcola dalle entalpie standard di formazione o sommando reazioni (legge di Hess).',
+  h:['Scrivi la reazione bilanciata.','ΔH° = Σ ΔH°f dei prodotti − Σ ΔH°f dei reagenti, ciascuna moltiplicata per il suo coefficiente.','Gli elementi nel loro stato standard hanno ΔH°f = 0.','Con Hess: se inverti una reazione cambia il segno, se la moltiplichi moltiplichi anche ΔH.'],
+  q:'Calcola ΔH° di CH₄ + 2 O₂ → CO₂ + 2 H₂O(l). (ΔH°f in kJ/mol: CH₄ −74,8; CO₂ −393,5; H₂O(l) −285,8)',
+  s:['Prodotti: −393,5 + 2 × (−285,8) = −965,1 kJ.','Reagenti: −74,8 + 2 × 0 = −74,8 kJ.','ΔH° = −965,1 − (−74,8) = −890,3 kJ: reazione esotermica.'],
+  w:'Prodotti meno reagenti, non il contrario.'},
+ {t:'Spontaneità: energia libera di Gibbs',
+  c:'Una trasformazione è spontanea se ΔG = ΔH − TΔS è negativo. ΔS misura la variazione di disordine: aumenta quando si formano gas o cresce il numero di particelle.',
+  h:['Trasforma ΔS in kJ/K (o ΔH in J) per avere le stesse unità.','Calcola ΔG = ΔH − TΔS con T in kelvin.','ΔH < 0 e ΔS > 0: sempre spontanea. ΔH > 0 e ΔS < 0: mai.','Se i segni sono uguali dipende dalla temperatura: il confine è T = ΔH / ΔS.'],
+  q:'Per CaCO₃ → CaO + CO₂ si ha ΔH = +178 kJ e ΔS = +160 J/K. Da che temperatura è spontanea?',
+  s:['ΔS = 0,160 kJ/K.','ΔG = 0 quando T = ΔH / ΔS = 178 / 0,160 = 1112 K.','È spontanea sopra circa 1110 K (circa 840 °C).'],
+  w:'ΔS è quasi sempre dato in J/K e ΔH in kJ: converti prima di calcolare.'}
+]);
+L('equil',[
+ {t:'Costante di equilibrio e quoziente di reazione',
+  c:'All\'equilibrio le concentrazioni non cambiano più e il loro rapporto vale K. Il quoziente Q ha la stessa forma di K ma usa le concentrazioni del momento: confrontarli dice da che parte procede la reazione.',
+  h:['Scrivi K: prodotti al numeratore e reagenti al denominatore, ciascuno elevato al suo coefficiente.','Solidi e liquidi puri non compaiono.','Calcola Q con le concentrazioni date.','Q < K: la reazione va verso i prodotti. Q > K: verso i reagenti. Q = K: equilibrio.'],
+  q:'Per H₂ + I₂ ⇌ 2 HI, K = 50. Con [H₂] = [I₂] = 0,10 M e [HI] = 0,50 M, da che parte va la reazione?',
+  s:['Q = [HI]² / ([H₂][I₂]) = 0,25 / 0,010 = 25.','Q = 25 è minore di K = 50.','La reazione procede verso destra, formando altro HI.'],
+  w:'K cambia solo con la temperatura, non con concentrazioni o pressione.'},
+ {t:'Principio di Le Chatelier',
+  c:'Se un sistema all\'equilibrio viene disturbato, reagisce nel verso che riduce il disturbo.',
+  h:['Aggiungi un reagente: l\'equilibrio va verso i prodotti (e viceversa).','Aumenti la pressione: va verso il lato con meno moli di gas.','Aumenti la temperatura: va nel verso endotermico.','Un catalizzatore fa raggiungere prima l\'equilibrio ma non lo sposta.'],
+  q:'N₂ + 3 H₂ ⇌ 2 NH₃ con ΔH < 0. Cosa succede aumentando la pressione? E aumentando la temperatura?',
+  s:['A sinistra ci sono 4 moli di gas, a destra 2: con più pressione l\'equilibrio va a destra.','La reazione diretta è esotermica: con più temperatura l\'equilibrio va a sinistra e K diminuisce.'],
+  w:'Aggiungere un gas inerte a volume costante non sposta l\'equilibrio.'}
+]);
+L('acidi',[
+ {t:'pH di acidi e basi forti',
+  c:'pH = −log[H₃O⁺] misura l\'acidità. Acidi e basi forti si dissociano del tutto, quindi la concentrazione di H₃O⁺ (o di OH⁻) è quella dell\'acido (o della base). A 25 °C pH + pOH = 14.',
+  h:['Acido forte: [H₃O⁺] = concentrazione dell\'acido, poi pH = −log[H₃O⁺].','Base forte: [OH⁻] = concentrazione della base (per il numero di OH), poi pOH = −log[OH⁻].','pH = 14 − pOH.','pH < 7 acido, pH = 7 neutro, pH > 7 basico.'],
+  q:'Qual è il pH di HCl 0,010 M? E di NaOH 0,0010 M?',
+  s:['HCl: [H₃O⁺] = 1,0 × 10⁻² M, pH = 2,00.','NaOH: [OH⁻] = 1,0 × 10⁻³ M, pOH = 3,00.','pH = 14 − 3,00 = 11,00.'],
+  w:'Per le basi si calcola prima il pOH: fermarsi lì è l\'errore tipico.'},
+ {t:'Acidi deboli e soluzioni tampone',
+  c:'Un acido debole si dissocia solo in parte, secondo la costante Ka. Un tampone è una miscela di un acido debole e della sua base coniugata: mantiene il pH quasi costante.',
+  h:['Acido debole: [H₃O⁺] ≈ √(Ka × C), valido se l\'acido è poco dissociato.','Poi pH = −log[H₃O⁺].','Tampone: pH = pKa + log([base] / [acido]).','Se acido e base coniugata hanno la stessa concentrazione, pH = pKa.'],
+  q:'Qual è il pH di CH₃COOH 0,10 M (Ka = 1,8 × 10⁻⁵)? E di un tampone con acido e acetato alla stessa concentrazione?',
+  s:['[H₃O⁺] = √(1,8 × 10⁻⁵ × 0,10) = 1,3 × 10⁻³ M.','pH = 2,87.','Tampone: pH = pKa = −log(1,8 × 10⁻⁵) = 4,74.'],
+  w:'Un acido debole 0,10 M non ha pH 1: quello è il valore di un acido forte.'}
+]);
+L('elettro',[
+ {t:'Ossidazione e riduzione',
+  c:'In una reazione redox si trasferiscono elettroni. Chi li perde si ossida (il suo numero di ossidazione aumenta) ed è il riducente; chi li acquista si riduce ed è l\'ossidante.',
+  h:['Assegna i numeri di ossidazione a tutti gli atomi.','Trova chi aumenta (si ossida) e chi diminuisce (si riduce).','Scrivi le due semireazioni e bilancia atomi e cariche.','Moltiplica le semireazioni in modo che gli elettroni scambiati siano uguali, poi sommale.'],
+  q:'In Zn + Cu²⁺ → Zn²⁺ + Cu chi si ossida, chi si riduce e chi è l\'ossidante?',
+  s:['Zn passa da 0 a +2: si ossida, è il riducente.','Cu passa da +2 a 0: si riduce.','L\'ossidante è Cu²⁺.'],
+  w:'L\'ossidante è la specie che si riduce, non quella che si ossida.'},
+ {t:'Pile e potenziali standard',
+  c:'Una pila trasforma una reazione redox spontanea in corrente. All\'anodo avviene l\'ossidazione, al catodo la riduzione. Il potenziale standard di riduzione E° dice quanto una specie tende a ridursi.',
+  h:['La coppia con E° più alto si riduce: è il catodo.','La coppia con E° più basso si ossida: è l\'anodo.','E° della pila = E° catodo − E° anodo, usando i potenziali di riduzione così come sono in tabella.','Se E° della pila è positivo la reazione è spontanea (ΔG° = −nFE°).'],
+  q:'Calcola E° della pila Zn/Cu. (E° Cu²⁺/Cu = +0,34 V; E° Zn²⁺/Zn = −0,76 V)',
+  s:['Il rame ha E° più alto: è il catodo.','Lo zinco è l\'anodo.','E° = 0,34 − (−0,76) = +1,10 V.'],
+  w:'Non si moltiplica E° per i coefficienti della reazione.'}
+]);
+L('organica',[
+ {t:'Idrocarburi e nomenclatura',
+  c:'Gli idrocarburi contengono solo C e H. Gli alcani hanno solo legami semplici (CₙH₂ₙ₊₂), gli alcheni un doppio legame (CₙH₂ₙ), gli alchini un triplo (CₙH₂ₙ₋₂).',
+  h:['Trova la catena di carboni più lunga: dà la radice (met-, et-, prop-, but-, pent-, es-).','Il suffisso indica la classe: -ano, -ene, -ino.','Numera la catena in modo che sostituenti e legami multipli abbiano i numeri più bassi.','Scrivi i sostituenti (metil-, etil-) con la loro posizione davanti al nome.'],
+  q:'Che nome ha CH₃–CH(CH₃)–CH₂–CH₃? Quanti isomeri ha C₄H₁₀?',
+  s:['La catena più lunga ha 4 carboni: butano.','C\'è un metile sul carbonio 2: 2-metilbutano.','C₄H₁₀ ha due isomeri: butano e 2-metilpropano.'],
+  w:'Gli isomeri hanno la stessa formula bruta ma struttura diversa.'},
+ {t:'Gruppi funzionali',
+  c:'Il gruppo funzionale è la parte della molecola che ne decide il comportamento chimico e la classe.',
+  h:['–OH: alcol (suffisso -olo).','–CHO: aldeide (-ale); C=O tra due carboni: chetone (-one).','–COOH: acido carbossilico (acido …oico); –COO–: estere.','–NH₂: ammina; –O– tra due carboni: etere; –CONH₂: ammide.'],
+  q:'A che classe appartengono CH₃CH₂OH, CH₃COOH e CH₃COCH₃?',
+  s:['CH₃CH₂OH ha un –OH: è un alcol, l\'etanolo.','CH₃COOH ha un –COOH: è un acido carbossilico, l\'acido acetico.','CH₃COCH₃ ha un C=O tra due carboni: è un chetone, il propanone (acetone).'],
+  w:'Aldeide e chetone hanno entrambi C=O: nell\'aldeide è in fondo alla catena, legato a un H.'}
+]);
+
+/* ===================== INFORMATICA ===================== */
+L('i-dati',[
+ {t:'Binario, decimale ed esadecimale',
+  c:'Il computer rappresenta tutto con bit, cifre che valgono 0 o 1. In binario ogni posizione vale una potenza di 2; in esadecimale (base 16) le cifre vanno da 0 a 9 e da A a F. Con n bit si rappresentano 2ⁿ valori diversi.',
+  h:['Da binario a decimale: somma le potenze di 2 dove c\'è un 1, partendo da destra con 2⁰.','Da decimale a binario: dividi per 2 più volte e leggi i resti dall\'ultimo al primo.','Esadecimale: ogni cifra corrisponde a 4 bit (A = 10 … F = 15).','Numero di valori con n bit: 2ⁿ; il massimo senza segno è 2ⁿ − 1.'],
+  q:'Quanto vale `1101` in decimale? Come si scrive 37 in binario? Quanto vale `2F` esadecimale?',
+  s:['1101 = 8 + 4 + 0 + 1 = 13.','37: resti 1, 0, 1, 0, 0, 1 letti al contrario danno `100101`.','2F = 2 × 16 + 15 = 47.'],
+  w:'I resti delle divisioni si leggono dal basso verso l\'alto.'},
+ {t:'Numeri negativi: complemento a due',
+  c:'Il complemento a due è il modo più usato per rappresentare gli interi con segno. Il bit più a sinistra indica il segno: 0 positivo, 1 negativo. Con n bit si va da −2ⁿ⁻¹ a 2ⁿ⁻¹ − 1.',
+  h:['Scrivi il valore positivo in binario su n bit.','Inverti tutti i bit.','Somma 1.','Per leggere un numero negativo fai lo stesso procedimento al contrario.'],
+  q:'Scrivi −5 in complemento a due su 8 bit. Che intervallo si rappresenta con 8 bit?',
+  s:['+5 = `00000101`.','Inverto: `11111010`.','Sommo 1: `11111011`.','Con 8 bit: da −128 a +127.'],
+  w:'L\'intervallo non è simmetrico: c\'è un negativo in più.'}
+]);
+L('i-base',[
+ {t:'Variabili, tipi e operatori',
+  c:'Una variabile è un nome che fa riferimento a un valore. I tipi di base sono `int`, `float`, `str` e `bool`. Gli operatori aritmetici seguono le precedenze della matematica.',
+  h:['`/` dà sempre un float, `//` la divisione intera, `%` il resto, `**` la potenza.','Precedenze: prima `**`, poi `*` `/` `//` `%`, poi `+` `-`.','`=` assegna, `==` confronta.','`type(x)` dice il tipo di un valore.'],
+  q:'Quanto valgono `7 / 2`, `7 // 2`, `7 % 2` e `2 + 3 * 2 ** 2`?',
+  s:['`7 / 2` vale 3.5.','`7 // 2` vale 3 e `7 % 2` vale 1.','`2 + 3 * 2 ** 2`: prima la potenza (4), poi il prodotto (12), poi la somma: 14.'],
+  w:'`7 / 2` non è 3: la divisione con una sola barra restituisce sempre un numero con la virgola.'},
+ {t:'input, print e conversioni',
+  c:'`input()` legge una riga dalla tastiera e restituisce sempre una stringa. Per fare calcoli va convertita con `int()` o `float()`. `print()` mostra i valori separati da uno spazio.',
+  h:['Leggi: `x = input("Testo: ")`.','Converti: `n = int(x)` oppure `float(x)`.','Tra stringhe `+` concatena, tra numeri somma.','Per unire testo e numeri usa una f-string: `f"Totale: {n}"`.'],
+  q:'Cosa stampano `print("12" + "3")` e `print(int("12") + 3)`?',
+  s:['`"12" + "3"` unisce due stringhe: stampa 123.','`int("12") + 3` somma due interi: stampa 15.'],
+  w:'`"12" + 3` dà errore (TypeError): non si somma una stringa con un numero.'}
+]);
+L('i-str',[
+ {t:'Indici e slicing',
+  c:'Una stringa è una sequenza di caratteri numerati a partire da 0. Gli indici negativi contano dalla fine. Lo slicing `s[inizio:fine:passo]` estrae una parte: `inizio` è compreso, `fine` è escluso.',
+  h:['`s[0]` è il primo carattere, `s[-1]` l\'ultimo.','`s[a:b]` prende i caratteri da a fino a b − 1.','Se manca un estremo si arriva al bordo: `s[:3]`, `s[2:]`.','`s[::-1]` rovescia la stringa. `len(s)` dà la lunghezza.'],
+  q:'Con `s = "Python"`, quanto valgono `s[1:4]`, `s[-1]`, `s[::2]` e `s[::-1]`?',
+  s:['`s[1:4]`: indici 1, 2, 3, cioè `"yth"`.','`s[-1]` è `"n"`.','`s[::2]`: un carattere sì e uno no, `"Pto"`.','`s[::-1]` è `"nohtyP"`.'],
+  w:'L\'estremo destro è escluso: `s[1:4]` ha 3 caratteri, non 4.'},
+ {t:'Metodi delle stringhe',
+  c:'Le stringhe sono immutabili: i metodi non modificano l\'originale, restituiscono una nuova stringa (o un altro valore).',
+  h:['`upper()`, `lower()`: maiuscole e minuscole. `strip()`: toglie gli spazi ai bordi.','`replace(a, b)`: sostituisce. `split(sep)`: divide in una lista. `sep.join(lista)`: riunisce.','`find(x)`: posizione della prima occorrenza, −1 se non c\'è. `count(x)`: quante volte compare.','`in` controlla se una sottostringa è presente.'],
+  q:'Cosa stampa questo codice?\n`s = "  ciao mondo "\nt = s.strip().upper()\nprint(t.split())\nprint(s.count("o"))`',
+  s:['`strip()` toglie gli spazi esterni, `upper()` mette in maiuscolo: `t` vale `"CIAO MONDO"`.','`t.split()` stampa `[\'CIAO\', \'MONDO\']`.','In `s` la lettera o compare 3 volte: stampa 3.'],
+  w:'`s.upper()` da solo non cambia `s`: serve riassegnare, `s = s.upper()`.'}
+]);
+L('i-if',[
+ {t:'Decisioni con if, elif, else',
+  c:'L\'istruzione `if` esegue un blocco solo se una condizione è vera. `elif` aggiunge altri casi, `else` raccoglie tutto il resto. Viene eseguito solo il primo ramo la cui condizione è vera.',
+  h:['Scrivi la condizione con gli operatori di confronto: `==`, `!=`, `<`, `<=`, `>`, `>=`.','Combina le condizioni con `and`, `or`, `not` (precedenza: `not`, poi `and`, poi `or`).','Metti i casi più restrittivi per primi.','Il blocco è definito dall\'indentazione.'],
+  q:'Cosa stampa questo codice con `voto = 27`?\n`if voto >= 18:\n    print("sufficiente")\nelif voto >= 27:\n    print("ottimo")\nelse:\n    print("insufficiente")`',
+  s:['La prima condizione, `voto >= 18`, è vera.','Viene eseguito solo quel ramo: stampa sufficiente.','Il ramo `elif` non viene nemmeno controllato. Per ottenere "ottimo" bisogna mettere prima il controllo `>= 27`.'],
+  w:'Una serie di `if` separati controlla tutte le condizioni; una catena `if/elif` si ferma alla prima vera.'}
+]);
+L('i-cicli',[
+ {t:'Ciclo while',
+  c:'`while` ripete un blocco finché la condizione resta vera. Si usa quando non si sa in anticipo quante ripetizioni servono.',
+  h:['Inizializza la variabile di controllo prima del ciclo.','Scrivi la condizione di permanenza.','Dentro il ciclo modifica la variabile, altrimenti il ciclo non finisce mai.','Per capire un ciclo, fai la tabella dei valori giro per giro.'],
+  q:'Quante volte viene eseguito il corpo e cosa viene stampato?\n`n = 10\nc = 0\nwhile n > 1:\n    n = n // 2\n    c += 1\nprint(c, n)`',
+  s:['Giro 1: n = 5, c = 1.','Giro 2: n = 2, c = 2.','Giro 3: n = 1, c = 3. Ora `n > 1` è falso.','Stampa `3 1`.'],
+  w:'Se la condizione è falsa già all\'inizio, il corpo non viene eseguito nemmeno una volta.'},
+ {t:'Ciclo for e range',
+  c:'`for` scorre gli elementi di una sequenza. `range(inizio, fine, passo)` genera interi da `inizio` a `fine` escluso.',
+  h:['`range(n)` va da 0 a n − 1: sono n valori.','`range(a, b)` va da a fino a b − 1.','`range(a, b, p)` avanza di p; con p negativo conta all\'indietro.','`break` esce dal ciclo, `continue` salta al giro successivo.'],
+  q:'Che valori assume `i` in `range(2, 10, 3)`? Cosa stampa questo codice?\n`t = 0\nfor i in range(1, 5):\n    if i == 3:\n        continue\n    t += i\nprint(t)`',
+  s:['`range(2, 10, 3)`: 2, 5, 8.','Nel ciclo `i` vale 1, 2, 3, 4, ma il 3 viene saltato.','t = 1 + 2 + 4 = 7.'],
+  w:'L\'estremo finale di `range` è sempre escluso.'}
+]);
+L('i-liste',[
+ {t:'Liste',
+  c:'Una lista è una sequenza ordinata e modificabile di valori. Si usano indici e slicing come per le stringhe, ma gli elementi si possono cambiare.',
+  h:['`a[i]` legge o modifica un elemento; `len(a)` dà il numero di elementi.','`append(x)` aggiunge in fondo, `insert(i, x)` in posizione i, `pop()` toglie l\'ultimo, `remove(x)` toglie la prima occorrenza.','`sort()` ordina la lista stessa; `sorted(a)` ne crea una nuova ordinata.','`b = a` non copia: crea un secondo nome per la stessa lista. Per copiare usa `a[:]` o `a.copy()`.'],
+  q:'Cosa stampa questo codice?\n`a = [1, 2, 3]\nb = a\nc = a[:]\nb.append(4)\nprint(a, c)`',
+  s:['`b` è un altro nome per la stessa lista di `a`.','`c` è una copia indipendente.','`b.append(4)` modifica anche `a`.','Stampa `[1, 2, 3, 4] [1, 2, 3]`.'],
+  w:'`a.sort()` restituisce `None`: scrivere `a = a.sort()` fa perdere la lista.'}
+]);
+L('i-tab',[
+ {t:'Tabelle (liste di liste)',
+  c:'Una tabella si rappresenta con una lista di righe, dove ogni riga è a sua volta una lista. L\'elemento si individua con due indici: prima la riga, poi la colonna.',
+  h:['`m[r][c]`: riga r, colonna c, entrambe a partire da 0.','Numero di righe: `len(m)`. Numero di colonne: `len(m[0])`.','Per scorrere tutto usa due cicli annidati: quello esterno sulle righe, quello interno sulle colonne.','Per una colonna: `for r in range(len(m))` leggendo `m[r][c]`.'],
+  q:'Con `m = [[1, 2, 3], [4, 5, 6]]`, quanto vale `m[1][2]`? Cosa stampa questo codice?\n`t = 0\nfor riga in m:\n    t += riga[0]\nprint(t)`',
+  s:['`m[1]` è la seconda riga, `[4, 5, 6]`; l\'elemento di indice 2 è 6.','Il ciclo somma il primo elemento di ogni riga: 1 + 4.','Stampa 5.'],
+  w:'`[[0] * 3] * 2` crea due righe che sono la stessa lista: modificarne una cambia anche l\'altra.'}
+]);
+L('i-tuple',[
+ {t:'Tuple',
+  c:'Una tupla è una sequenza ordinata come la lista, ma immutabile: dopo la creazione non si può modificare. Si scrive con le parentesi tonde.',
+  h:['Crea: `t = (1, 2, 3)`; con un solo elemento serve la virgola: `(5,)`.','Leggi con indici e slicing come per le liste.','Spacchettamento: `a, b = t` assegna gli elementi a più variabili.','Scambio di due variabili: `a, b = b, a`.'],
+  q:'Cosa succede con questo codice?\n`t = (1, 2, 3)\nx, y, z = t\nprint(y)\nt[0] = 9`',
+  s:['Lo spacchettamento assegna x = 1, y = 2, z = 3.','`print(y)` stampa 2.','`t[0] = 9` dà errore `TypeError`: le tuple non si modificano.'],
+  w:'`(5)` è solo il numero 5 tra parentesi; la tupla è `(5,)`.'}
+]);
+L('i-funz',[
+ {t:'Funzioni',
+  c:'Una funzione è un blocco di codice con un nome, che riceve dei parametri e può restituire un risultato con `return`. Serve a non ripetere codice e a dividere un problema in parti.',
+  h:['Definisci: `def nome(parametri):` seguito dal corpo indentato.','`return valore` termina la funzione e restituisce il risultato; senza `return` la funzione restituisce `None`.','Le variabili create dentro la funzione sono locali: fuori non esistono.','Un parametro può avere un valore predefinito: `def f(x, n=2)`.'],
+  q:'Cosa stampa questo codice?\n`def f(x):\n    x = x + 1\n    return x\n\na = 5\nb = f(a)\nprint(a, b)`',
+  s:['Dentro la funzione `x` è una variabile locale che parte da 5 e diventa 6.','La funzione restituisce 6, che viene assegnato a `b`.','`a` non cambia. Stampa `5 6`.'],
+  w:'`print` mostra un valore, `return` lo restituisce: una funzione che fa solo `print` restituisce `None`.'}
+]);
+L('i-file',[
+ {t:'File di testo',
+  c:'Per leggere o scrivere un file bisogna aprirlo con `open(nome, modo)`. Il costrutto `with` chiude il file da solo alla fine del blocco.',
+  h:['Modi: `"r"` lettura, `"w"` scrittura (cancella il contenuto precedente), `"a"` aggiunta in fondo.','Leggere: `for riga in f` una riga alla volta; `f.read()` tutto; `f.readlines()` lista di righe.','Ogni riga letta finisce con `\\n`: toglilo con `strip()`.','Scrivere: `f.write(testo)`; il carattere di a capo va aggiunto a mano.'],
+  q:'Cosa fa questo codice?\n`n = 0\nwith open("dati.txt", "r") as f:\n    for riga in f:\n        if riga.strip() != "":\n            n += 1\nprint(n)`',
+  s:['Apre `dati.txt` in lettura e lo scorre riga per riga.','`riga.strip()` toglie spazi e a capo: se resta qualcosa la riga non è vuota.','Stampa il numero di righe non vuote del file.'],
+  w:'Aprire in `"w"` un file che esiste ne cancella subito il contenuto.'}
+]);
+L('i-ecc',[
+ {t:'Eccezioni',
+  c:'Un\'eccezione è un errore che avviene durante l\'esecuzione. Con `try` ed `except` il programma può intercettarla e continuare invece di interrompersi.',
+  h:['Metti nel `try` il codice che può fallire.','`except TipoErrore:` gestisce quel tipo di errore.','`else` viene eseguito solo se non ci sono stati errori; `finally` viene eseguito sempre.','Errori comuni: `ValueError` (conversione non valida), `ZeroDivisionError`, `IndexError`, `KeyError`, `TypeError`, `FileNotFoundError`. `raise` solleva un\'eccezione.'],
+  q:'Cosa stampa questo codice?\n`try:\n    n = int("abc")\n    print("ok")\nexcept ValueError:\n    print("non valido")\nfinally:\n    print("fine")`',
+  s:['`int("abc")` solleva `ValueError`: il resto del `try` viene saltato, quindi "ok" non viene stampato.','Il ramo `except ValueError` stampa non valido.','`finally` viene eseguito comunque: stampa fine.'],
+  w:'Un `except` senza tipo cattura qualsiasi errore e nasconde anche quelli che non ti aspetti.'}
+]);
+
 </script>
 <script>
 (function(){
@@ -3010,8 +3393,11 @@ function when(ts){var d=new Date(ts);function z(n){return (n<10?'0':'')+n;}retur
 var LETTERS='ABCDE';
 var LV=['Tutte','Facile','Media','Difficile'];
 /* ---------- accesso ---------- */
-var AUTH_KEY='chimicaquiz.auth', CRED='125wnja', authed=false, loginErr=false;
-try{authed=localStorage.getItem(AUTH_KEY)===CRED;}catch(e){}
+var AUTH_KEY='chimicaquiz.auth', CRED='125wnja', CRED2='1pgxcm0', authed=false, loginErr=false, who='';
+// Due accessi: Polito (quiz) ed Elyass (quiz e lezioni).
+try{who=localStorage.getItem(AUTH_KEY)||'';authed=who===CRED||who===CRED2;}catch(e){}
+function userName(){return who===CRED2?'Elyass':'Polito';}
+function hasLez(){return who===CRED2;}
 var PIN=/^(Nessuna delle|Nessuno dei|Tutte le)/;
 
 /* ---------- costruzione di una sessione ---------- */
@@ -3103,6 +3489,8 @@ var IC={
   up:'<path d="M12 19V5M6 11l6-6 6 6"/>',
   plus:'<path d="M12 5v14M5 12h14"/>',
   chev:'<path d="m9 6 6 6-6 6"/>',
+  book:'<path d="M5 4.5h10.5A2.5 2.5 0 0 1 18 7v13H7.5A2.5 2.5 0 0 1 5 17.5v-13ZM5 17.5A2.5 2.5 0 0 1 7.5 15H18M9 8.5h5"/>',
+  alert:'<path d="M12 4 21 19.5H3L12 4ZM12 10v4.5M12 17h.01"/>',
   spark:'<path d="M12 4v4M12 16v4M4 12h4M16 12h4M7 7l2 2M15 15l2 2M17 7l-2 2M9 15l-2 2"/>',
   /* chimica */
   fond:'<rect x="3" y="8" width="18" height="8" rx="1.500"/><path d="M7 8v3M11 8v4.500M15 8v3"/>',
@@ -3139,10 +3527,10 @@ function ic(n,cls){return '<svg class="ic'+(cls?' '+cls:'')+'" viewBox="0 0 24 2
 
 function header(){
   var inQuiz=view==='quiz';
-  function tab(go,icon,label){return '<button data-go="'+go+'"'+(view===go?' aria-current="page"':'')+'>'+ic(icon)+'<span>'+label+'</span></button>';}
+  function tab(go,icon,label){return '<button data-go="'+go+'"'+(view===go||(go==='lez'&&view==='lezione')?' aria-current="page"':'')+'>'+ic(icon)+'<span>'+label+'</span></button>';}
   return '<header class="top"><div class="brand">'+ic('logo')+'Quiz per Test</div>'+
-    (inQuiz?'':'<nav class="tabs" aria-label="Pagine">'+tab('home','grid','Sezioni')+tab('storico','history','Storico')+tab('ai','chat','Assistente AI')+'</nav>'+
-      '<details class="prof"><summary aria-label="Profilo">'+ic('user')+'</summary><div class="menu"><div class="who"><b>Polito</b><span>Storico salvato su questo dispositivo</span></div>'+
+    (inQuiz?'':'<nav class="tabs" aria-label="Pagine">'+tab('home','grid','Sezioni')+(hasLez()?tab('lez','book','Lezioni'):'')+tab('storico','history','Storico')+tab('ai','chat','Assistente AI')+'</nav>'+
+      '<details class="prof"><summary aria-label="Profilo">'+ic('user')+'</summary><div class="menu"><div class="who"><b>'+userName()+'</b><span>Storico salvato su questo dispositivo</span></div>'+
       '<button data-act="logout">'+ic('logout')+'Esci</button></div></details>')+
     '</header>';
 }
@@ -3270,6 +3658,53 @@ function storico(){
   h+='</tbody></table></div>';
   h+=wipeAsk?'<div class="confirm" role="alert"><p>Cancellare tutte le sessioni di entrambe le materie, gli errori da ripassare e le statistiche? Non si può annullare.</p><button class="btn" data-act="wipe-yes">Cancella tutto</button><button class="btn ghost" data-act="wipe-no">Annulla</button></div>'
     :'<button class="btn ghost" data-act="wipe">Cancella lo storico</button>';
+  return h;
+}
+/* ---------- lezioni (solo per l'accesso Elyass) ---------- */
+var LZ=null, P=null;
+function pracNew(){
+  var cands=pool(P.topic).filter(function(c){return !c.again;}), fresh=cands.filter(function(c){return !P.used[c.id];});
+  if(!fresh.length){P.used={};fresh=cands;}
+  var c=fresh[rnd(fresh.length)];
+  if(!c.src.fn)P.used[c.id]=1;            // gli esercizi con dati casuali possono ripresentarsi con numeri nuovi
+  P.item=materialize(c.src,c.id);P.n++;
+}
+function pracHtml(){
+  var q=P.item, ans=q.sel>=0, right=q.sel===q.ok;
+  var h='<div class="card"><span class="tag">Esercizio '+P.n+' · '+LV[q.lv]+(P.done?' · giuste '+P.ok+' su '+P.done:'')+'</span><h3>'+fmt(q.q)+'</h3><div class="opts">';
+  q.o.forEach(function(o,i){
+    var cls=ans?(i===q.ok?' right':i===q.sel?' wrong':' dim'):'';
+    h+='<button class="opt'+cls+'" data-popt="'+i+'"'+(ans?' disabled':'')+'><span class="k">'+LETTERS[i]+'</span><span>'+fmt(o)+'</span></button>';
+  });
+  h+='</div>';
+  if(ans)h+='<div class="corr '+(right?'ok':'ko')+'" role="status"><b>'+(right?'Giusto':'Sbagliato: la risposta giusta è la '+LETTERS[q.ok])+'</b>'+fmt(q.e)+'</div><div class="qfoot"><button class="btn primary" data-act="pnext">Prossimo esercizio'+ic('chev')+'</button></div>';
+  else h+='<p class="note">Scegli una risposta: la correzione compare subito.</p>';
+  return h+'</div>';
+}
+function pracFill(){var el=document.getElementById('prac');if(el)el.innerHTML=pracHtml();}
+function lezList(){
+  var h=header()+subjSwitch();
+  h+='<div class="sech"><h2>Lezioni</h2><span class="muted small">spiegazione, metodo, esempio svolto ed esercizi</span></div><div class="grid">';
+  TOPICS.filter(function(t){return t.subj===db.subj;}).forEach(function(t){
+    var U=LESSONS[t.id]||[], ne=BANK.filter(function(x){return x.t===t.id;}).length+GENS.filter(function(g){return g.t===t.id;}).length;
+    h+='<button class="tile lz" data-lez="'+t.id+'"><span class="th"><span class="ti">'+ic(t.id)+'</span><span class="no">'+t.no+'</span><span class="cnt">'+ne+' esercizi</span></span>'+
+      '<span class="nm">'+esc(t.name)+'</span><span class="meta">'+U.map(function(u){return esc(u.t);}).join(' · ')+'</span></button>';
+  });
+  return h+'</div><p class="note">Gli esercizi guidati delle lezioni servono per allenarsi e non entrano nello storico: per registrare un risultato fai una sessione dalla pagina Sezioni.</p>';
+}
+function lezione(){
+  var t=TOPICS.filter(function(x){return x.id===LZ;})[0], U=LESSONS[LZ]||[];
+  var h=header()+'<div class="narrow"><button class="btn ghost back" data-go="lez">'+ic('chev')+'Lezioni</button>'+
+    '<div class="lhead"><span class="ti">'+ic(t.id)+'</span><div><span class="muted small">Capitolo '+t.no+' · '+(t.subj==='chimica'?'Chimica':'Informatica')+'</span><h1>'+esc(t.name)+'</h1></div></div>';
+  function ol(a){return '<ol>'+a.map(function(x){return '<li>'+fmt(x)+'</li>';}).join('')+'</ol>';}
+  U.forEach(function(u,i){
+    h+='<article class="unit"><h2><span class="un">'+(i+1)+'</span>'+esc(u.t)+'</h2>'+
+      '<h3>Cos\'è</h3><p>'+fmt(u.c)+'</p><h3>Come si fa</h3>'+ol(u.h)+
+      '<h3>Esempio svolto</h3><div class="exq">'+fmt(u.q)+'</div><details class="sol"><summary>Mostra la soluzione</summary>'+ol(u.s)+'</details>'+
+      (u.w?'<p class="warnl">'+ic('alert')+'<span>'+fmt(u.w)+'</span></p>':'')+'</article>';
+  });
+  h+='<div class="sech" id="prachead"><h2>Esercizi guidati</h2><span class="muted small">uno alla volta, con correzione immediata</span></div><div id="prac">'+pracHtml()+'</div>';
+  h+='<div class="actions"><button class="btn" data-start="sez" data-topic="'+t.id+'">Sessione da '+PER_SESSION+' domande su questa sezione</button><button class="btn ghost" data-go="lez">Altre lezioni</button></div></div>';
   return h;
 }
 /* ---------- assistente AI ---------- */
@@ -3513,7 +3948,8 @@ function render(){
   app.classList.remove('enter');if(enter){void app.offsetWidth;app.classList.add('enter');}
   if(!authed){document.documentElement.classList.remove('aimode');app.innerHTML=login();var f=document.getElementById('lu');if(f&&loginErr)f.focus();return;}
   document.documentElement.classList.toggle('aimode',view==='ai');
-  app.innerHTML=view==='quiz'?quiz():view==='review'?review():view==='storico'?storico():view==='ai'?aiView():home();
+  if((view==='lez'||view==='lezione')&&(!hasLez()||(view==='lezione'&&!P)))view=hasLez()?'lez':'home';
+  app.innerHTML=view==='quiz'?quiz():view==='review'?review():view==='storico'?storico():view==='ai'?aiView():view==='lez'?lezList():view==='lezione'?lezione():home();
   if(view==='ai'){aiFill();aiGrow();}
 }
 
@@ -3522,16 +3958,20 @@ app.addEventListener('submit',function(ev){
   ev.preventDefault();
   if(ev.target.id==='aiform'){if(authed){var q=document.getElementById('aiq');aiSend(q?q.value:'');}return;}
   var u=document.getElementById('lu'), p=document.getElementById('lp');if(!u||!p)return;
-  if(hash(u.value.trim().toLowerCase()+'\u0001'+p.value)===CRED){authed=true;loginErr=false;try{localStorage.setItem(AUTH_KEY,CRED);}catch(e){}view='home';}
+  var hv=hash(u.value.trim().toLowerCase()+'\u0001'+p.value);
+  if(hv===CRED||hv===CRED2){authed=true;who=hv;loginErr=false;try{localStorage.setItem(AUTH_KEY,hv);}catch(e){}view='home';}
   else loginErr=true;
   render();
 });
 app.addEventListener('click',function(ev){
   var b=ev.target.closest('button');if(!b||b.disabled)return;
   var d=b.dataset;
-  if(d.go){if(!authed)return;view=d.go;wipeAsk=false;try{history.replaceState(null,'',d.go==='storico'?'#storico':d.go==='ai'?'#assistente':'#sezioni');}catch(e){}render();window.scrollTo(0,0);return;}
+  if(d.go){if(!authed)return;view=d.go;wipeAsk=false;try{history.replaceState(null,'',d.go==='storico'?'#storico':d.go==='ai'?'#assistente':d.go==='lez'?'#lezioni':'#sezioni');}catch(e){}render();window.scrollTo(0,0);return;}
   if(!authed)return;
-  if(d.act==='logout'){authed=false;loginErr=false;try{localStorage.removeItem(AUTH_KEY);}catch(e){}render();return;}
+  if(d.act==='logout'){authed=false;who='';loginErr=false;try{localStorage.removeItem(AUTH_KEY);}catch(e){}render();return;}
+  if(d.lez){if(!hasLez()||!LESSONS[d.lez])return;LZ=d.lez;P={topic:d.lez,used:{},n:0,ok:0,done:0};pracNew();view='lezione';render();window.scrollTo(0,0);return;}
+  if(d.popt!=null&&view==='lezione'&&P){var pq=P.item;if(pq.sel<0){pq.sel=+d.popt;P.done++;if(pq.sel===pq.ok)P.ok++;pracFill();}return;}
+  if(d.act==='pnext'&&view==='lezione'&&P){pracNew();pracFill();var ph=document.getElementById('prachead');if(ph&&ph.getBoundingClientRect().top<0)ph.scrollIntoView();return;}
   if(d.aiprov){AI.prov=d.aiprov;aiSave();keepDraft(render);var ds=document.querySelector('.aiset');if(ds)ds.open=true;return;}
   if(d.act==='ai-new'){if(AI.busy)return;AI.msgs=[];AI.draft='';render();return;}
   if(d.sug){aiSend(d.sug);return;}
@@ -3580,8 +4020,8 @@ document.addEventListener('keydown',function(ev){
   else if(k==='arrowleft'){act('prev');ev.preventDefault();}
   else if(k==='escape'&&S.ask){act('ask-no');}
 });
-if(location.hash==='#storico')view='storico';else if(location.hash==='#assistente')view='ai';
-window.addEventListener('hashchange',function(){if(view==='quiz'||view==='review')return;view=location.hash==='#storico'?'storico':location.hash==='#assistente'?'ai':'home';render();});
+if(location.hash==='#storico')view='storico';else if(location.hash==='#assistente')view='ai';else if(location.hash==='#lezioni')view='lez';
+window.addEventListener('hashchange',function(){if(view==='quiz'||view==='review'||view==='lezione')return;view=location.hash==='#storico'?'storico':location.hash==='#assistente'?'ai':location.hash==='#lezioni'?'lez':'home';render();});
 render();
 })();
 </script>
