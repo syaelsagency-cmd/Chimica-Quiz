@@ -3271,9 +3271,19 @@ function storico(){
 /* ---------- assistente AI ---------- */
 var AI_KEY='quizpertest.ai';
 var AI={prov:'free',mfree:'auto',mor:'openrouter/free',key:'',msgs:[],busy:false,draft:'',
-  list:{free:['openai-fast','grok-4.1-mini:free','step-3.5-flash:free'],or:['openrouter/free']},loaded:{}};
+  cool:{},list:{free:['openai-fast','grok-4.1-mini:free','step-3.5-flash:free'],or:['openrouter/free']},loaded:{}};
 try{var ap=JSON.parse(localStorage.getItem(AI_KEY)||'null');if(ap){AI.prov=ap.prov==='or'?'or':'free';AI.mfree=(ap.v2&&ap.mfree)||AI.mfree;AI.mor=ap.mor||AI.mor;AI.key=ap.key||'';}}catch(e){}
 function aiSave(){try{localStorage.setItem(AI_KEY,JSON.stringify({v2:1,prov:AI.prov,mfree:AI.mfree,mor:AI.mor,key:AI.key}));}catch(e){}}
+var AI_OVH='https://oai.endpoints.kepler.ai.cloud.ovh.net/v1', AI_KILO='https://api.kilo.ai/api/gateway', AI_NET=/Failed to fetch|NetworkError|Load failed/i;
+var AI_OVHM=['gpt-oss-120b','Meta-Llama-3_3-70B-Instruct','Qwen3.8-27B','gpt-oss-20b'];
+// Percorsi senza chiave, alternati per servizio. gap = secondi di pausa dopo una risposta, secondo i limiti dichiarati da ciascun servizio.
+function aiRoutes(){
+  var R=[], kl=AI.list.free;
+  function a(base,model,gap){if(model)R.push({base:base,model:model,gap:gap});}
+  a(AI_FREE[0],kl[0]||'openai-fast',20);a(AI_OVH,AI_OVHM[0],31);a(AI_KILO,'kilo-auto/free',2);a(AI_FREE[1],'openai-fast',46);
+  a(AI_OVH,AI_OVHM[1],31);a(AI_FREE[0],kl[1],20);a(AI_OVH,AI_OVHM[2],31);a(AI_FREE[0],kl[2],20);a(AI_OVH,AI_OVHM[3],31);
+  return R;
+}
 var AI_FREE=['https://keylessai.thryx.workers.dev/v1','https://text.pollinations.ai/openai','https://api.airforce/v1'], AI_OR='https://openrouter.ai/api/v1';
 var AI_SYS='Sei un tutor per studenti che preparano i test universitari di chimica generale e di informatica (Python e rappresentazione dei dati). Rispondi in italiano, in modo chiaro e breve, mostrando i passaggi dei calcoli. Se non sei sicuro di qualcosa, dillo. Non usare LaTeX né tabelle: scrivi le formule in testo semplice con caratteri Unicode (per esempio 1s² 2s¹, H₂O, →, ×). Per il codice usa i blocchi con tre apici inversi.';
 // Le risposte dei modelli arrivano spesso in Markdown e LaTeX: qui diventano testo leggibile (apici, pedici, simboli, titoli, elenchi).
@@ -3389,26 +3399,31 @@ function aiSend(text){
   // Catena di tentativi: se un modello è al limite o non risponde si passa al successivo, senza dirlo.
   // La conversazione resta la stessa, perché a ogni richiesta viene inviata tutta la cronologia.
   var h={'Content-Type':'application/json'}, tries=[], seenT={};
-  function add(base,hd,model){var k=base+'|'+model;if(!seenT[k]){seenT[k]=1;tries.push({base:base,h:hd,model:model});}}
+  function add(base,hd,model,gap){var k=base+'|'+model;if(!seenT[k]){seenT[k]=1;tries.push({base:base,h:hd,model:model,k:k,gap:gap||0});}}
   if(AI.prov==='or'){
     var ho={'Content-Type':'application/json','Authorization':'Bearer '+AI.key,'X-Title':'Quiz per Test'};
     add(AI_OR,ho,AI.mor);add(AI_OR,ho,'openrouter/free');
     AI.list.or.filter(function(id){return id!==AI.mor&&id!=='openrouter/free';}).slice(0,4).forEach(function(id){add(AI_OR,ho,id);});
   } else {
-    var ms=AI.list.free.slice();
-    if(AI.mfree!=='auto')ms=[AI.mfree].concat(ms);
-    else if(AI.last&&ms.indexOf(AI.last)>0)ms=[AI.last].concat(ms);
-    ms.slice(0,6).forEach(function(id){add(AI_FREE[0],h,id);});
-    add(AI_FREE[1],h,'openai-fast');
+    // A ogni domanda si parte dal servizio successivo; quelli in pausa (appena usati o al limite) vanno in coda.
+    var now=Date.now(), R=aiRoutes(), ord=[], k;
+    AI.rr=((AI.rr==null?-1:AI.rr)+1)%R.length;
+    for(k=0;k<R.length;k++)ord.push(R[(AI.rr+k)%R.length]);
+    var ready=ord.filter(function(r){return !(AI.cool[r.base+'|'+r.model]>now);});
+    var paused=ord.filter(function(r){return AI.cool[r.base+'|'+r.model]>now;}).sort(function(x,y){return AI.cool[x.base+'|'+x.model]-AI.cool[y.base+'|'+y.model];});
+    if(AI.mfree!=='auto')add(AI_FREE[0],h,AI.mfree,20);
+    ready.concat(paused).slice(0,8).forEach(function(r){add(r.base,h,r.model,r.gap);});
   }
   function runChain(){
     var errs=[], i=0, t0=Date.now();
     function next(){
       if(i>=tries.length||Date.now()-t0>80000){var er=new Error(errs[errs.length-1]||'Nessun modello disponibile');er.all=errs;throw er;}
       var t=tries[i++];
-      return aiCall(t.base,t.h,t.model,onChunk).then(function(ans){if(AI.prov==='free')AI.last=t.model;return ans;},function(e){
+      return aiCall(t.base,t.h,t.model,onChunk).then(function(ans){AI.cool[t.k]=Date.now()+t.gap*1000;return ans;},function(e){
         if(got)throw e;                       // risposta già iniziata: non si riparte da capo
         var m=String(e&&e.message||e);errs.push(m);
+        var sec=/(?:retry|every|ogni)[^0-9]{0,20}(\d{1,3})\s*s/i.exec(m);
+        AI.cool[t.k]=Date.now()+(sec?Math.min(+sec[1]+1,120):AI_NET.test(m)?600:/timeout/.test(m)?120:60)*1000;
         if(AI.prov==='or'&&/401|invalid|No auth|User not found/i.test(m)){var ek=new Error('La chiave OpenRouter non è valida. Controllala nel menu del modello.');ek.fatal=1;throw ek;}
         return next();
       });
@@ -3429,7 +3444,8 @@ function aiSend(text){
   });
   p.then(function(ans){AI.msgs.push({r:'ai',t:ans});})
    .catch(function(e){var m=String(e&&e.message||e), all=(e&&e.all||[]).concat(m).join(' | ');
-     AI.msgs.push({r:'err',t:e&&e.fatal?m:/Failed to fetch|NetworkError|Load failed|abort/i.test(m)?'Non riesco a collegarmi ai servizi AI. Controlla la connessione e riprova. Se stai usando la pagina dentro Claude, la chat funziona solo dalla versione su GitHub o dall\'app per PC.':/limit|rate|429|quota|busy|every \d+ s/i.test(all)?'In questo momento tutti i modelli gratuiti sono al limite. Riprova tra un minuto.':/timeout/.test(all)?'I modelli gratuiti non stanno rispondendo in questo momento. Riprova tra poco.':'Nessun modello è riuscito a rispondere ('+m+'). Riprova tra poco.'});})
+     var errs=e&&e.all&&e.all.length?e.all:[m], net=errs.every(function(x){return AI_NET.test(x)||/abort/i.test(x);});
+     AI.msgs.push({r:'err',t:e&&e.fatal?m:net?'Non riesco a collegarmi ai servizi AI. Controlla la connessione e riprova. Se stai usando la pagina dentro Claude, la chat funziona solo dalla versione su GitHub o dall\'app per PC.':/limit|rate|429|quota|busy|every \d+ s/i.test(all)?'In questo momento tutti i modelli gratuiti sono al limite. Riprova tra un minuto.':/timeout/.test(all)?'I modelli gratuiti non stanno rispondendo in questo momento. Riprova tra poco.':'Nessun modello è riuscito a rispondere ('+m+'). Riprova tra poco.'});})
    .then(function(){AI.busy=false;AI.el=null;if(view==='ai'){aiFill();aiGrow();var q=document.getElementById('aiq');if(q&&window.matchMedia('(pointer:fine)').matches)q.focus();}});
 }
 function aiView(){
@@ -3439,7 +3455,7 @@ function aiView(){
     '<div class="seg" role="group" aria-label="Servizio"><button type="button" data-aiprov="free" aria-pressed="'+(prov==='free')+'">Senza chiave</button><button type="button" data-aiprov="or" aria-pressed="'+(prov==='or')+'">OpenRouter</button></div>'+
     '<select id="aimodel" aria-label="Modello">'+aiOptions()+'</select>'+
     (prov==='or'?'<input id="aikey" type="password" autocomplete="off" placeholder="Chiave OpenRouter (sk-or-…)" value="'+esc(AI.key)+'" aria-label="Chiave OpenRouter">':'')+
-    '<p class="note">'+(prov==='or'?'La chiave è gratuita e resta salvata solo su questo dispositivo. <a href="https://openrouter.ai/settings/keys" target="_blank" rel="noopener">Creane una su openrouter.ai</a>.':'Servizi pubblici gratuiti gestiti da terzi. In automatico, se un modello è al limite si passa al successivo senza interrompere la conversazione.')+'</p></div></details>'+
+    '<p class="note">'+(prov==='or'?'La chiave è gratuita e resta salvata solo su questo dispositivo. <a href="https://openrouter.ai/settings/keys" target="_blank" rel="noopener">Creane una su openrouter.ai</a>.':'Servizi pubblici gratuiti gestiti da terzi (Pollinations, OVHcloud, Kilo). In automatico ogni risposta usa un servizio diverso, per non fermarsi ai limiti di ciascuno; la conversazione resta la stessa.')+'</p></div></details>'+
     '<button type="button" class="ainew" data-act="ai-new">'+ic('plus')+'Nuova chat</button></div>';
   h+='<div id="chatlog" aria-live="polite"></div>';
   h+='<form class="composer" id="aiform"><textarea id="aiq" rows="1" placeholder="Scrivi un messaggio" aria-label="Messaggio">'+esc(AI.draft)+'</textarea><button id="aisend" type="submit" aria-label="Invia" disabled>'+ic('up')+'</button></form>';
