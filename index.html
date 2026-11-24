@@ -2282,6 +2282,20 @@ window.addEventListener('hashchange',function(){if(view==='quiz')return;view=loc
 render();
 })();
 </script>
-<script>if('serviceWorker' in navigator&&location.protocol==='https:'){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+<script>
+if('serviceWorker' in navigator&&location.protocol==='https:'){
+  var avevaSW=!!navigator.serviceWorker.controller, ricaricata=false;
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      // ogni volta che l'app torna in primo piano controlla se c'e' una versione nuova
+      document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')reg.update().catch(function(){});});
+    }).catch(function(){});
+  });
+  // quando arriva la versione nuova ricarica la pagina, ma non durante una sessione di quiz
+  navigator.serviceWorker.addEventListener('controllerchange',function(){
+    if(avevaSW&&!ricaricata&&!document.querySelector('.dots')){ricaricata=true;location.reload();}
+  });
+}
+</script>
 </body>
 </html>
