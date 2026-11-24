@@ -1,6 +1,6 @@
 {
- "name": "Chimica Quiz",
- "short_name": "Chimica Quiz",
+ "name": "Quiz per Test",
+ "short_name": "Quiz per Test",
  "lang": "it",
  "start_url": "./",
  "scope": "./",

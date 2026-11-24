@@ -7,11 +7,11 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Chimica Quiz">
+<meta name="apple-mobile-web-app-title" content="Quiz per Test">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#f4f5f3" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#161a1b" media="(prefers-color-scheme: dark)">
-<title>Chimica Quiz</title>
+<title>Quiz per Test</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -87,6 +87,14 @@ nav.tabs button[aria-current="page"]{background:var(--sunken);color:var(--ink)}
 .login input:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
 .login .btn{width:100%;margin-top:22px;padding:12px}
 .login .err{background:var(--ko-soft);color:var(--ko);border-radius:10px;padding:10px 12px;margin-top:16px;font-size:14.5px}
+code{font-family:var(--mono);font-size:.92em;background:var(--sunken);padding:.12em .38em;border-radius:6px}
+code.blk{display:block;white-space:pre;overflow-x:auto;padding:14px 16px;margin:12px 0 0;font-size:14.5px;line-height:1.55;font-weight:400;border-radius:10px}
+.opt.sel code{background:var(--surface)}
+.subj{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 40px}
+.subj button{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:2px}
+.subj button b{font:500 19px/1.2 var(--display);letter-spacing:-.01em}
+.subj button span{font-size:13px;color:var(--muted)}
+.subj button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
 /* quiz */
 .qhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .qhead h2{font-size:18px;font-weight:500}
@@ -1254,6 +1262,462 @@ Q('organica','Quale sostanza è la meno solubile nel benzene?',['Acqua','Esano',
 Q('organica','La combustione completa di un idrocarburo produce:',['CO₂ e H₂O','CO e H₂','C e H₂O','CO₂ e H₂'],'In difetto di ossigeno si forma anche CO.');
 Q('organica','Quanti legami σ e π ci sono in una molecola di etene C₂H₄?',['5 σ e 1 π','4 σ e 2 π','6 σ e 0 π','3 σ e 2 π'],'Quattro C–H, un C–C σ e un π.');
 
+// ===== INFORMATICA — capitoli 1–4 =====
+// Il codice Python è scritto tra accenti gravi: `codice`
+// ---------- 1. Rappresentazione dei dati ----------
+Q("i-dati","In un sistema posizionale in base B, quali cifre sono disponibili?",["Da 0 a B − 1","Da 1 a B","Da 0 a B","Da 1 a B − 1"],"Le cifre sono B in tutto, da 0 a B − 1: in base 2 sono 0 e 1, in base 10 da 0 a 9.");
+Q("i-dati","Quale di questi sistemi di numerazione NON è posizionale?",["Romano","Indo-arabo decimale","Binario","Babilonese","Maya"],"Nel sistema romano il valore di un simbolo non dipende dalla posizione: è un sistema additivo, come l'egiziano e il greco.");
+Q("i-dati","Nel sistema decimale, che peso ha la cifra in posizione i (contando da destra a partire da 0)?",["10ⁱ","10 · i","i¹⁰","10ⁱ⁺¹"],"In base B la cifra in posizione i pesa Bⁱ.");
+Q("i-dati","Che cos'è un bit?",["Una singola cifra binaria","Un gruppo di 8 cifre binarie","Un numero decimale","Una cella di memoria"],"Bit = BInary digiT. Otto bit formano un byte.");
+Q("i-dati","Quanti bit ci sono in un byte?",["8","4","16","10","2"],"Un byte è un gruppo di 8 bit.");
+Q("i-dati","Che cos'è il MSB?",["Il bit più a sinistra, di peso maggiore","Il bit più a destra, di peso minore","Il bit di parità","Il primo bit letto dal resto delle divisioni"],"Most Significant Bit. Il LSB è invece il bit più a destra.");
+Q("i-dati","Quanto vale 2¹⁰?",["1024","1000","512","2048","100"],"È una delle potenze da sapere a memoria: 2⁸ = 256, 2⁹ = 512, 2¹⁰ = 1024.");
+Q("i-dati","Quanto vale 2¹⁶?",["65 536","32 768","16 384","65 535","1 048 576"],"65 535 è invece il massimo rappresentabile su 16 bit in binario puro.");
+Q("i-dati","Come si converte un numero da decimale a binario?",["Divisioni successive per 2, leggendo i resti dall'ultimo al primo","Divisioni successive per 2, leggendo i resti dal primo all'ultimo","Moltiplicazioni successive per 2","Somma pesata delle cifre"],"Il primo resto ottenuto è il LSB, l'ultimo è il MSB. La somma pesata serve per il verso opposto.");
+Q("i-dati","A quanti bit corrisponde una cifra esadecimale?",["4","3","8","2","16"],"Rapporto 4 : 1. Una cifra ottale corrisponde invece a 3 bit.");
+Q("i-dati","A quanti bit corrisponde una cifra ottale?",["3","4","8","2"],"Le cifre ottali vanno da 0 a 7, cioè da 000 a 111.");
+Q("i-dati","Quanto vale in decimale la cifra esadecimale F?",["15","16","14","10","6"],"A = 10, B = 11, C = 12, D = 13, E = 14, F = 15.");
+Q("i-dati","Come si scrive 10111001₂ in esadecimale?",["B9","271","5C","A9","139"],"Si raggruppa a 4 bit da destra: 1011 = B, 1001 = 9. 271 è la scrittura in ottale.");
+Q("i-dati","Come si scrive 10111001₂ in ottale?",["271","B9","561","135"],"Si raggruppa a 3 bit da destra: 10 = 2, 111 = 7, 001 = 1.");
+Q("i-dati","Che cosa restituisce `int('344', base=5)`?",["99","344","1720","'344'"],"3×25 + 4×5 + 4 = 99: la stringa viene letta come numero in base 5.");
+Q("i-dati","Che cosa restituisce `bin(17)`?",["'0b10001'","10001","'10001'","'0x11'"],"È una stringa con il prefisso 0b. `hex(17)` dà '0x11' e `oct(17)` dà '0o21'.");
+Q("i-dati","Che cosa restituisce `hex(17)`?",["'0x11'","'0b10001'","'0o21'","'17'"],"17 = 1×16 + 1. Il risultato è una stringa con prefisso 0x.");
+Q("i-dati","Con N bit, quante combinazioni distinte si ottengono?",["2ᴺ","2ᴺ − 1","N²","2 · N"],"Per questo in binario puro si rappresentano i valori da 0 a 2ᴺ − 1.");
+Q("i-dati","Qual è il massimo numero naturale rappresentabile su 8 bit in binario puro?",["255","256","127","128","511"],"2⁸ − 1 = 255: le 256 combinazioni comprendono lo zero.");
+Q("i-dati","Quanto fa 1 + 1 in binario?",["0 con riporto 1","1 con riporto 1","2","1 senza riporto"],"1 + 1 = 10₂: si scrive 0 e si riporta 1 sulla colonna successiva.");
+Q("i-dati","Quanto fa 0110 + 0111 in binario?",["1101","1011","1111","1001"],"6 + 7 = 13 = 1101₂.");
+Q("i-dati","Che cos'è l'overflow?",["Il risultato di un'operazione non è rappresentabile con la stessa codifica e lo stesso numero di bit","Un numero troppo piccolo viene arrotondato a zero","Un errore di sintassi","La divisione per zero"],"È una condizione dinamica: nasce da un'operazione, non è una proprietà di un numero. Il caso del numero troppo vicino a zero si chiama underflow.");
+Q("i-dati","In binario puro su 4 bit, la somma 0101 + 1110 dà overflow?",["Sì: il risultato è 19, che richiede 5 bit","No: il risultato è 3","No: il risultato è 15","Sì, ma solo in complemento a due"],"5 + 14 = 19 > 15. C'è riporto oltre il MSB.");
+Q("i-dati","In binario puro, quando c'è overflow in una somma su un numero fisso di bit?",["Quando c'è riporto sul MSB","Quando il risultato è dispari","Quando gli addendi sono uguali","Mai"],"Nella sottrazione, quando c'è prestito sul MSB.");
+Q("i-dati","In Python, la somma di due interi molto grandi può dare overflow?",["No: gli interi hanno precisione arbitraria","Sì, oltre 2³¹ − 1","Sì, oltre 2⁶³ − 1","Sì, oltre 10³⁰⁸"],"Gli `int` di Python non hanno limiti; i `float` invece sì.");
+Q("i-dati","Come si rappresenta −3 su 4 bit in modulo e segno?",["1011","0011","1101","1100"],"Il primo bit è il segno (1 = negativo), gli altri tre il modulo: 011.");
+Q("i-dati","Quale svantaggio ha la codifica in modulo e segno?",["Ha due rappresentazioni dello zero","Non rappresenta i numeri negativi","Usa il doppio dei bit","Non ha un bit di segno"],"0000 è +0 e 1000 è −0. Inoltre le operazioni richiedono di guardare i segni.");
+Q("i-dati","Qual è l'intervallo rappresentabile su 8 bit in modulo e segno?",["Da −127 a +127","Da −128 a +127","Da 0 a 255","Da −128 a +128"],"Da −(2ᴺ⁻¹ − 1) a +(2ᴺ⁻¹ − 1): uno dei 256 codici è sprecato per il secondo zero.");
+Q("i-dati","In complemento a due su N bit, che peso ha il MSB?",["−2ᴺ⁻¹","+2ᴺ⁻¹","−2ᴺ","Nessuno: indica solo il segno"],"Il numero resta posizionale, ma il bit più a sinistra ha peso negativo.");
+Q("i-dati","Quanto vale 101101 interpretato in complemento a due su 6 bit?",["−19","45","−13","−45","19"],"−32 + 8 + 4 + 1 = −19.");
+Q("i-dati","Come si scrive −12 in complemento a due su 5 bit?",["10100","11100","10011","01100"],"+12 = 01100; si complementa (10011) e si somma 1: 10100.");
+Q("i-dati","Come si cambia segno a un numero in complemento a due?",["Si complementa ogni bit e si somma 1","Si inverte solo il MSB","Si sottrae 1","Si complementa ogni bit"],"La procedura vale in entrambe le direzioni.");
+Q("i-dati","Qual è l'intervallo rappresentabile su 8 bit in complemento a due?",["Da −128 a +127","Da −127 a +127","Da −128 a +128","Da 0 a 255"],"Da −2ᴺ⁻¹ a 2ᴺ⁻¹ − 1: c'è un solo zero e un negativo in più.");
+Q("i-dati","Come si rappresenta −1 in complemento a due su N bit?",["Tutti i bit a 1","Solo il MSB a 1","Solo il LSB a 1","Tutti i bit a 0 tranne i due estremi"],"Per esempio su 4 bit: 1111 = −8 + 4 + 2 + 1 = −1.");
+Q("i-dati","In complemento a due, quando può esserci overflow in una somma?",["Solo se gli addendi hanno lo stesso segno e il risultato ha segno diverso","Ogni volta che c'è riporto oltre il MSB","Solo se gli addendi hanno segno diverso","Mai"],"Con addendi di segno discorde l'overflow è impossibile. Il riporto oltre il MSB si trascura sempre.");
+Q("i-dati","In complemento a due, il riporto oltre il MSB:",["Si trascura sempre","Indica sempre overflow","Va sommato al risultato","Cambia il segno del risultato"],"L'overflow in CA2 non coincide con il carry.");
+Q("i-dati","Quanto vale 11.011₂ in virgola fissa?",["3,375","3,3","3,011","6,75","3,75"],"2 + 1 + 0,25 + 0,125: i bit dopo la virgola pesano 2⁻¹, 2⁻², 2⁻³.");
+Q("i-dati","Quali tre campi si memorizzano per un numero in virgola mobile?",["Segno, esponente, mantissa","Parte intera, virgola, parte frazionaria","Numeratore, denominatore, segno","Base, cifre, resto"],"È la notazione scientifica in base 2: ±M × 2ᴱ.");
+Q("i-dati","Nello standard IEEE-754 in doppia precisione, quanti bit ha la mantissa?",["52","23","64","11","32"],"1 bit di segno, 11 di esponente, 52 di mantissa: 64 in tutto. In singola precisione sono 1, 8 e 23.");
+Q("i-dati","Quanti bit occupa un numero IEEE-754 in singola precisione?",["32","64","16","23"],"1 + 8 + 23.");
+Q("i-dati","Perché in Python `0.1 + 0.2 == 0.3` risulta `False`?",["Alcuni decimali non sono rappresentabili esattamente in binario","Python arrotonda sempre per difetto","La somma tra float non è permessa","È un errore di sintassi"],"0.1 viene approssimato: la precisione dei float è limitata.");
+Q("i-dati","Che cos'è l'underflow nei numeri in virgola mobile?",["Un numero troppo vicino a zero diventa 0","Un numero troppo grande diventa inf","Un intero negativo","La perdita del bit di segno"],"L'overflow riguarda invece i numeri troppo grandi in modulo.");
+Q("i-dati","Che tipo di precisione ha il `float` di Python?",["Doppia precisione (64 bit)","Singola precisione (32 bit)","Arbitraria","8 bit"],"Massimo circa 1,8 × 10³⁰⁸; oltre diventa `inf`.");
+Q("i-dati","Quanti bit servono per codificare 100 oggetti distinti?",["7","6","100","8","10"],"Serve il più piccolo N con 2ᴺ ≥ 100: 2⁶ = 64 non basta, 2⁷ = 128 sì.");
+Q("i-dati","Quanti bit usava in origine il codice ASCII?",["7","8","16","21"],"Poi esteso a 8. Codifica lettere, cifre, punteggiatura e caratteri di controllo.");
+Q("i-dati","Quale codice ASCII ha il carattere di a-capo (Line Feed)?",["10","13","9","0","32"],"9 è la tabulazione, 13 il ritorno carrello.");
+Q("i-dati","Quale codice usa Python per i caratteri delle stringhe?",["Unicode","ASCII a 7 bit","EBCDIC","Solo UTF-16"],"Unicode copre i caratteri di tutte le lingue e gli emoji.");
+Q("i-dati","Che cosa caratterizza la codifica UTF-8?",["Ha lunghezza variabile: da 1 a 4 byte per carattere","Usa sempre 1 byte per carattere","Usa sempre 4 byte per carattere","Codifica solo l'alfabeto inglese"],"1 byte per i caratteri ASCII, 2 per le lettere accentate, fino a 4 per i caratteri rari.");
+Q("i-dati","Con 8 bit per canale, quanti livelli ha ciascun canale di colore (R, G, B)?",["256","255","8","1024"],"2⁸ = 256 livelli, da 0 a 255.");
+Q("i-dati","Che differenza c'è tra un file di testo formattato e uno non formattato?",["Quello formattato contiene anche byte che descrivono l'aspetto del testo","Quello non formattato è sempre più grande","Quello formattato contiene solo caratteri ASCII","Nessuna"],"Un file Word contiene font e spaziature; un file .txt solo i caratteri.");
+Q("i-dati","La sottrazione A − B in complemento a due si può calcolare come:",["A + (complemento a due di B)","A + B + 1","Complemento di A più B","A − B con prestito sul bit di segno"],"Le regole di somma si applicano a tutti i bit, segno compreso.");
+Q("i-dati","Perché la somma tra float non è sempre associativa?",["Sommando numeri di ordini di grandezza molto diversi si perdono cifre","Perché i float non hanno segno","Perché Python somma da destra","Perché i float sono interi"],"x + (y + z) può differire da (x + y) + z.");
+
+// ---------- 2. Fondamenti di Python ----------
+Q("i-base","In Python, che cosa fa l'operatore `=`?",["Assegna a un nome il valore dell'espressione a destra","Verifica se due valori sono uguali","Dichiara il tipo di una variabile","Confronta due variabili"],"Prima si valuta la destra, poi il risultato viene associato al nome a sinistra. Il confronto si fa con `==`.");
+Q("i-base","Che cosa succede usando una variabile a cui non è mai stato assegnato un valore?",["Si genera NameError","Vale 0","Vale None","Si genera ValueError"],"Una variabile nasce alla prima assegnazione.");
+Q("i-base","Dopo `x = 5` e poi `x = x + 1`, quanto vale `x`?",["6","5","Errore: x non può essere uguale a x + 1","1"],"Si calcola la destra (5 + 1) e si riassegna.");
+Q("i-base","In Python il tipo appartiene:",["Al valore","Al nome della variabile","Al file","Alla riga di codice"],"Lo stesso nome può riferirsi prima a un intero e poi a una stringa.");
+Q("i-base","Che tipo ha il valore `1.0`?",["float","int","str","bool"],"`1` è int, `1.0` è float, `'1'` è str: tre valori diversi.");
+Q("i-base","Che tipo ha il valore `'1'`?",["str","int","float","char"],"Tra apici è una stringa, anche se contiene una cifra.");
+Q("i-base","Quale funzione restituisce il tipo di un valore?",["`type(x)`","`kind(x)`","`typeof(x)`","`class(x)`"],"Per esempio `type(3.5)` è float.");
+Q("i-base","Quale di questi è un nome di variabile valido?",["`prezzo_2`","`2prezzo`","`prezzo-unitario`","`for`","`prezzo unitario`"],"Deve iniziare con una lettera o `_`, senza spazi né simboli, e non essere una parola riservata.");
+Q("i-base","`lattine` e `Lattine` sono:",["Due nomi diversi","Lo stesso nome","Un errore di sintassi","Due costanti"],"Python distingue maiuscole e minuscole (case sensitive).");
+Q("i-base","Come si scrivono per convenzione le costanti in Python?",["TUTTE_MAIUSCOLE","tutte_minuscole","Con il prefisso const","Tra apici"],"Python non le impone: è una convenzione che evita i numeri magici.");
+Q("i-base","Che cosa fa il carattere `#` in una riga di codice?",["Inizia un commento, ignorato dall'interprete","Indica una divisione intera","Importa un modulo","Termina il programma"],"Tutto ciò che segue fino a fine riga viene ignorato.");
+Q("i-base","Quanto vale `7 / 2`?",["3.5","3","4","3.0"],"`/` è la divisione reale e produce sempre un float.");
+Q("i-base","Quanto vale `7 // 2`?",["3","3.5","4","1"],"`//` è la divisione intera: il quoziente troncato verso il basso.");
+Q("i-base","Quanto vale `7 % 2`?",["1","3","3.5","0"],"`%` è il resto della divisione intera.");
+Q("i-base","Quanto vale `6 / 2`?",["3.0","3","2","'3'"],"Anche quando la divisione è esatta, `/` restituisce un float.");
+Q("i-base","Quanto vale `2 + 3 * 4`?",["14","20","24","9"],"Il prodotto ha precedenza sulla somma.");
+Q("i-base","Quanto vale `2 ** 3 ** 2`?",["512","64","36","18"],"`**` associa da destra: 3 ** 2 = 9, poi 2 ** 9 = 512.");
+Q("i-base","Quanto vale `7 + 2.0`?",["9.0","9","'9.0'","Errore"],"Un'operazione tra int e float dà un float.");
+Q("i-base","Come si verifica se `n` è pari?",["`n % 2 == 0`","`n / 2 == 0`","`n // 2 == 0`","`n ** 2 == 0`"],"Un numero è pari se il resto della divisione per 2 è zero.");
+Q("i-base","Che cosa isola l'espressione `n % 10`?",["L'ultima cifra decimale di n","La prima cifra di n","n senza l'ultima cifra","Il numero di cifre di n"],"`n // 10` elimina invece l'ultima cifra.");
+Q("i-base","Con `totale = 1234` centesimi, quanto valgono `totale // 100` e `totale % 100`?",["12 e 34","34 e 12","12.34 e 0","123 e 4"],"12 euro e 34 centesimi rimasti.");
+Q("i-base","Che cosa restituisce `int(3.9)`?",["3","4","3.9","Errore"],"La conversione a intero tronca: non arrotonda.");
+Q("i-base","Che cosa restituisce `round(3.14159, 2)`?",["3.14","3.1","3","3.142"],"Arrotonda a 2 decimali.");
+Q("i-base","Che cosa restituisce `abs(-7)`?",["7","-7","0","49"],"Il valore assoluto.");
+Q("i-base","Come si usa la radice quadrata dopo `import math`?",["`math.sqrt(x)`","`sqrt(x)`","`math(sqrt, x)`","`x.sqrt()`"],"Con `from math import sqrt` si potrebbe scrivere direttamente `sqrt(x)`.");
+Q("i-base","In che unità vogliono l'angolo `sin`, `cos` e `tan` del modulo math?",["Radianti","Gradi","Giri","Percentuale"],"Per convertire: `radians(x)` e `degrees(x)`.");
+Q("i-base","Che tipo di valore restituisce sempre `input()`?",["Una stringa","Un intero","Un float","Dipende da ciò che si digita"],"Per fare calcoli bisogna convertire con `int()` o `float()`.");
+Q("i-base","Che cosa succede con `int(input())` se l'utente digita `ciao`?",["Si genera ValueError","Si ottiene 0","Si ottiene la stringa 'ciao'","Si genera NameError"],"Il testo non è un numero valido.");
+Q("i-base","Che cosa stampa `print('a', 'b', sep='-')`?",["a-b","a b","ab","a - b"],"`sep` è il separatore tra gli argomenti; di default è uno spazio.");
+Q("i-base","A che cosa serve il parametro `end` di `print`?",["Indica cosa stampare alla fine, al posto dell'a-capo","Indica dove finisce la stringa","Termina il programma","Separa gli argomenti"],"Di default vale '\\n'. Con `end=''` si resta sulla stessa riga.");
+Q("i-base","Che cosa stampa `print()` senza argomenti?",["Una riga vuota","Nulla","None","Un errore"],"Stampa solo l'a-capo.");
+Q("i-base","Che cosa produce `f'{3.14159:.2f}'`?",["'3.14'","'3.142'","'3.1'","'3.14159'"],"`.2f` significa float con 2 decimali, arrotondato.");
+Q("i-base","Che cosa produce `f'{42:5d}'`?",["'   42' (allineato a destra su 5 caratteri)","'42   ' (allineato a sinistra)","'00042'","'42.00'"],"Di default i numeri si allineano a destra.");
+Q("i-base","Di default, in una f-string con ampiezza, le stringhe si allineano:",["A sinistra","A destra","Al centro","Dipende dalla lunghezza"],"I numeri a destra, le stringhe a sinistra.");
+Q("i-base","Nell'operatore `%`, quale indicatore si usa per un intero?",["`%d`","`%f`","`%s`","`%i%`"],"`%f` per i float, `%s` per le stringhe, `%%` per il simbolo di percentuale.");
+Q("i-base","Perché `100,000` non va scritto così in un programma Python?",["Non si usano separatori delle migliaia: non è un numero","Python usa il punto come separatore delle migliaia","È troppo grande per un int","Va scritto tra apici"],"Si scrive `100000`.");
+Q("i-base","Che cosa restituisce `max(3, 9, 4)`?",["9","3","4","16"],"Il maggiore degli argomenti.");
+Q("i-base","Quale modo di importare è sconsigliato?",["`from math import *`","`import math`","`from math import sqrt`","`from math import sqrt, pi`"],"Importa tutti i nomi del modulo, con il rischio di conflitti.");
+Q("i-base","Qual è l'ordine di precedenza degli operatori aritmetici, dal più alto?",["Parentesi, `**`, poi `*` `/` `//` `%`, poi `+` `-`","`+` `-`, poi `*` `/`, poi `**`","Da sinistra a destra, senza eccezioni","`*` `/`, poi `**`, poi `+` `-`"],"A parità di precedenza si procede da sinistra a destra, tranne `**`.");
+Q("i-base","Quanto vale `(2 + 3) * 4`?",["20","14","24","9"],"Le parentesi hanno la precedenza più alta.");
+Q("i-base","Quanto vale `17 % 5`?",["2","3","3.4","12"],"17 = 3 × 5 + 2.");
+Q("i-base","Perché `4.35 * 100` non dà esattamente 435?",["Per gli errori di arrotondamento dei float","Perché `*` tronca il risultato","Perché 4.35 è una stringa","Perché 100 è un intero"],"4.35 non è rappresentabile esattamente in binario: si ottiene 434.99999999999994.");
+Q("i-base","Che cosa stampa `print('Totale:', 5)`?",["Totale: 5","Totale:5","'Totale:', 5","Totale: '5'"],"Più argomenti vengono separati da uno spazio.");
+Q("i-base","Quale espressione compone correttamente un messaggio con il numero `n`?",["`'Valore: ' + str(n)`","`'Valore: ' + n`","`'Valore: ' - n`","`str('Valore: ') * n`"],"Con `+` tra una stringa e un intero si avrebbe TypeError: serve la conversione.");
+
+// ---------- 3. Stringhe ----------
+Q("i-str","Una stringa in Python è:",["Una sequenza ordinata e immutabile di caratteri","Una sequenza modificabile di caratteri","Un insieme non ordinato","Un numero"],"Per \"modificarla\" se ne costruisce una nuova.");
+Q("i-str","Quanto vale `len('ciao')`?",["4","3","5","0"],"È il numero di caratteri.");
+Q("i-str","Quanto vale `'ab' + 'cd'`?",["'abcd'","'ab cd'","'abab'","Errore"],"`+` tra stringhe è la concatenazione.");
+Q("i-str","Quanto vale `'-' * 5`?",["'-----'","'-5'","-5","Errore"],"`*` ripete la stringa.");
+Q("i-str","Quanto vale `'ia' in 'ciao'`?",["True","False","1","'ia'"],"`in` verifica se è una sottostringa.");
+Q("i-str","Che cosa succede con `3 + '4'`?",["TypeError","7","'34'","'7'"],"Python non converte da solo: bisogna scegliere `str(3) + '4'` oppure `3 + int('4')`.");
+Q("i-str","Quanto vale `'3' + '4'`?",["'34'","7","'7'","Errore"],"Sono due stringhe: si concatenano.");
+Q("i-str","Che cosa succede con `int('ciao')`?",["ValueError","0","TypeError","'ciao'"],"Il tipo è giusto (una stringa) ma il valore non è convertibile.");
+Q("i-str","Qual è l'ultimo indice valido di una stringa `s`?",["`len(s) - 1`","`len(s)`","`len(s) + 1`","`-len(s) - 1`"],"Gli indici partono da 0.");
+Q("i-str","Con `s = 'Bob'`, quanto vale `s[-1]`?",["'b'","'B'","'o'","Errore"],"Gli indici negativi contano dalla fine.");
+Q("i-str","Che cosa succede con `s[10]` se `s = 'ciao'`?",["IndexError","Stringa vuota","None","L'ultimo carattere"],"L'indice è fuori dall'intervallo. Uno slice invece non darebbe errore.");
+Q("i-str","Che cosa succede con `s[0] = 'X'` se `s` è una stringa?",["TypeError: le stringhe sono immutabili","Il primo carattere diventa X","IndexError","Si crea una nuova stringa"],"Bisogna costruire una nuova stringa, per esempio `'X' + s[1:]`.");
+Q("i-str","Con `s = 'Python'`, quanto vale `s[0:2]`?",["'Py'","'Pyt'","'yt'","'P'"],"L'inizio è incluso, la fine è esclusa: indici 0 e 1.");
+Q("i-str","Con `s = 'Python'`, quanto vale `s[2:]`?",["'thon'","'Py'","'yth'","'hon'"],"Dall'indice 2 fino alla fine.");
+Q("i-str","Con `s = 'Python'`, quanto vale `s[-2:]`?",["'on'","'ho'","'Py'","'n'"],"Gli ultimi due caratteri.");
+Q("i-str","Con `s = 'Python'`, quanto vale `s[::2]`?",["'Pto'","'yhn'","'Py'","'nohtyP'"],"Un carattere sì e uno no, partendo dall'indice 0.");
+Q("i-str","Con `s = 'Python'`, quanto vale `s[::-1]`?",["'nohtyP'","'Python'","'n'","Errore"],"Il passo negativo percorre la stringa all'indietro.");
+Q("i-str","Uno slice con estremi fuori intervallo, come `'ciao'[2:100]`:",["Non dà errore: gli estremi vengono tagliati","Dà IndexError","Dà None","Dà ValueError"],"Si ottiene 'ao'.");
+Q("i-str","Quanto è lunga la porzione `s[a:b]` (passo 1, indici validi)?",["b − a","b − a + 1","b","a + b"],"Perché la fine è esclusa.");
+Q("i-str","Quanto vale `ord('A')`?",["65","97","1","'A'"],"`ord` va da carattere a codice; `chr(65)` torna a 'A'.");
+Q("i-str","In che ordine stanno i codici dei caratteri?",["Cifre, poi maiuscole, poi minuscole","Minuscole, poi maiuscole, poi cifre","Maiuscole, poi cifre, poi minuscole","Sono in ordine alfabetico senza distinzione"],"'0'–'9' sono 48–57, 'A'–'Z' 65–90, 'a'–'z' 97–122.");
+Q("i-str","Qual è la differenza tra `len(s)` e `s.upper()`?",["La prima è una funzione, la seconda un metodo invocato sul dato","Sono entrambe funzioni","Sono entrambi metodi","La seconda modifica s"],"I metodi usano la notazione puntata e sono specifici di un tipo.");
+Q("i-str","Dopo `s = 'ciao'` e `s.upper()`, quanto vale `s`?",["'ciao'","'CIAO'","'Ciao'","None"],"I metodi delle stringhe restituiscono un nuovo valore: per cambiarla serve `s = s.upper()`.");
+Q("i-str","Che cosa restituisce `'banana'.count('a')`?",["3","2","1","6"],"Il numero di occorrenze.");
+Q("i-str","Che cosa restituisce `'ciao'.find('z')`?",["-1","0","None","ValueError"],"`find` dà −1 se non trova; `index` genererebbe ValueError.");
+Q("i-str","Che cosa restituisce `'  ciao \\n'.strip()`?",["'ciao'","'  ciao'","'ciao \\n'","'  ciao \\n'"],"Toglie gli spazi bianchi (spazi, tab, a-capo) da entrambi i lati.");
+Q("i-str","Che cosa restituisce `'a-b-c'.replace('-', '+')`?",["'a+b+c'","'a+b-c'","'abc'","'a-b-c'"],"Sostituisce tutte le occorrenze.");
+Q("i-str","Che cosa restituisce `''.isdigit()`?",["False","True","None","Errore"],"I metodi di test danno False sulla stringa vuota.");
+Q("i-str","Che cosa restituisce `'a b  c'.split()`?",["['a', 'b', 'c']","['a', 'b', '', 'c']","['a b  c']","'abc'"],"Senza argomenti separa sugli spazi bianchi, anche multipli.");
+Q("i-str","Che cosa restituisce `'a;b;;c'.split(';')`?",["['a', 'b', '', 'c']","['a', 'b', 'c']","['a;b;;c']","['a', 'b', ';', 'c']"],"Con un separatore esplicito, due separatori consecutivi producono un campo vuoto.");
+Q("i-str","Che cosa restituisce `', '.join(['a', 'b'])`?",["'a, b'","['a', ', ', 'b']","'a b'","', a, b'"],"Unisce gli elementi mettendo il separatore tra uno e l'altro.");
+Q("i-str","Quanti caratteri ha la stringa `'a\\nb'`?",["3","4","2","5"],"`\\n` è un solo carattere: l'a-capo.");
+Q("i-str","Quanto vale `'Ciao' == 'ciao'`?",["False","True","Errore","None"],"Maiuscole e minuscole sono caratteri diversi.");
+Q("i-str","Quanto vale `'Z' < 'a'`?",["True","False","Errore","Dipende"],"Tutte le maiuscole precedono le minuscole nell'ordine dei codici.");
+Q("i-str","Quanto vale `'casa' < 'casale'`?",["True","False","Errore","None"],"Se una stringa è prefisso dell'altra, la più corta viene prima.");
+Q("i-str","Quanto vale `'10' < '9'`?",["True","False","Errore","None"],"Sono stringhe: si confronta il primo carattere, e '1' viene prima di '9'.");
+Q("i-str","Come si confrontano due stringhe ignorando maiuscole e minuscole?",["Portandole entrambe a `lower()`","Con l'operatore `===`","Con `s.equals(t)`","Non si può"],"Oppure entrambe a `upper()`.");
+Q("i-str","Quale ciclo serve quando occorre anche la posizione di ogni carattere?",["`for i in range(len(s)):`","`for c in s:`","`while s:`","`for s in c:`"],"Oppure `for i, c in enumerate(s)`.");
+Q("i-str","Per costruire una nuova stringa un pezzo alla volta in un ciclo, si parte da:",["Una stringa vuota `''`","`None`","`0`","Una lista di caratteri fissa"],"E a ogni iterazione si concatena: `risultato = risultato + pezzo`.");
+Q("i-str","Perché si scrive `\"l'altro\"` con gli apici doppi?",["Perché il testo contiene un apostrofo","Perché è più veloce","Perché le stringhe lunghe li richiedono","Perché gli apici singoli sono vietati"],"In alternativa: `'l\\'altro'`.");
+Q("i-str","Che cosa restituisce `'ciao mondo'.title()`?",["'Ciao Mondo'","'Ciao mondo'","'CIAO MONDO'","'ciao mondo'"],"`capitalize()` metterebbe in maiuscolo solo la prima lettera.");
+Q("i-str","Che cosa restituisce `'ciao'.startswith('ci')`?",["True","False","0","'ci'"],"Vero se la stringa inizia con quel prefisso.");
+Q("i-str","Che cosa restituisce `'abc123'.isalnum()`?",["True","False","None","6"],"Tutti i caratteri sono lettere o cifre.");
+Q("i-str","Che cosa restituisce `str(42)`?",["'42'","42","42.0","['4', '2']"],"Converte l'intero in stringa.");
+Q("i-str","Con `s = 'Python'`, quanto vale `s[1::2]`?",["'yhn'","'Pto'","'yt'","'ython'"],"Le posizioni dispari: indici 1, 3, 5.");
+
+// ---------- 4. Decisioni ----------
+Q("i-if","In un `if` / `else`, quanti rami vengono eseguiti?",["Esattamente uno","Entrambi","Nessuno o uno","Dipende dall'indentazione"],"O il ramo vero o quello falso.");
+Q("i-if","In una catena `if` / `elif` / `else`, quale blocco viene eseguito?",["Quello della prima condizione vera","Tutti quelli con condizione vera","Sempre l'ultimo","Sempre il primo"],"Le altre condizioni vengono saltate. L'`else` finale si esegue se nessuna è vera.");
+Q("i-if","Che differenza c'è tra una catena di `if` separati e una `if` / `elif`?",["Gli `if` separati valutano tutte le condizioni e possono eseguire più blocchi","Nessuna","Gli `elif` valutano sempre tutte le condizioni","Gli `if` separati eseguono al massimo un blocco"],"Una catena `if` / `elif` esegue al massimo un blocco.");
+Q("i-if","Classificando un voto con soglie 8, 7 e 6, da quale condizione conviene partire?",["Dalla più restrittiva: `>= 8`","Dalla meno restrittiva: `>= 6`","Non importa l'ordine","Da `== 7`"],"Se si partisse da `>= 6`, anche un 9 si fermerebbe lì.");
+Q("i-if","A che cosa serve `pass`?",["È un'istruzione vuota, segnaposto dove serve un blocco","Salta all'iterazione successiva","Esce dal ciclo","Passa un argomento"],"Non fa nulla.");
+Q("i-if","Con quale carattere termina l'intestazione di un'istruzione composta?",["`:`","`;`","`{`","`)`"],"Vale per `if`, `else`, `while`, `for`, `def`.");
+Q("i-if","In Python l'indentazione:",["Fa parte della sintassi e delimita i blocchi","È solo una convenzione estetica","È vietata dentro gli `if`","Serve solo nei commenti"],"Convenzione: 4 spazi per livello, senza mescolare tab e spazi.");
+Q("i-if","Che errore dà un'indentazione incoerente?",["IndentationError","ValueError","NameError","IndexError"],"Tutte le istruzioni di un blocco devono avere la stessa indentazione.");
+Q("i-if","Qual è la differenza tra `=` e `==`?",["`=` assegna, `==` confronta e produce True o False","Sono equivalenti","`==` assegna, `=` confronta","`==` si usa solo con le stringhe"],"`piano = 13` è un'assegnazione; `piano == 13` è un test.");
+Q("i-if","Che tipo di valore produce un confronto come `x > 5`?",["bool","int","str","None"],"True oppure False.");
+Q("i-if","Come si confrontano correttamente due float `x` e `y`?",["`abs(x - y) < EPSILON`","`x == y`","`x is y`","`int(x) == int(y)`"],"Per gli errori di arrotondamento conviene verificare che siano abbastanza vicini. In alternativa `math.isclose(x, y)`.");
+Q("i-if","Quanto vale `True and False`?",["False","True","None","Errore"],"`and` è vero solo se entrambe le condizioni sono vere.");
+Q("i-if","Quanto vale `True or False`?",["True","False","None","Errore"],"`or` è vero se almeno una condizione è vera.");
+Q("i-if","Quanto vale `not True`?",["False","True","None","0"],"`not` inverte il valore di verità.");
+Q("i-if","Qual è l'ordine di precedenza tra gli operatori booleani, dal più alto?",["`not`, `and`, `or`","`or`, `and`, `not`","`and`, `or`, `not`","Sono tutti allo stesso livello"],"Prima ancora vengono gli operatori aritmetici e poi quelli relazionali.");
+Q("i-if","A che cosa equivale `a or b and c`?",["`a or (b and c)`","`(a or b) and c`","`a and b or c`","`not a or b`"],"`and` ha precedenza su `or`.");
+Q("i-if","A che cosa equivale `0 < temp < 100`?",["`0 < temp and temp < 100`","`0 < temp or temp < 100`","`(0 < temp) < 100`","È un errore di sintassi"],"Python ammette i confronti concatenati.");
+Q("i-if","In `A and B`, se A è falsa:",["B non viene valutata","B viene valutata comunque","Si genera un errore","Il risultato è B"],"È la valutazione in cortocircuito: il risultato è già falso.");
+Q("i-if","Perché `if n != 0 and totale / n > 5:` non divide mai per zero?",["Se n è 0 la seconda condizione non viene valutata","Perché Python ignora le divisioni per zero","Perché `and` valuta prima la destra","Perché `totale / n` è tra parentesi"],"Cortocircuito: con la prima condizione falsa, `and` si ferma.");
+Q("i-if","Secondo De Morgan, `not (A and B)` equivale a:",["`(not A) or (not B)`","`(not A) and (not B)`","`A or B`","`not A and B`"],"E `not (A or B)` equivale a `(not A) and (not B)`.");
+Q("i-if","Perché `if x == 1 or 2:` è sbagliato?",["È sempre vero, perché 2 da solo vale come vero","È sempre falso","Dà errore di sintassi","Confronta x con 3"],"Si scrive `if x == 1 or x == 2:`.");
+Q("i-if","Quale condizione esprime \"x è compreso tra 0 e 100\"?",["`x >= 0 and x <= 100`","`x >= 0 or x <= 100`","`x <= 0 and x >= 100`","`not x >= 0`"],"Con `or` la condizione sarebbe sempre vera.");
+Q("i-if","Quale condizione esprime \"x è fuori dall'intervallo 0–100\"?",["`x < 0 or x > 100`","`x < 0 and x > 100`","`x > 0 or x < 100`","`x > 0 and x < 100`"],"Con `and` sarebbe sempre falsa: un numero non può essere insieme minore di 0 e maggiore di 100.");
+Q("i-if","Quale di questi valori vale come falso in una condizione?",["`''` (stringa vuota)","`'False'`","`1`","`[0]`","`' '`"],"Valgono come falso 0, 0.0, la stringa vuota, la lista vuota e None. Tutto il resto vale come vero.");
+Q("i-if","A quale `if` si riferisce un `else`?",["A quello con la sua stessa indentazione","Sempre al primo del programma","Sempre al più interno","A quello più vicino sopra, qualunque sia l'indentazione"],"È l'indentazione a stabilire l'abbinamento.");
+Q("i-if","Che cos'è l'hand-tracing?",["Eseguire il programma a mano, aggiornando una tabella delle variabili","Scrivere il codice su carta","Un tipo di ciclo","Un modulo di Python"],"Serve a capire o verificare cosa fa un programma.");
+Q("i-if","Quali valori conviene provare nei casi di test di un `if` con una soglia?",["Il valore esatto della soglia, uno sopra e uno sotto","Solo valori molto grandi","Solo il valore zero","Un solo valore qualsiasi"],"Più un caso per ogni ramo.");
+Q("i-if","Che cosa stampa?\n`x = 7\nif x > 5:\n    print('A')\nelif x > 3:\n    print('B')\nelse:\n    print('C')`",["A","A e B","B","C"],"Si esegue solo il blocco della prima condizione vera.");
+Q("i-if","Che cosa stampa?\n`x = 7\nif x > 5:\n    print('A')\nif x > 3:\n    print('B')`",["A e poi B","Solo A","Solo B","Nulla"],"Sono due `if` separati: vengono valutati entrambi.");
+Q("i-if","A che cosa equivale `not (x > 5)`?",["`x <= 5`","`x < 5`","`x >= 5`","`x != 5`"],"Il contrario di \"maggiore\" è \"minore o uguale\".");
+Q("i-if","Che cosa significa l'operatore `!=`?",["Diverso","Uguale","Non definito","Minore o uguale"],"`3 != 4` vale True.");
+Q("i-if","Che cos'è la validazione dell'input?",["Controllare che un dato sia accettabile prima di elaborarlo","Stampare l'input a video","Convertire l'input in stringa","Cancellare l'input errato"],"Se non lo è, si segnala l'errore invece di proseguire.");
+Q("i-if","Che cosa stampa?\n`x = 3\nif x > 5:\n    print('A')\nelse:\n    if x > 2:\n        print('B')\n    else:\n        print('C')`",["B","A","C","B e C"],"La condizione esterna è falsa, quella interna è vera.");
+Q("i-if","Quanto vale `5 > 3 and 2 > 4`?",["False","True","Errore","None"],"La seconda condizione è falsa.");
+Q("i-if","Quanto vale `not (3 > 5) or 1 > 2`?",["True","False","Errore","None"],"`not (3 > 5)` è True, quindi l'`or` è vero.");
+Q("i-if","Che differenza c'è tra operatori relazionali e operatori booleani?",["I relazionali confrontano valori, i booleani combinano condizioni","Nessuna","I booleani confrontano numeri, i relazionali stringhe","I relazionali producono numeri"],"Entrambi producono un valore bool.");
+Q("i-if","Che cosa stampa?\n`voto = 9\nif voto >= 6:\n    print('suff')\nelif voto >= 8:\n    print('ottimo')`",["suff","ottimo","suff e ottimo","Nulla"],"L'ordine è sbagliato: 9 soddisfa già la prima condizione e la seconda non viene mai controllata.");
+Q("i-if","Quanto vale `bool([])`?",["False","True","[]","Errore"],"La lista vuota vale come falso.");
+
+// ===== INFORMATICA — capitoli 5–8 =====
+// ---------- 5. Cicli ----------
+Q("i-cicli","In un `while`, se la condizione è falsa già la prima volta:",["Il corpo non viene mai eseguito","Il corpo viene eseguito una volta","Si genera un errore","Il ciclo è infinito"],"La condizione si valuta prima di ogni giro, anche del primo.");
+Q("i-cicli","Quali sono i tre ingredienti di un ciclo `while` ben costruito?",["Inizializzazione, condizione, aggiornamento","Intestazione, corpo, return","Contatore, somma, media","Input, calcolo, output"],"Senza aggiornamento di una variabile della condizione il ciclo non termina.");
+Q("i-cicli","Qual è la causa tipica di un ciclo infinito?",["L'aggiornamento della variabile della condizione è stato dimenticato","Il corpo è troppo lungo","La condizione è falsa all'inizio","Manca l'istruzione `else`"],"La condizione non diventa mai falsa. Si interrompe da tastiera con Ctrl+C.");
+Q("i-cicli","Che cos'è un errore off-by-one?",["Il ciclo esegue una volta di troppo o una di meno","Il ciclo non parte mai","Un errore di indentazione","Una divisione per zero"],"Dubbi tipici: si parte da 0 o da 1? Si usa `<` o `<=`?");
+Q("i-cicli","Che cos'è un valore sentinella?",["Un valore speciale, estraneo ai dati, che ne segnala la fine","Il primo dato letto","Il valore massimo di un contatore","Una variabile booleana"],"Per esempio −1 se i dati sono tutti positivi, oppure una riga vuota.");
+Q("i-cicli","Nello schema con sentinella, dove si mettono le letture?",["Una prima del ciclo e una alla fine di ogni iterazione","Solo all'inizio del corpo","Solo prima del ciclo","Solo dopo il ciclo"],"Così la sentinella viene riconosciuta dalla condizione prima di essere elaborata.");
+Q("i-cicli","Quali valori genera `range(5)`?",["0, 1, 2, 3, 4","1, 2, 3, 4, 5","0, 1, 2, 3, 4, 5","5 volte il valore 5"],"n valori, partendo da 0; n è escluso.");
+Q("i-cicli","Quali valori genera `range(1, 10, 2)`?",["1, 3, 5, 7, 9","1, 3, 5, 7, 9, 11","2, 4, 6, 8, 10","1, 2, 3 … 10"],"Da 1, di 2 in 2, finché resta minore di 10.");
+Q("i-cicli","Quali valori genera `range(10, 0, -1)`?",["10, 9, …, 1","10, 9, …, 0","9, 8, …, 0","Nessuno"],"Conta all'indietro; l'estremo finale (0) è escluso.");
+Q("i-cicli","Quali valori genera `range(2, 6)`?",["2, 3, 4, 5","2, 3, 4, 5, 6","3, 4, 5","2, 6"],"L'estremo finale è escluso.");
+Q("i-cicli","Che cosa fornisce `enumerate(contenitore)` a ogni iterazione?",["L'indice e il valore insieme","Solo l'indice","Solo il valore","La lunghezza"],"Si usa con `for indice, valore in enumerate(...)`.");
+Q("i-cicli","Quando conviene usare `while` invece di `for`?",["Quando il numero di iterazioni non è noto in anticipo","Quando si scorre una lista","Quando il numero di iterazioni è noto","Mai"],"Per esempio finché un saldo non raggiunge un obiettivo.");
+Q("i-cicli","In un ciclo `for`, chi gestisce l'avanzamento?",["Python, che passa da solo all'elemento successivo","Il programmatore, con un contatore","L'utente","L'istruzione `continue`"],"Per questo su contenitori finiti non c'è rischio di ciclo infinito.");
+Q("i-cicli","Che cosa fa `break`?",["Interrompe subito il ciclo più interno","Salta all'iterazione successiva","Termina il programma","Esce da tutti i cicli annidati"],"L'esecuzione prosegue dopo il ciclo.");
+Q("i-cicli","Che cosa fa `continue`?",["Salta il resto del corpo e passa all'iterazione successiva","Interrompe il ciclo","Riprende dopo un errore","Ripete l'iterazione corrente"],"Il ciclo non termina.");
+Q("i-cicli","Nell'algoritmo del massimo, con che cosa si inizializza la variabile `massimo`?",["Con il primo valore","Con 0","Con −1","Con un numero molto grande"],"Con 0 l'algoritmo sbaglierebbe se tutti i valori fossero negativi.");
+Q("i-cicli","Perché prima di calcolare la media si controlla `conteggio > 0`?",["Per evitare la divisione per zero","Per arrotondare il risultato","Per fermare il ciclo","Per convertire in float"],"Se non è stato letto alcun valore, la media non esiste.");
+Q("i-cicli","Se il ciclo esterno fa m giri e quello interno n, quante volte si esegue il corpo interno?",["m × n","m + n","n","m"],"Per ogni iterazione esterna il ciclo interno viene eseguito per intero.");
+Q("i-cicli","Che cosa restituisce `randint(1, 6)`?",["Un intero tra 1 e 6, estremi inclusi","Un intero tra 1 e 5","Un float tra 1 e 6","Un intero tra 0 e 6"],"A differenza di `range`, qui l'estremo superiore è incluso.");
+Q("i-cicli","Che cosa restituisce `random()` del modulo random?",["Un float in [0.0, 1.0)","Un intero tra 0 e 1","Un float tra 0 e 100","Un intero qualsiasi"],"1.0 è escluso.");
+Q("i-cicli","Quante volte viene eseguito il corpo?\n`contatore = 1\nwhile contatore <= 10:\n    contatore = contatore + 1`",["10","9","11","Infinite"],"Per i valori da 1 a 10.");
+Q("i-cicli","Quanto vale `totale` alla fine?\n`totale = 0\nfor i in range(1, 5):\n    totale = totale + i`",["10","15","6","4"],"1 + 2 + 3 + 4: il 5 è escluso.");
+Q("i-cicli","Quanti asterischi stampa?\n`for i in range(3):\n    for j in range(4):\n        print('*', end='')`",["12","7","3","4"],"Per ognuno dei 3 giri esterni il ciclo interno ne fa 4: 3 × 4 = 12.");
+Q("i-cicli","Quanti asterischi stampa?\n`for i in range(3):\n    for j in range(i + 1):\n        print('*', end='')`",["6","9","3","4"],"1 + 2 + 3: il ciclo interno dipende da quello esterno e disegna un triangolo.");
+Q("i-cicli","Che cosa stampa?\n`for i in range(5):\n    if i == 3:\n        break\n    print(i, end=' ')`",["0 1 2","0 1 2 3","0 1 2 4","0 1 2 3 4"],"Arrivato a 3 il ciclo si interrompe prima della stampa.");
+Q("i-cicli","Che cosa stampa?\n`for i in range(5):\n    if i == 3:\n        continue\n    print(i, end=' ')`",["0 1 2 4","0 1 2","0 1 2 3 4","3"],"Quando i vale 3 si salta la stampa e si passa al giro successivo.");
+Q("i-cicli","Nella ricerca del primo elemento che soddisfa una condizione, che cosa controlla la variabile `trovato`?",["Se il ciclo deve continuare","Quanti elementi ci sono","L'indice massimo","Il valore cercato"],"Il ciclo va avanti finché ci sono elementi e non si è trovato nulla: `while not trovato and posizione < len(s)`.");
+Q("i-cicli","Per confrontare valori consecutivi in un ciclo si usa:",["Una variabile che conserva il valore precedente","Due cicli annidati","Una sentinella","Il modulo random"],"Aggiornata alla fine di ogni iterazione: `precedente = valore`.");
+Q("i-cicli","Quale è la regola per affrontare un problema complesso?",["Prima si pensa all'algoritmo, poi si scrive il codice","Si scrive subito tutto il codice","Si prova a caso finché funziona","Si parte dai casi limite"],"Capire, risolvere a mano, pseudocodice, scomporre, tradurre, collaudare.");
+Q("i-cicli","Quali casi vanno provati nel collaudo?",["Casi normali, casi limite e input non validi","Solo un caso normale","Solo i casi che funzionano","Solo l'input vuoto"],"Casi limite: sequenza vuota, un solo elemento, valori uguali.");
+Q("i-cicli","Quanti valori genera `range(len(s))` se `s = 'ciao'`?",["4","3","5","1"],"Tutti gli indici validi: 0, 1, 2, 3.");
+Q("i-cicli","Che cosa stampa?\n`n = 10\nwhile n > 0:\n    n = n - 3\nprint(n)`",["-2","1","0","-3"],"10 → 7 → 4 → 1 → −2: a quel punto la condizione è falsa.");
+Q("i-cicli","Ogni `for` su un `range` si può riscrivere come:",["Un `while` con contatore","Un `if` annidato","Una funzione","Una list comprehension senza ciclo"],"Il contrario non è sempre comodo.");
+Q("i-cicli","Che cosa hanno in comune `if` e `while`?",["Sono istruzioni composte con intestazione e blocco indentato","Ripetono entrambi il blocco","Eseguono entrambi il blocco una sola volta","Richiedono entrambi `else`"],"La differenza: `if` esegue il blocco al massimo una volta, `while` lo ripete.");
+Q("i-cicli","Quanto vale `conta` alla fine?\n`conta = 0\nfor c in 'banana':\n    if c == 'a':\n        conta = conta + 1`",["3","2","6","1"],"È lo schema del conteggio: contatore a 0, incrementato dentro un `if`.");
+Q("i-cicli","Con una riga vuota come sentinella, l'input va:",["Tenuto come stringa e convertito solo dopo aver verificato che non è vuoto","Convertito subito in numero","Ignorato","Letto due volte"],"`float('')` darebbe ValueError.");
+Q("i-cicli","Quante volte viene eseguito il corpo di `for i in range(2, 11, 3):`?",["3","4","9","2"],"Per i = 2, 5, 8; 11 è escluso.");
+Q("i-cicli","Che cosa stampa?\n`i = 0\nwhile i < 3:\n    print(i, end=' ')\n    i = i + 1`",["0 1 2","0 1 2 3","1 2 3","Nulla"],"Quando i arriva a 3 la condizione è falsa.");
+
+// ---------- 6. Liste ----------
+Q("i-liste","Una lista in Python è:",["Un contenitore ordinato e modificabile","Un contenitore immutabile","Un insieme non ordinato","Una stringa"],"Ogni elemento è individuato da un indice intero.");
+Q("i-liste","Che cosa crea `[0] * 10`?",["Una lista di 10 elementi uguali a 0","Una lista con il solo elemento 0","Il numero 0","Una lista con l'elemento 10"],"È la replicazione.");
+Q("i-liste","Con `valori = [32, 54, 67, 29, 35]`, quanto vale `valori[2]`?",["67","54","29","32"],"Gli indici partono da 0.");
+Q("i-liste","Con `valori = [32, 54, 67, 29, 35]`, quanto vale `valori[-1]`?",["35","32","29","Errore"],"L'indice −1 è l'ultimo elemento.");
+Q("i-liste","Che differenza c'è tra `valori = [4]` e `valori[4]`?",["La prima crea una lista con un elemento, la seconda accede all'indice 4","Nessuna","La prima accede all'indice 4","Entrambe creano una lista"],"Attenzione alle parentesi quadre.");
+Q("i-liste","Che cosa succede con `valori[len(valori)]`?",["IndexError","Si ottiene l'ultimo elemento","Si ottiene None","Si ottiene il primo elemento"],"L'ultimo indice valido è `len(valori) - 1`.");
+Q("i-liste","Che cosa legge `lista[i - 1]` quando `i` vale 0?",["L'ultimo elemento, senza dare errore","Il primo elemento","Nulla: dà IndexError","None"],"Un indice negativo sbagliato non segnala l'errore: è un bug insidioso.");
+Q("i-liste","Dopo questo codice, la lista è cambiata?\n`valori = [1, 2, 3]\nfor elemento in valori:\n    elemento = 0`",["No: cambia solo la variabile del ciclo","Sì: diventa [0, 0, 0]","Sì: diventa []","Dà errore"],"Per modificare serve l'indice: `valori[i] = 0`.");
+Q("i-liste","Che cosa contiene una variabile di tipo lista?",["Un riferimento alla lista in memoria","Una copia di tutti gli elementi","Solo il primo elemento","La lunghezza"],"Per questo l'assegnazione `b = a` non copia la lista.");
+Q("i-liste","Che cosa stampa?\n`a = [10, 9, 7]\nb = a\nb[0] = 99\nprint(a)`",["[99, 9, 7]","[10, 9, 7]","[99]","Errore"],"`b` è un alias: due nomi per la stessa lista.");
+Q("i-liste","Quale di queste NON crea una copia della lista `a`?",["`b = a`","`b = list(a)`","`b = a[:]`","`b = a.copy()`"],"L'assegnazione crea solo un alias.");
+Q("i-liste","Con due liste distinte `a = [1, 2]` e `b = [1, 2]`, quanto vale `a == b`?",["True","False","Errore","None"],"`==` confronta i contenuti, elemento per elemento.");
+Q("i-liste","Che cosa fa `lista.append(x)`?",["Aggiunge x in fondo alla lista","Aggiunge x all'inizio","Restituisce una nuova lista","Sostituisce l'ultimo elemento"],"Modifica la lista sul posto e restituisce None.");
+Q("i-liste","Che cosa fa `lista.insert(1, 'x')`?",["Inserisce 'x' all'indice 1 e fa scalare i successivi","Sostituisce l'elemento di indice 1","Aggiunge 'x' in fondo","Rimuove l'elemento di indice 1"],"La lista si allunga di un elemento.");
+Q("i-liste","Che cosa restituisce `lista.pop()`?",["L'ultimo elemento, dopo averlo rimosso","None","Il primo elemento","La lista senza l'ultimo elemento"],"`pop(i)` rimuove e restituisce l'elemento di indice i.");
+Q("i-liste","Che cosa fa `lista.remove(x)`?",["Rimuove la prima occorrenza del valore x","Rimuove l'elemento di indice x","Rimuove tutte le occorrenze di x","Svuota la lista"],"Se x non c'è genera ValueError.");
+Q("i-liste","Qual è la differenza tra `remove` e `pop`?",["`remove` cerca un valore, `pop` lavora su un indice","Nessuna","`pop` cerca un valore","`remove` restituisce l'elemento"],"Anche `del lista[i]` lavora su un indice.");
+Q("i-liste","Dopo `lista = lista.sort()`, quanto vale `lista`?",["None","La lista ordinata","La lista originale","Errore"],"`sort` ordina sul posto e restituisce None: basta scrivere `lista.sort()`.");
+Q("i-liste","Qual è la differenza tra `lista.sort()` e `sorted(lista)`?",["`sort` modifica la lista, `sorted` ne restituisce una nuova","Nessuna","`sorted` modifica la lista","`sort` funziona solo sulle stringhe"],"Con `sorted` l'originale non cambia.");
+Q("i-liste","Come si ordina una lista in senso decrescente?",["`lista.sort(reverse=True)`","`lista.sort(-1)`","`lista.unsort()`","`lista.sort(down)`"],"`lista.reverse()` inverte soltanto l'ordine attuale.");
+Q("i-liste","Che cosa restituisce `[3, 1, 3, 2].count(3)`?",["2","3","1","4"],"Il numero di occorrenze.");
+Q("i-liste","Che cosa restituisce `[5, 8, 2].index(8)`?",["1","8","2","True"],"L'indice della prima occorrenza. Se il valore manca: ValueError.");
+Q("i-liste","Che cosa restituisce `sum([1, 2, 3])`?",["6","3","[6]","'123'"],"La somma degli elementi.");
+Q("i-liste","Quanto vale `[1, 2] + [3]`?",["[1, 2, 3]","[4, 5]","[1, 2, [3]]","Errore"],"È la concatenazione: produce una nuova lista.");
+Q("i-liste","Che cosa restituisce `list('abc')`?",["['a', 'b', 'c']","['abc']","'abc'","[97, 98, 99]"],"Una lista con gli elementi della sequenza.");
+Q("i-liste","Con `temp = [18, 21, 24, 28, 33, 39]`, quanto vale `temp[1:4]`?",["[21, 24, 28]","[21, 24, 28, 33]","[18, 21, 24]","[24, 28, 33]"],"Indici 1, 2 e 3: la fine è esclusa.");
+Q("i-liste","Che cosa produce `temp[:]`?",["Una copia dell'intera lista","La lista vuota","Un alias","Il primo elemento"],"Lo slice produce sempre una nuova lista.");
+Q("i-liste","Che cosa fa `temp[1:3] = [0, 0, 0]`?",["Sostituisce gli elementi di indice 1 e 2 con i tre nuovi","Dà errore: le lunghezze sono diverse","Sostituisce tre elementi","Aggiunge tre zeri in fondo"],"A una porzione di lista si può assegnare, e la lunghezza può cambiare.");
+Q("i-liste","Che cosa produce `'3;4;5'.split(';')`?",["['3', '4', '5']","[3, 4, 5]","'345'","[3;4;5]"],"`split` produce sempre stringhe: per fare calcoli vanno convertite.");
+Q("i-liste","Che cosa richiede `sep.join(lista)`?",["Una lista di sole stringhe","Una lista di numeri","Una stringa","Una lista vuota"],"Con dei numeri darebbe TypeError.");
+Q("i-liste","Nella ricerca lineare, quanti elementi si esaminano nel caso peggiore?",["Tutti","La metà","Uno","Il logaritmo del numero di elementi"],"Si guardano uno dopo l'altro finché si trova o finisce la lista.");
+Q("i-liste","Rimuovendo elementi in un ciclo con `pop(i)`, quando va incrementato l'indice?",["Solo se non si è rimosso nulla","Sempre","Mai","Solo se si è rimosso un elemento"],"Dopo una rimozione i successivi scalano: l'elemento seguente è già all'indice i.");
+Q("i-liste","Come si scambiano due elementi in Python?",["`v[i], v[j] = v[j], v[i]`","`v[i] = v[j]` e poi `v[j] = v[i]`","`swap(v[i], v[j])`","`v[i] <-> v[j]`"],"In alternativa serve una variabile temporanea. Con due assegnazioni semplici il primo valore andrebbe perso.");
+Q("i-liste","Quanto vale `[1, 2] < [1, 3]`?",["True","False","Errore","None"],"Ordine lessicografico: decide la prima coppia diversa.");
+Q("i-liste","Quanto vale `[1, 2] < [1, 2, 0]`?",["True","False","Errore","None"],"Se una lista è prefisso dell'altra, la più corta è minore.");
+Q("i-liste","Che cosa produce `[x ** 2 for x in range(5)]`?",["[0, 1, 4, 9, 16]","[1, 4, 9, 16, 25]","[0, 2, 4, 6, 8]","[0, 1, 2, 3, 4]"],"x va da 0 a 4.");
+Q("i-liste","Che cosa produce `[x for x in [3, 8, 5, 6] if x % 2 == 0]`?",["[8, 6]","[3, 5]","[3, 8, 5, 6]","[4, 3]"],"Solo gli elementi pari.");
+Q("i-liste","Nell'algoritmo \"posizione del massimo\", che cosa si memorizza?",["L'indice dell'elemento massimo","Il valore massimo","La lunghezza della lista","Il valore precedente"],"Si confronta `valori[i]` con `valori[pos_max]`.");
+Q("i-liste","Che cosa fa `del lista[0]`?",["Elimina il primo elemento","Elimina tutta la lista","Azzera il primo elemento","Restituisce il primo elemento"],"A differenza di `pop`, non restituisce nulla.");
+Q("i-liste","Quanto vale `3 in [1, 2, 3]`?",["True","False","2","Errore"],"`in` verifica se il valore è tra gli elementi.");
+Q("i-liste","Che cosa stampa?\n`v = [1, 2, 3]\nv.append(4)\nprint(len(v))`",["4","3","5","None"],"La lista ora ha quattro elementi.");
+Q("i-liste","Che cosa fa `a.extend(b)`?",["Aggiunge in fondo ad `a` tutti gli elementi di `b`","Aggiunge `b` come unico elemento","Crea una nuova lista","Ordina le due liste"],"`append(b)` aggiungerebbe invece la lista b come singolo elemento.");
+Q("i-liste","Per modificare gli elementi di una lista sul posto si scorre:",["Sugli indici, con `range(len(lista))`","Sui valori, con `for x in lista`","Con `enumerate` senza indice","Con uno slice"],"E si assegna con `lista[i] = …`.");
+Q("i-liste","Che differenza c'è tra liste e stringhe?",["La lista è modificabile e contiene valori di qualunque tipo","La stringa è modificabile","La lista non ha indici","Nessuna"],"Entrambe sono sequenze con indici, slice, `len`, `in`, `+` e `*`.");
+Q("i-liste","Che cosa stampa?\n`v = [5, 3, 8]\nw = sorted(v)\nprint(v[0], w[0])`",["5 3","3 3","5 5","3 5"],"`sorted` non modifica l'originale.");
+
+// ---------- 7. Tabelle ----------
+Q("i-tab","Come si realizza una tabella in Python?",["Come lista di liste, una per riga","Come stringa con a-capo","Come tupla di numeri","Con il tipo `table`"],"Ogni lista interna è una riga.");
+Q("i-tab","In `tabella[i][j]`, che cosa indicano i due indici?",["Prima la riga, poi la colonna","Prima la colonna, poi la riga","Due righe","Due colonne"],"Si seleziona la riga i e poi, dentro di essa, l'elemento j.");
+Q("i-tab","Che cosa restituisce `len(tabella)`?",["Il numero di righe","Il numero di colonne","Il numero totale di elementi","La riga più lunga"],"Il numero di colonne è `len(tabella[0])`.");
+Q("i-tab","Come si ottiene il numero di colonne di una tabella?",["`len(tabella[0])`","`len(tabella)`","`tabella.columns`","`len(tabella[][0])`"],"È la lunghezza della prima riga.");
+Q("i-tab","Con `t = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]`, quanto vale `t[1][2]`?",["7","6","10","2"],"Riga di indice 1 (5, 6, 7, 8), elemento di indice 2.");
+Q("i-tab","Con `t = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]`, quanto vale `t[-1]`?",["[9, 10, 11, 12]","12","[4, 8, 12]","[1, 2, 3, 4]"],"L'ultima riga.");
+Q("i-tab","Con `t = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]`, quanto vale `t[0][-1]`?",["4","1","12","9"],"L'ultimo elemento della prima riga.");
+Q("i-tab","Che cosa restituisce `tabella[i]` con un indice solo?",["L'intera riga i","L'intera colonna i","Un solo elemento","Errore"],"È una lista.");
+Q("i-tab","Perché `tabella = [[0] * COLONNE] * RIGHE` non funziona?",["Crea più riferimenti alla stessa riga","Crea una tabella troppo grande","Dà errore di sintassi","Crea solo una colonna"],"Modificare una cella modifica l'intera colonna. Ogni riga va creata separatamente.");
+Q("i-tab","Qual è il modo corretto di creare una tabella di zeri?",["`[[0] * COLONNE for i in range(RIGHE)]`","`[[0] * COLONNE] * RIGHE`","`[0] * RIGHE * COLONNE`","`[0, 0] * [RIGHE, COLONNE]`"],"A ogni giro si crea una riga nuova.");
+Q("i-tab","Quale costrutto serve per scorrere tutta una tabella?",["Due cicli `for` annidati","Un solo ciclo `for`","Un `if` annidato","Un `while` con sentinella"],"Quello esterno sulle righe, quello interno sulle colonne.");
+Q("i-tab","Come si calcola in breve la somma della riga i?",["`sum(tabella[i])`","`sum(tabella)[i]`","`tabella[i].sum`","`sum(tabella[i][j])`"],"Una riga è una lista già pronta.");
+Q("i-tab","Come si calcola la somma della colonna j?",["Con un ciclo sulle righe che somma `tabella[i][j]`","Con `sum(tabella[j])`","Con `tabella[][j]`","Con `sum(tabella)`"],"Una colonna non è una lista già pronta.");
+Q("i-tab","Qual è il vicino sopra la cella `[i][j]`?",["`[i-1][j]`","`[i+1][j]`","`[i][j-1]`","`[i][j+1]`"],"Riga precedente, stessa colonna.");
+Q("i-tab","Prima di accedere a un vicino di una cella sul bordo bisogna:",["Verificare che riga e colonna siano dentro i limiti","Copiare la tabella","Ordinare le righe","Nulla: Python lo controlla da solo"],"`0 <= riga < RIGHE` e `0 <= colonna < COLONNE`. Un indice −1 non darebbe errore ma leggerebbe dall'altra parte.");
+Q("i-tab","Che cosa fa `tabella.append([1, 2, 3])`?",["Aggiunge una riga","Aggiunge una colonna","Aggiunge tre righe","Dà errore"],"Una tabella è una lista di liste: valgono i metodi delle liste.");
+Q("i-tab","Quanti elementi ha una tabella di 3 righe e 4 colonne?",["12","7","3","4"],"Righe × colonne.");
+Q("i-tab","Con `shallow = list(tabella)`, che cosa succede modificando `shallow[0][0]`?",["Cambia anche `tabella[0][0]`","La tabella originale non cambia","Dà errore","Cambia tutta la prima colonna"],"La copia superficiale crea una nuova lista esterna, ma le righe sono condivise.");
+Q("i-tab","Come si ottiene una copia completamente indipendente di una tabella?",["`copy.deepcopy(tabella)`","`list(tabella)`","`tabella[:]`","`alias = tabella`"],"La copia profonda duplica anche le righe.");
+Q("i-tab","Con `alias = tabella`:",["Lista esterna e righe sono le stesse","Si copia la lista esterna","Si copiano le righe","Si copia tutto"],"È solo un secondo nome per la stessa tabella.");
+Q("i-tab","Per modificare le celle di una tabella in un ciclo serve:",["La versione con gli indici","La versione `for riga in tabella`","Un ciclo `while` semplice","La funzione `sum`"],"La variante sui valori va bene solo in lettura.");
+Q("i-tab","Quali sono gli indici validi di colonna?",["Da 0 a `len(tabella[0]) - 1`","Da 1 a `len(tabella[0])`","Da 0 a `len(tabella) - 1`","Da 0 a `len(tabella[0])`"],"Come per ogni lista.");
+Q("i-tab","Che cosa stampa?\n`t = [[1, 2], [3, 4]]\nprint(t[1][0] + t[0][1])`",["5","4","7","3"],"t[1][0] vale 3, t[0][1] vale 2.");
+Q("i-tab","Come si ottengono gli elementi dell'ultima colonna?",["`tabella[i][-1]` per ogni riga i","`tabella[-1]`","`tabella[-1][i]`","`tabella.last()`"],"`tabella[-1]` è invece l'ultima riga.");
+Q("i-tab","Quante dimensioni ha una tabella rispetto a una lista?",["Due: righe e colonne","Una","Tre","Dipende dal contenuto"],"Per questo servono due indici e due cicli annidati.");
+Q("i-tab","Che cosa stampa?\n`t = [[0] * 2] * 2\nt[0][0] = 5\nprint(t)`",["[[5, 0], [5, 0]]","[[5, 0], [0, 0]]","[[5, 5], [5, 5]]","Errore"],"Le due righe sono la stessa lista.");
+Q("i-tab","Con `t = [[1, 2, 3], [4, 5, 6]]`, quanto vale `len(t[0])`?",["3","2","6","1"],"La prima riga ha tre elementi.");
+Q("i-tab","Con `t = [[1, 2, 3], [4, 5, 6]]`, quanto vale `sum(t[1])`?",["15","6","21","5"],"4 + 5 + 6.");
+
+// ---------- 8. Tuple ----------
+Q("i-tuple","Che cosa distingue una tupla da una lista?",["La tupla è immutabile","La tupla non è ordinata","La tupla contiene solo numeri","La tupla non ha indici"],"Una volta creata non si possono cambiare, aggiungere o togliere elementi.");
+Q("i-tuple","Come si scrive una tupla con un solo elemento?",["`(7,)`","`(7)`","`[7]`","`{7}`"],"Serve la virgola finale: `(7)` è solo il numero 7 tra parentesi.");
+Q("i-tuple","Che cosa crea `terna = 5, 10, 15`?",["Una tupla di tre elementi","Tre variabili","Una lista","Un errore di sintassi"],"Le parentesi tonde si possono omettere.");
+Q("i-tuple","Che cosa succede con `t[0] = 9` se `t` è una tupla?",["TypeError","Il primo elemento diventa 9","IndexError","Si crea una nuova tupla"],"Le tuple non sono modificabili.");
+Q("i-tuple","Quale metodo NON esiste per le tuple?",["`append`","`count`","`index`","Esistono tutti"],"Mancano tutti i metodi che modificano la sequenza: append, insert, pop, remove, sort.");
+Q("i-tuple","Quale operazione è valida su una tupla `t`?",["`len(t)`","`t.sort()`","`t.append(1)`","`t.pop()`"],"Valgono tutte le operazioni che non modificano la sequenza.");
+Q("i-tuple","Quanto vale `(1, 2) + (3,)`?",["(1, 2, 3)","(4, 2)","[1, 2, 3]","Errore"],"La concatenazione produce una nuova tupla.");
+Q("i-tuple","Dopo `x, y = (3, 4)`, quanto vale `y`?",["4","3","(3, 4)","Errore"],"È lo spacchettamento: ogni variabile riceve un elemento.");
+Q("i-tuple","Che cosa fa `a, b = b, a`?",["Scambia i valori di a e b","Assegna b ad a due volte","Dà errore","Crea due tuple"],"A destra si crea una tupla, che poi viene spacchettata.");
+Q("i-tuple","Che cosa succede con `x, y = (1, 2, 3)`?",["Errore: il numero di variabili non coincide","x vale 1, y vale 2","x vale 1, y vale (2, 3)","x e y valgono 3"],"Il numero di variabili a sinistra deve coincidere con il numero di elementi.");
+Q("i-tuple","Che cosa restituisce una funzione con `return minimo, massimo`?",["Una tupla","Una lista","Solo il primo valore","Due valori separati non collegati"],"Il chiamante la spacchetta con `mn, mx = funzione(...)`.");
+Q("i-tuple","Che cosa produce `enumerate` a ogni iterazione?",["Una tupla (indice, valore)","Una lista [indice, valore]","Solo l'indice","Una stringa"],"Per questo si scrive `for i, v in enumerate(lista)`.");
+Q("i-tuple","Quando conviene una tupla invece di una lista?",["Per un gruppo fisso di valori collegati tra loro","Per una raccolta che cresce nel tempo","Per ordinare dei dati","Per leggere un file"],"Per esempio coordinate o una data.");
+Q("i-tuple","Che cosa restituisce `tuple([1, 2])`?",["(1, 2)","[1, 2]","((1, 2),)","Errore"],"Converte la lista in tupla.");
+Q("i-tuple","Come si scrive la tupla vuota?",["`()`","`(,)`","`[]`","`tuple[]`"],"Ha lunghezza 0.");
+Q("i-tuple","Con `t = (5, 6, 7, 8)`, quanto vale `t[1:3]`?",["(6, 7)","[6, 7]","(6, 7, 8)","(5, 6)"],"Lo slice di una tupla è una tupla.");
+Q("i-tuple","Con `t = (5, 6, 7)`, quanto vale `t[-1]`?",["7","5","(7,)","Errore"],"Indici e indici negativi funzionano come nelle liste.");
+Q("i-tuple","Che tipo ha il valore `(7)`?",["int","tuple","list","str"],"Senza virgola le parentesi sono solo parentesi.");
+Q("i-tuple","Quanto vale `3 in (1, 2, 3)`?",["True","False","2","Errore"],"`in` funziona su tutte le sequenze.");
+Q("i-tuple","Si può scorrere una tupla con un ciclo `for`?",["Sì, come una lista","No, è immutabile","Solo con `while`","Solo dopo averla convertita in lista"],"Immutabile non significa illeggibile.");
+Q("i-tuple","Quanto vale `(1, 2) * 2`?",["(1, 2, 1, 2)","(2, 4)","((1, 2), (1, 2))","Errore"],"La ripetizione produce una nuova tupla.");
+Q("i-tuple","Che cosa stampa?\n`def estremi(v):\n    return min(v), max(v)\n\na, b = estremi([4, 9, 2])\nprint(b)`",["9","2","(2, 9)","4"],"La funzione restituisce la tupla (2, 9), spacchettata in a e b.");
+Q("i-tuple","Con `t = (4, 4, 5)`, che cosa restituisce `t.count(4)`?",["2","1","3","Errore"],"`count` e `index` esistono anche per le tuple.");
+Q("i-tuple","Qual è la sintassi di una lista e quale di una tupla?",["Lista `[1, 2, 3]`, tupla `(1, 2, 3)`","Lista `(1, 2, 3)`, tupla `[1, 2, 3]`","Entrambe `{1, 2, 3}`","Lista `<1, 2, 3>`, tupla `(1, 2, 3)`"],"Quadre per le liste, tonde per le tuple.");
+
+// ===== INFORMATICA — capitoli 9–11 =====
+// ---------- 9. Funzioni ----------
+Q("i-funz","Che cos'è una funzione?",["Una sequenza di istruzioni con un nome, che riceve dati e può restituire un risultato","Una variabile globale","Un tipo di ciclo","Un file di testo"],"Si scrive una volta e si invoca quante volte serve.");
+Q("i-funz","Che cosa significa vedere una funzione come \"scatola nera\"?",["Basta sapere cosa vuole e cosa restituisce, non come lo calcola","Il suo codice è segreto","Non restituisce nulla","Non ha parametri"],"Per esempio si usa `round(x, 2)` senza conoscerne il codice.");
+Q("i-funz","Quale di questi NON è un vantaggio delle funzioni?",["Rendono il programma più veloce da eseguire","Permettono il riuso del codice","Migliorano la leggibilità","Si collaudano separatamente"],"I vantaggi sono riuso, leggibilità, collaudo e scomposizione del problema.");
+Q("i-funz","Che cosa fa l'istruzione `def`?",["Definisce la funzione senza eseguirla","Esegue la funzione","Importa un modulo","Restituisce un valore"],"Il corpo viene eseguito solo quando la funzione viene invocata.");
+Q("i-funz","Che differenza c'è tra parametri e argomenti?",["I parametri stanno nell'intestazione, gli argomenti nella chiamata","Sono sinonimi","Gli argomenti stanno nell'intestazione","I parametri sono sempre numeri"],"Gli argomenti possono essere costanti, variabili o espressioni.");
+Q("i-funz","Che cosa fa `return espressione`?",["Termina subito la funzione e consegna il valore al chiamante","Stampa il valore","Ripete la funzione","Definisce un parametro"],"Le istruzioni successive nella funzione non vengono eseguite.");
+Q("i-funz","Che cosa restituisce una funzione che termina senza incontrare un `return`?",["None","0","Una stringa vuota","Un errore"],"Per questo tutti i percorsi dovrebbero arrivare a un `return`.");
+Q("i-funz","Se una funzione contiene più `return`:",["Si esegue solo il primo che si incontra","Si eseguono tutti in ordine","Si esegue solo l'ultimo","È un errore di sintassi"],"Tipicamente stanno in rami diversi di un `if`.");
+Q("i-funz","Che differenza c'è tra `return valore` e `print(valore)`?",["`return` consegna il valore al codice chiamante, `print` lo mostra all'utente","Nessuna","`print` consegna il valore al chiamante","`return` mostra il valore a schermo"],"Solo il valore restituito è riutilizzabile nel programma.");
+Q("i-funz","Che cosa contiene `x` dopo `x = funzione_che_stampa()`?",["None","Il valore stampato","Una stringa","Un errore"],"La funzione stampa ma non restituisce nulla.");
+Q("i-funz","Che cosa stampa?\n`def raddoppia(n):\n    n = n * 2\n\nx = 5\nraddoppia(x)\nprint(x)`",["5","10","None","Errore"],"Riassegnare un parametro non cambia la variabile del chiamante.");
+Q("i-funz","Che cosa stampa?\n`def aggiungi(v):\n    v.append(4)\n\nlista = [1, 2, 3]\naggiungi(lista)\nprint(lista)`",["[1, 2, 3, 4]","[1, 2, 3]","None","Errore"],"Il parametro è un riferimento alla stessa lista: modificarne gli elementi cambia la lista del chiamante.");
+Q("i-funz","Che cosa stampa?\n`def svuota(v):\n    v = []\n\nlista = [1, 2, 3]\nsvuota(lista)\nprint(lista)`",["[1, 2, 3]","[]","None","Errore"],"Riassegnare l'intero parametro non tocca la lista del chiamante.");
+Q("i-funz","Con `def potenza(base, esponente=2): return base ** esponente`, quanto vale `potenza(3)`?",["9","6","3","Errore"],"Si usa il valore di default: esponente = 2.");
+Q("i-funz","Con `def potenza(base, esponente=2): return base ** esponente`, quanto vale `potenza(esponente=3, base=2)`?",["8","9","6","Errore"],"Con gli argomenti nominali l'ordine non conta: 2 ** 3.");
+Q("i-funz","In una chiamata, in che ordine vanno gli argomenti?",["Prima i posizionali, poi i nominali","Prima i nominali, poi i posizionali","In ordine alfabetico","È indifferente"],"E nell'intestazione i parametri con default vanno dopo quelli senza.");
+Q("i-funz","Dove si invoca di solito la funzione `main`?",["Come ultima riga del file","Come prima riga del file","Dentro ogni altra funzione","Non va invocata"],"Così tutte le definizioni sono già state lette.");
+Q("i-funz","Quando una funzione deve essere stata definita?",["Prima che l'esecuzione arrivi alla sua chiamata","Dopo la sua chiamata","Nella stessa riga della chiamata","In un altro file"],"L'ordine delle definizioni tra loro non conta.");
+Q("i-funz","Che cos'è una variabile locale?",["Una variabile definita dentro una funzione, visibile solo lì","Una variabile visibile in tutto il programma","Una costante","Un parametro di `print`"],"Esiste fino al termine della funzione. I parametri sono variabili locali.");
+Q("i-funz","Due funzioni usano entrambe una variabile locale chiamata `totale`. Sono:",["Due variabili indipendenti","La stessa variabile","Un errore","Una variabile globale"],"Ogni funzione ha il proprio ambito di visibilità.");
+Q("i-funz","Come si scambiano i dati tra funzioni?",["Tramite parametri e `return`","Leggendo le variabili locali dell'altra funzione","Solo con variabili globali","Con `print`"],"Una funzione non vede le variabili locali di un'altra.");
+Q("i-funz","Che cosa serve per assegnare una variabile globale dentro una funzione?",["La dichiarazione `global nome`","Nulla","La parola `extern`","Un `return`"],"Altrimenti l'assegnazione crea una nuova variabile locale con lo stesso nome.");
+Q("i-funz","Perché le variabili globali sono da evitare?",["Rendono le funzioni dipendenti da dati esterni e difficili da collaudare","Sono più lente","Occupano troppa memoria","Non possono essere lette"],"Eccezione accettata: le costanti globali, in maiuscolo.");
+Q("i-funz","Quale caratteristica rende una funzione riutilizzabile?",["Riceve come parametri tutto ciò che può variare","Usa molte variabili globali","Stampa sempre il risultato","Chiede sempre l'input all'utente"],"E svolge un solo compito, restituendo il risultato.");
+Q("i-funz","Nel programma compaiono due pezzi di codice quasi uguali, diversi solo per alcuni valori. Che cosa conviene fare?",["Sostituirli con una funzione che riceve quei valori come parametri","Lasciarli così","Unirli in un unico ciclo infinito","Usare variabili globali"],"È un indizio tipico che serve una nuova funzione.");
+Q("i-funz","Che cos'è uno stub?",["Una funzione provvisoria che restituisce un valore fisso","Un errore di esecuzione","Un commento","Una variabile globale"],"Serve a provare la struttura generale prima di scrivere i dettagli.");
+Q("i-funz","In che cosa consiste il perfezionamento graduale (stepwise refinement)?",["Scomporre un compito in sotto-compiti sempre più semplici","Scrivere tutto in un'unica funzione","Provare il codice una riga alla volta","Ottimizzare la velocità"],"Ogni sotto-compito diventa una funzione con un nome chiaro.");
+Q("i-funz","Come va collaudata una funzione?",["Da sola, con argomenti di cui si conosce il risultato atteso","Solo dentro il programma completo","Solo con valori casuali","Non serve collaudarla"],"Compresi i casi limite.");
+Q("i-funz","Una funzione che modifica la lista ricevuta, di solito:",["Non restituisce nulla","Restituisce una copia","Restituisce la lunghezza","Stampa la lista"],"Una che produce una nuova lista lascia invece intatta quella ricevuta.");
+Q("i-funz","Che cosa stampa?\n`def segno(x):\n    if x > 0:\n        return 'positivo'\n    elif x < 0:\n        return 'negativo'\n    return 'zero'\n\nprint(segno(0))`",["zero","positivo","negativo","None"],"Nessuna delle due condizioni è vera: si arriva all'ultimo `return`.");
+Q("i-funz","Che cosa stampa?\n`def f(a, b):\n    return a - b\n\nprint(f(b=1, a=5))`",["4","-4","6","Errore"],"Gli argomenti nominali si abbinano per nome: 5 − 1.");
+Q("i-funz","Che cosa stampa?\n`def area(lato):\n    return lato * lato\n\nprint(area(3) + area(2))`",["13","25","10","None"],"9 + 4: il valore restituito si può usare nei calcoli.");
+Q("i-funz","Che cosa stampa?\n`def saluta():\n    print('ciao')\n\nx = saluta()\nprint(x)`",["ciao e poi None","Solo ciao","Solo None","ciao due volte"],"La funzione stampa 'ciao' e restituisce None.");
+Q("i-funz","Che cosa succede ai parametri e alle variabili locali quando la funzione termina?",["Vengono eliminati","Diventano globali","Restano disponibili al chiamante","Vengono salvati su file"],"Vengono ricreati a ogni chiamata.");
+Q("i-funz","A che cosa serve il commento tra triple virgolette all'inizio di una funzione?",["A dire cosa fa, cosa sono i parametri e cosa restituisce","A disattivare la funzione","A dichiarare i tipi","A importare un modulo"],"Fa parte di una funzione riutilizzabile, insieme a un nome descrittivo.");
+Q("i-funz","Come si restituiscono più valori da una funzione?",["`return a, b` (una tupla)","Con due `return` di seguito","Con `return a and b`","Non è possibile"],"Il secondo `return` non verrebbe mai eseguito.");
+Q("i-funz","Che cosa stampa?\n`saldo = 100\n\ndef azzera():\n    saldo = 0\n\nazzera()\nprint(saldo)`",["100","0","None","Errore"],"Senza `global`, l'assegnazione crea una variabile locale: quella globale non cambia.");
+Q("i-funz","Quale variante si usa spesso per avviare il programma?",["`if __name__ == '__main__': main()`","`start main`","`run(main)`","`main.start()`"],"Esegue `main` solo quando il file viene lanciato direttamente.");
+Q("i-funz","Buona pratica sui parametri:",["Non modificarne il valore: usare una nuova variabile locale","Riassegnarli sempre","Dichiararli globali","Stamparli all'inizio"],"Rende il codice più chiaro.");
+Q("i-funz","Una funzione di calcolo dovrebbe:",["Restituire il risultato e lasciare al chiamante la scelta di stamparlo","Stampare sempre il risultato","Chiedere i dati con `input`","Salvare il risultato in una variabile globale"],"Così è utilizzabile in più contesti.");
+
+// ---------- 10. File di testo ----------
+Q("i-file","Quali sono i tre passi per usare un file?",["Apertura, lettura o scrittura, chiusura","Lettura, scrittura, cancellazione","Creazione, copia, stampa","Apertura, ordinamento, chiusura"],"`open`, poi i metodi dell'oggetto file, poi `close`.");
+Q("i-file","Che cosa succede aprendo con `'r'` un file che non esiste?",["FileNotFoundError","Il file viene creato","Si ottiene una stringa vuota","Si ottiene None"],"In lettura il file deve esistere.");
+Q("i-file","Che cosa succede aprendo con `'w'` un file che esiste già?",["Viene svuotato: il contenuto precedente si perde","Si scrive in coda","Si genera un errore","Si apre in sola lettura"],"Per aggiungere in coda si usa `'a'`.");
+Q("i-file","Che cosa succede aprendo con `'w'` un file che non esiste?",["Viene creato","FileNotFoundError","Nulla","Si apre un altro file"],"Lo stesso vale per `'a'`.");
+Q("i-file","Con quale modo si aggiunge testo in fondo a un file esistente?",["`'a'`","`'w'`","`'r'`","`'+'`"],"a come append.");
+Q("i-file","Qual è il modo di apertura di default di `open`?",["Lettura (`'r'`)","Scrittura (`'w'`)","Aggiunta (`'a'`)","Non c'è default"],"`open('dati.txt')` apre in lettura.");
+Q("i-file","Perché è importante chiudere un file aperto in scrittura?",["I dati vengono scritti davvero su disco solo alla chiusura","Per liberare lo schermo","Per poterlo leggere una riga alla volta","Non è importante"],"Senza `close()` parte dell'output può andare perso.");
+Q("i-file","Che vantaggio ha l'istruzione `with open(...) as f:`?",["Chiude il file automaticamente, anche in caso di errore","Apre il file più in fretta","Legge tutto il file in memoria","Non richiede il nome del file"],"All'uscita dal blocco il file è già chiuso.");
+Q("i-file","Che cosa restituisce `infile.readline()` alla fine del file?",["La stringa vuota `''`","`'\\n'`","None","Un errore"],"Una riga vuota dentro il file viene invece letta come `'\\n'`.");
+Q("i-file","Come viene letta una riga vuota che sta in mezzo al file?",["Come `'\\n'`, di lunghezza 1","Come `''`","Viene saltata","Come None"],"Solo la fine del file dà la stringa vuota.");
+Q("i-file","La riga restituita da `readline()` comprende l'a-capo finale?",["Sì","No","Solo l'ultima riga","Solo se il file è CSV"],"Per toglierlo si usa `rstrip()`.");
+Q("i-file","Che cosa restituisce `infile.read()`?",["L'intero file come un'unica stringa","La prima riga","Una lista di righe","Un carattere"],"`readlines()` restituisce invece una lista di stringhe.");
+Q("i-file","Che cosa restituisce `infile.readlines()`?",["Una lista di stringhe, una per riga","Un'unica stringa","Il numero di righe","La prima riga"],"Ogni stringa conserva il suo a-capo.");
+Q("i-file","Qual è la forma più comoda per leggere un file riga per riga?",["`for riga in infile:`","`while infile:`","`for riga in range(infile):`","`infile.each()`"],"Ogni riga comprende il `\\n` finale.");
+Q("i-file","La lettura di un file è sequenziale. Come si rilegge dall'inizio?",["Si chiude e si riapre il file","Si chiama `readline(0)`","Non si può","Si usa `infile.back()`"],"Ogni operazione riprende dal punto in cui si era arrivati.");
+Q("i-file","Di che tipo è tutto ciò che si legge da un file di testo?",["Stringa","Intero","Dipende dal contenuto","Float"],"I numeri vanno convertiti con `int()` o `float()`.");
+Q("i-file","Che cosa toglie `riga.rstrip()`?",["Gli spazi bianchi a destra, compreso l'a-capo","Gli spazi bianchi a sinistra","Tutti gli spazi della riga","Solo le virgole"],"`strip()` agisce su entrambi i lati.");
+Q("i-file","Che cosa toglie `riga.rstrip('\\n')`?",["Solo l'a-capo finale","Tutti gli spazi bianchi a destra","Tutti gli a-capo del testo","La prima riga"],"Conserva gli altri spazi.");
+Q("i-file","I metodi `strip`, `lstrip` e `rstrip` tolgono caratteri:",["Solo alle estremità","Anche in mezzo alla stringa","Solo all'inizio","Solo se sono lettere"],"Per i caratteri interni si usa `replace`.");
+Q("i-file","Che cosa restituisce `'parola!?'.strip('.,?!')`?",["'parola'","'parola!'","'parola!?'","'paro'"],"Toglie i caratteri indicati ai due estremi.");
+Q("i-file","Perché conviene scrivere `riga.rstrip().split(';')`?",["Altrimenti l'a-capo resta attaccato all'ultimo campo","Per ordinare i campi","Per convertire i numeri","Perché `split` non funziona con `\\n`"],"Con un separatore esplicito `split` non elimina l'a-capo.");
+Q("i-file","Che cosa fa `riga.split(';', 1)`?",["Al massimo una divisione: il resto resta nell'ultimo elemento","Divide solo sul primo carattere","Restituisce il campo di indice 1","Divide in gruppi di un carattere"],"Utile quando un campo può contenere il separatore.");
+Q("i-file","`outfile.write(...)` accetta:",["Solo una stringa","Qualsiasi tipo","Solo numeri","Una lista di stringhe"],"I numeri vanno convertiti con `str()` o una f-string.");
+Q("i-file","`outfile.write('Ciao')` aggiunge l'a-capo?",["No: va messo a mano con `\\n`","Sì, sempre","Solo alla prima riga","Solo in modo `'a'`"],"`print(..., file=outfile)` invece lo aggiunge da solo.");
+Q("i-file","Come si usa `print` per scrivere su un file?",["`print('Ciao', file=outfile)`","`print(outfile, 'Ciao')`","`outfile.print('Ciao')`","`print('Ciao') > outfile`"],"Aggiunge l'a-capo automaticamente.");
+Q("i-file","Qual è l'errore nell'aprire un file con `'w'` prima di averne letto il contenuto?",["L'apertura in scrittura lo svuota","Il file diventa di sola lettura","Si raddoppia il contenuto","Nessuno"],"Per aggiornarlo: leggere tutto in memoria, chiudere, poi riaprire in scrittura.");
+Q("i-file","Che cos'è un file strutturato?",["Un file di record, fatti di campi con un formato uguale per tutti","Un file di testo libero","Un file binario","Un file senza a-capo"],"Si elabora separando i campi e convertendoli nel tipo giusto.");
+Q("i-file","Che cosa significa CSV?",["Comma-Separated Values","Common String Variables","Column Sorted Values","Character Set Version"],"È un file di testo che rappresenta una tabella, con i campi separati da virgola.");
+Q("i-file","Che cosa contiene spesso la prima riga di un file CSV?",["Le intestazioni delle colonne","Il numero di righe","La data","Nulla"],"Con il modulo csv si salta con `next(lettore)`.");
+Q("i-file","Che cosa fornisce `reader` del modulo csv a ogni iterazione?",["Una lista di stringhe con i campi della riga","Una stringa con tutta la riga","Una lista di numeri già convertiti","Una tupla di interi"],"I numeri vanno comunque convertiti.");
+Q("i-file","Che vantaggio ha il modulo csv rispetto a `split(',')`?",["Gestisce i campi tra virgolette che contengono virgole","È l'unico modo di leggere un file","Converte i numeri da solo","Non richiede di aprire il file"],"Per altri separatori: `reader(infile, delimiter=';')`.");
+Q("i-file","Che cosa fa `scrittore.writerow(['Roma', 2024, 3.5])`?",["Scrive una riga del CSV a partire da una lista","Scrive tre righe","Legge una riga","Ordina il file"],"`writer` si occupa di separatori e a-capo.");
+Q("i-file","Perché si specifica `encoding='utf-8'` in `open`?",["Per leggere correttamente i caratteri accentati","Per aprire più in fretta","Per aprire in scrittura","Per leggere solo numeri"],"È la codifica più diffusa per i file di testo.");
+Q("i-file","Dove viene cercato un file indicato con il solo nome, come `'input.txt'`?",["Nella cartella di lavoro del programma","Sul desktop","In tutto il disco","Nella cartella di Python"],"Altrimenti va indicato il percorso.");
+Q("i-file","Quando conviene leggere tutto il file in una lista invece che una riga alla volta?",["Quando servono tutti i dati insieme, per esempio per ordinarli","Sempre","Mai","Quando il file è vuoto"],"Se ogni riga si elabora da sola, basta leggere una riga alla volta.");
+Q("i-file","Un campo può contenere spazi (per esempio un nome di più parole). Quale delimitatore NON va usato?",["Lo spazio","Il punto e virgola","La tabulazione","I due punti"],"Il campo verrebbe spezzato in più pezzi.");
+Q("i-file","Che cosa stampa, se il file contiene le righe `3` e `4`?\n`totale = 0\nfor riga in open('n.txt'):\n    totale = totale + int(riga)\nprint(totale)`",["7","34","'34'","Errore"],"`int()` tollera l'a-capo attorno al numero.");
+Q("i-file","Che cosa restituisce `infile.read(1)`?",["Il carattere successivo","La prima riga","Tutto il file","Un intero"],"A fine file restituisce la stringa vuota.");
+Q("i-file","Che cosa restituisce `open(...)`?",["Un oggetto file su cui invocare i metodi di lettura e scrittura","Il contenuto del file","Il nome del file","True o False"],"Per esempio `infile.readline()` o `outfile.write(...)`.");
+Q("i-file","Che cosa fa `testo.splitlines()`?",["Restituisce la lista delle righe, senza gli a-capo","Divide sulle virgole","Conta le righe","Unisce le righe"],"Comodo dopo `read()`.");
+
+// ---------- 11. Eccezioni ----------
+Q("i-ecc","Che cos'è un'eccezione?",["Il meccanismo con cui Python segnala un errore durante l'esecuzione","Un errore di sintassi","Un commento speciale","Un tipo di ciclo"],"Interrompe il flusso normale e passa il controllo a un gestore, se esiste.");
+Q("i-ecc","Che cosa succede se un'eccezione non viene gestita da nessuno?",["Il programma termina con un messaggio di errore (traceback)","Viene ignorata","Il programma riparte dall'inizio","Si stampa None"],"Prima risale da una funzione alla sua chiamante, e così via.");
+Q("i-ecc","Con quale istruzione si segnala (solleva) un'eccezione?",["`raise`","`try`","`except`","`throw`"],"La usa il codice che rileva il problema ma non sa come rimediare.");
+Q("i-ecc","Con quale costrutto si gestisce (cattura) un'eccezione?",["`try` / `except`","`raise`","`if` / `else`","`with`"],"Lo usa il codice che sa cosa fare in caso di errore.");
+Q("i-ecc","Qual è la regola pratica sulle eccezioni?",["Segnalare presto, gestire tardi","Gestire presto, segnalare tardi","Non segnalare mai","Gestire tutto in ogni funzione"],"Si segnala appena si rileva l'errore e si gestisce dove si è in grado di rimediare.");
+Q("i-ecc","Quale eccezione genera `int('pippo')`?",["ValueError","TypeError","NameError","IndexError"],"Il tipo è giusto (stringa), ma il valore non è accettabile.");
+Q("i-ecc","Quale eccezione genera `'a' + 1`?",["TypeError","ValueError","NameError","ZeroDivisionError"],"Operazione tra tipi incompatibili.");
+Q("i-ecc","Quale eccezione genera `lista[10]` su una lista di 3 elementi?",["IndexError","KeyError","ValueError","TypeError"],"Indice fuori intervallo.");
+Q("i-ecc","Quale eccezione genera `5 / 0`?",["ZeroDivisionError","ValueError","ArithmeticWarning","TypeError"],"Divisione per zero.");
+Q("i-ecc","Quale eccezione genera l'uso di una variabile mai assegnata?",["NameError","ValueError","TypeError","IndexError"],"Il nome non è definito.");
+Q("i-ecc","Quale eccezione genera l'accesso a una chiave inesistente di un dizionario?",["KeyError","IndexError","NameError","ValueError"],"Per le sequenze sarebbe IndexError.");
+Q("i-ecc","Quale eccezione genera `open('manca.txt', 'r')` se il file non esiste?",["FileNotFoundError","ValueError","NameError","Nessuna: il file viene creato"],"È un caso particolare di IOError / OSError.");
+Q("i-ecc","Aprendo in scrittura (`'w'`) un file che non esiste:",["Non c'è errore: il file viene creato","Si genera FileNotFoundError","Si genera ValueError","Il programma termina"],"L'apertura in scrittura fallisce solo se il percorso non esiste o mancano i permessi.");
+Q("i-ecc","Se nel blocco `try` si verifica un'eccezione, che cosa succede al resto del blocco?",["Viene abbandonato","Viene eseguito comunque","Viene ripetuto","Viene eseguito dopo l'`except`"],"Si passa al primo `except` il cui tipo corrisponde.");
+Q("i-ecc","Se nel blocco `try` non si verifica alcuna eccezione:",["I blocchi `except` vengono saltati","Si esegue il primo `except`","Si eseguono tutti gli `except`","Il programma termina"],"L'esecuzione prosegue dopo l'intera struttura.");
+Q("i-ecc","Se nessun `except` corrisponde al tipo dell'eccezione:",["L'eccezione risale al chiamante","Viene ignorata","Si esegue l'ultimo `except`","Si esegue il `try` di nuovo"],"Se nessuno la gestisce, il programma termina.");
+Q("i-ecc","Come si gestiscono due tipi di eccezione con lo stesso blocco?",["`except (ValueError, IndexError):`","`except ValueError, IndexError:`","`except ValueError or IndexError:`","`except [ValueError + IndexError]:`"],"I tipi si elencano in una tupla.");
+Q("i-ecc","A che cosa serve `as errore` in `except ValueError as errore:`?",["A dare accesso all'oggetto eccezione e al suo messaggio","A rinominare il tipo di eccezione","A rilanciare l'eccezione","A ignorare l'errore"],"`str(errore)` è il messaggio.");
+Q("i-ecc","Dove va messo un gestore generico `except Exception:`?",["Per ultimo","Per primo","Ovunque","Prima del `try`"],"Cattura qualsiasi eccezione: va usato con cautela perché nasconde anche errori di programmazione.");
+Q("i-ecc","Quando viene eseguito il blocco `finally`?",["Sempre, con o senza eccezione","Solo se c'è un'eccezione","Solo se non c'è un'eccezione","Solo se l'eccezione è gestita"],"Serve per le operazioni di pulizia, tipicamente chiudere un file.");
+Q("i-ecc","Qual è l'ordine delle clausole?",["`try`, `except`, `finally`","`try`, `finally`, `except`","`except`, `try`, `finally`","`finally`, `try`, `except`"],"`finally` va per ultimo.");
+Q("i-ecc","Che cosa succede dopo un `raise` dentro una funzione?",["La funzione termina immediatamente","La funzione continua","Si stampa un messaggio e si prosegue","Si restituisce None"],"Le istruzioni successive non vengono eseguite.");
+Q("i-ecc","Quale tipo di eccezione conviene sollevare per un dato non accettabile?",["ValueError","NameError","IndexError","KeyError"],"Per esempio `raise ValueError('Importo superiore al saldo')`.");
+Q("i-ecc","Qual è il modo corretto, per una funzione, di comunicare che non può svolgere il suo compito?",["Sollevare un'eccezione","Stampare un messaggio","Restituire un valore speciale come −1","Terminare il programma con un ciclo infinito"],"Così il chiamante può decidere come rimediare.");
+Q("i-ecc","Un divisore che potrebbe essere zero: conviene prevenire o gestire?",["Prevenire, con un `if`","Gestire, con `try` / `except`","Ignorare","Usare `finally`"],"Gli errori prevedibili con un controllo semplice si prevengono.");
+Q("i-ecc","Un file che potrebbe non esistere: conviene prevenire o gestire?",["Gestire, con `try` / `except`","Prevenire, con un `if` sul nome","Ignorare","Usare `pass`"],"Gli errori che dipendono dall'esterno non si possono escludere in anticipo.");
+Q("i-ecc","Nello schema tipico di lettura dati, chi gestisce le eccezioni?",["`main`, che informa l'utente","La funzione che converte i numeri","Nessuno","L'interprete"],"La funzione che legge segnala; quella che apre il file garantisce la chiusura.");
+Q("i-ecc","Che cosa stampa?\n`try:\n    x = int('12a')\n    print('A')\nexcept ValueError:\n    print('B')`",["B","A","A e poi B","Nulla"],"La conversione fallisce: il resto del `try` viene saltato.");
+Q("i-ecc","Che cosa stampa?\n`try:\n    x = int('12')\n    print('A')\nexcept ValueError:\n    print('B')`",["A","B","A e poi B","Nulla"],"Nessuna eccezione: l'`except` viene saltato.");
+Q("i-ecc","Che cosa stampa?\n`try:\n    print(10 / 0)\nexcept ZeroDivisionError:\n    print('errore')\nfinally:\n    print('fine')`",["errore e poi fine","Solo errore","Solo fine","Nulla"],"`finally` viene eseguito in ogni caso.");
+Q("i-ecc","Che cosa stampa?\n`try:\n    v = [1, 2, 3]\n    print(v[5])\nexcept ValueError:\n    print('valore')\nexcept IndexError:\n    print('indice')`",["indice","valore","valore e poi indice","Nulla"],"Si esegue il primo `except` il cui tipo corrisponde.");
+Q("i-ecc","Che cosa si mette dentro il blocco `try`?",["Solo il codice che può fallire","Tutto il programma","Solo le istruzioni `print`","Le definizioni delle funzioni"],"E si catturano solo le eccezioni che si sa trattare.");
+Q("i-ecc","Quale istruzione ottiene lo stesso effetto di `try` / `finally` per chiudere un file?",["`with`","`pass`","`global`","`return`"],"In modo più compatto.");
+Q("i-ecc","Che cosa stampa?\n`def preleva(saldo, importo):\n    if importo > saldo:\n        raise ValueError('troppo')\n    return saldo - importo\n\ntry:\n    print(preleva(50, 80))\nexcept ValueError as e:\n    print(str(e))`",["troppo","-30","None","Nulla"],"La funzione solleva l'eccezione e il chiamante stampa il messaggio.");
+Q("i-ecc","Che cosa succede con `lista.remove(x)` se x non è nella lista?",["ValueError","IndexError","None","La lista si svuota"],"Conviene verificare prima con `in`.");
+Q("i-ecc","IOError / OSError indicano:",["Un errore di input/output, come un file non apribile","Un errore di indentazione","Un overflow","Un errore di tipo"],"FileNotFoundError ne è un caso particolare.");
+
 // Esercizi con numeri generati a caso: ogni volta che escono hanno dati diversi.
 const ri = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
 const pick = a => a[ri(0, a.length - 1)];
@@ -1975,10 +2439,338 @@ G('organica', 'isomeri-alcani', () => {
   return { q: `Quanti isomeri di struttura esistono per l'alcano ${f}?`, o: opts(String(n), mix(['1', '2', '3', '4', '5', '6'])), e: `${n}: ${nomi}.` };
 });
 
+// ===== INFORMATICA — esercizi con dati variabili =====
+// Rappresentazione "alla Python" dei valori
+function py(v) {
+  if (v === null || v === undefined) return 'None';
+  if (v === true) return 'True';
+  if (v === false) return 'False';
+  if (typeof v === 'string') return "'" + v + "'";
+  if (v && v.tup) return '(' + v.tup.map(py).join(', ') + (v.tup.length === 1 ? ',' : '') + ')';
+  if (Array.isArray(v)) return '[' + v.map(py).join(', ') + ']';
+  if (v && v.f !== undefined) return Number.isInteger(v.f) ? v.f + '.0' : String(v.f);
+  return String(v);
+}
+const C = s => '`' + s + '`';
+const bin = (n, bits) => { let s = n.toString(2); while (s.length < bits) s = '0' + s; return s; };
+const uniq = a => a.filter((x, i) => a.indexOf(x) === i);
+// opzioni da valori Python: giusta + sbagliate distinte, già formattate come codice
+function po(ok, cands, n = 3) { return opts(C(py(ok)), uniq(cands.map(v => C(py(v)))), n); }
+const slice = (s, a, b, st = 1) => { // slice Python su stringa o array
+  const n = s.length, arr = typeof s === 'string' ? s.split('') : s.slice(), out = [];
+  const norm = (x, d) => x === null ? d : (x < 0 ? Math.max(st > 0 ? 0 : -1, x + n) : Math.min(st > 0 ? n : n - 1, x));
+  if (st > 0) { for (let i = norm(a, 0); i < norm(b, n); i += st) out.push(arr[i]); }
+  else { for (let i = norm(a, n - 1); i > (b === null ? -1 : norm(b, -1)); i += st) out.push(arr[i]); }
+  return typeof s === 'string' ? out.join('') : out;
+};
+
+// ---------- 1. Rappresentazione dei dati ----------
+G('i-dati', 'bin-dec', () => {
+  const bits = ri(4, 8), n = ri(2 ** (bits - 1), 2 ** bits - 1), b = bin(n, bits);
+  return { q: `Quanto vale in decimale il numero binario ${b}₂ (binario puro)?`, o: opts(String(n), uniq([n + 1, n - 1, n * 2, Math.floor(n / 2), parseInt(b.split('').reverse().join(''), 2), n + 2, n - 2].filter(x => x > 0 && x !== n).map(String)), 4),
+    e: `Somma pesata delle cifre: ${b.split('').map((c, i) => c === '1' ? 2 ** (bits - 1 - i) : null).filter(x => x !== null).join(' + ')} = ${n}.` };
+});
+G('i-dati', 'dec-bin', () => {
+  const n = ri(9, 127), b = n.toString(2);
+  return { q: `Come si scrive ${n} in binario?`, o: opts(b, uniq([(n + 1).toString(2), (n - 1).toString(2), b.split('').reverse().join(''), (n ^ 2).toString(2), (n ^ 4).toString(2), (n + 2).toString(2)].filter(x => x !== b && x[0] === '1')), 4),
+    e: `Divisioni successive per 2, leggendo i resti dall'ultimo al primo: ${n}₁₀ = ${b}₂.` };
+});
+G('i-dati', 'bin-hex', () => {
+  const n = ri(16, 255), b = bin(n, 8), h = n.toString(16).toUpperCase(), verso = Math.random() < 0.5;
+  const hx = x => x.toString(16).toUpperCase();
+  return verso
+    ? { q: `Come si scrive ${b.slice(0, 4)} ${b.slice(4)}₂ in esadecimale?`, o: opts(h, uniq([hx(n ^ 1), hx((n >> 4) | ((n & 15) << 4)), hx(n ^ 16), n.toString(8), hx((n + 16) % 256), String(n)].filter(x => x !== h)), 4), e: `Si raggruppa a 4 bit: ${b.slice(0, 4)} = ${h[0]}, ${b.slice(4)} = ${h[1]}.` }
+    : { q: `Come si scrive ${h}₁₆ in binario?`, o: opts(b, uniq([bin(n ^ 1, 8), bin((n >> 4) | ((n & 15) << 4), 8), bin(n ^ 16, 8), bin(n ^ 128, 8), bin(n ^ 8, 8)].filter(x => x !== b)), 4), e: `Ogni cifra esadecimale si espande in 4 bit: ${h[0]} = ${b.slice(0, 4)}, ${h[1]} = ${b.slice(4)}.` };
+});
+G('i-dati', 'hex-dec', () => {
+  const n = ri(16, 255), h = n.toString(16).toUpperCase(), a = parseInt(h[0], 16), b = parseInt(h[1], 16);
+  return { q: `Quanto vale in decimale ${h}₁₆?`, o: opts(String(n), uniq([a * 10 + b, a + b, b * 16 + a, a * 16 + b + 16, a * 8 + b, n - 16].filter(x => x !== n && x > 0).map(String)), 4), e: `${h[0]} × 16 + ${h[1]} = ${a} × 16 + ${b} = ${n}.` };
+});
+G('i-dati', 'intervallo', () => {
+  const N = pick([4, 5, 6, 8, 10, 12, 16]), [nome, lo, hi] = pick([['binario puro', 0, 2 ** N - 1], ['modulo e segno', -(2 ** (N - 1) - 1), 2 ** (N - 1) - 1], ['complemento a due', -(2 ** (N - 1)), 2 ** (N - 1) - 1]]);
+  const f = (a, b) => `Da ${a < 0 ? '−' + (-a) : a} a ${b}`;
+  return { q: `Quale intervallo di valori si rappresenta su ${N} bit in ${nome}?`, o: opts(f(lo, hi), uniq([f(0, 2 ** N - 1), f(-(2 ** (N - 1) - 1), 2 ** (N - 1) - 1), f(-(2 ** (N - 1)), 2 ** (N - 1) - 1), f(0, 2 ** N), f(-(2 ** (N - 1)), 2 ** (N - 1)), f(-(2 ** N), 2 ** N - 1)]), 4),
+    e: 'Binario puro: da 0 a 2ᴺ − 1. Modulo e segno: da −(2ᴺ⁻¹ − 1) a 2ᴺ⁻¹ − 1. Complemento a due: da −2ᴺ⁻¹ a 2ᴺ⁻¹ − 1.' };
+});
+G('i-dati', 'ca2-codifica', () => {
+  const N = pick([4, 5, 6, 8]), v = ri(1, 2 ** (N - 1) - 1), pos = bin(v, N), compl = pos.split('').map(c => c === '0' ? '1' : '0').join(''), ok = bin(2 ** N - v, N);
+  return { q: `Come si scrive −${v} in complemento a due su ${N} bit?`, o: opts(ok, uniq([compl, '1' + pos.slice(1), pos, bin((2 ** N - v + 1) % 2 ** N, N), bin(2 ** N - v - 2 < 0 ? 0 : 2 ** N - v - 2, N)].filter(x => x !== ok)), 4),
+    e: `+${v} = ${pos}; si complementa ogni bit (${compl}) e si somma 1: ${ok}.` };
+});
+G('i-dati', 'ca2-valore', () => {
+  const N = pick([4, 5, 6]), u = ri(2 ** (N - 1), 2 ** N - 1), b = bin(u, N), v = u - 2 ** N;
+  const s = x => x < 0 ? '−' + (-x) : String(x);
+  return { q: `Quanto vale ${b} interpretato in complemento a due su ${N} bit?`, o: opts(s(v), uniq([u, -(u - 2 ** (N - 1)), v + 1, v - 1, -u].filter(x => x !== v).map(s)), 4),
+    e: `Il MSB pesa −${2 ** (N - 1)}: −${2 ** (N - 1)} + ${u - 2 ** (N - 1)} = ${s(v)}. In binario puro varrebbe ${u}; in modulo e segno ${s(-(u - 2 ** (N - 1)))}.` };
+});
+G('i-dati', 'bit-necessari', () => {
+  const M = pick([5, 10, 12, 20, 26, 33, 50, 64, 65, 100, 200, 256, 300, 1000]), N = Math.ceil(Math.log2(M));
+  return { q: `Quanti bit servono, come minimo, per codificare ${M} oggetti distinti?`, o: opts(String(N), [N - 1, N + 1, N + 2, M, N - 2].filter(x => x > 0).map(String), 4),
+    e: `Serve il più piccolo N con 2ᴺ ≥ ${M}: 2${sup(N - 1)} = ${2 ** (N - 1)} non basta, 2${sup(N)} = ${2 ** N} sì.` };
+});
+G('i-dati', 'somma-binaria', () => {
+  const a = ri(1, 15), b = ri(1, 15), s = a + b, r = s.toString(2);
+  return { q: `Quanto fa ${bin(a, 4)} + ${bin(b, 4)} in binario puro (senza limite di bit per il risultato)?`, o: opts(r, uniq([(s + 1).toString(2), (s - 1).toString(2), (a | b).toString(2), (a ^ b).toString(2), (s + 2).toString(2), (s ^ 4).toString(2)].filter(x => x !== r && x !== '0')), 4),
+    e: `${a} + ${b} = ${s} = ${r}₂.${s > 15 ? ' Su 4 bit sarebbe overflow.' : ''}` };
+});
+G('i-dati', 'overflow-ca2', () => {
+  const N = pick([4, 5, 8]), lo = -(2 ** (N - 1)), hi = 2 ** (N - 1) - 1, a = ri(lo, hi), b = ri(lo, hi), s = a + b, ov = s < lo || s > hi;
+  const f = x => x < 0 ? '(−' + (-x) + ')' : String(x);
+  return { q: `In complemento a due su ${N} bit, la somma ${f(a)} + ${f(b)} dà overflow?`, o: opts(ov ? 'Sì: il risultato è fuori dall\'intervallo' : 'No: il risultato è rappresentabile', [ov ? 'No: il risultato è rappresentabile' : 'Sì: il risultato è fuori dall\'intervallo', 'Sì, perché c\'è sempre riporto sul MSB', 'No, in complemento a due l\'overflow non esiste']),
+    e: `Su ${N} bit l'intervallo va da −${-lo} a ${hi}; la somma vale ${f(s)}${ov ? ', che è fuori' : ', che è dentro'}.${(a < 0) !== (b < 0) ? ' Con addendi di segno discorde l\'overflow è impossibile.' : ''}` };
+});
+
+// ---------- 2. Fondamenti ----------
+G('i-base', 'aritmetica', () => {
+  const a = ri(7, 40), b = pick([2, 3, 4, 5, 7, 8, 10]);
+  const [expr, val] = pick([[`${a} // ${b}`, Math.floor(a / b)], [`${a} % ${b}`, a % b], [`${a} / ${pick([2, 4, 5])}`, null], [`${ri(2, 5)} ** ${ri(2, 3)}`, null], [`${a} - ${b} * 2`, a - b * 2], [`(${a} - ${b}) * 2`, (a - b) * 2], [`${a} // ${b} + ${a} % ${b}`, Math.floor(a / b) + a % b], [`${a} % ${b} * ${b}`, (a % b) * b]]);
+  let ok, cands;
+  if (expr.includes(' / ')) { const d = +expr.split(' / ')[1]; ok = { f: a / d }; cands = [Math.floor(a / d), a % d, { f: Math.floor(a / d) + 1 }, { f: a * d }, Math.round(a / d)]; }
+  else if (expr.includes('**')) { const [x, y] = expr.split(' ** ').map(Number); ok = x ** y; cands = [x * y, y ** x === ok ? x + y : y ** x, x ** y + x, x * y + 1, { f: x ** y }]; }
+  else { ok = val; cands = [{ f: a / b }.f === ok ? ok + 1 : Math.round(a / b * 10) / 10, a % b, Math.floor(a / b), (a - b) * 2, a - b * 2, ok + 1, ok - 1, ok + b].map(x => typeof x === 'number' && !Number.isInteger(x) ? { f: x } : x); }
+  return { q: `Quanto vale ${C(expr)}?`, o: po(ok, cands.filter(x => py(x) !== py(ok)), 4), e: '`/` dà sempre un float; `//` è il quoziente intero; `%` è il resto; `**` è la potenza. Precedenze: parentesi, `**`, poi `*` `/` `//` `%`, poi `+` `-`.' };
+});
+G('i-base', 'tipo-espressione', () => {
+  const [e, t, w] = pick([['7 / 2', 'float', '`/` produce sempre un float'], ['8 / 2', 'float', '`/` produce sempre un float, anche se la divisione è esatta'], ['7 // 2', 'int', 'la divisione intera tra due int dà un int'], ['7 % 2', 'int', 'il resto tra due int è un int'], ["'3' * 2", 'str', 'è la ripetizione di una stringa'], ['3 > 2', 'bool', 'un confronto produce True o False'], ['3 + 2.0', 'float', 'int e float insieme danno float'], ["len('ab')", 'int', '`len` restituisce un intero'], ['input()', 'str', '`input` restituisce sempre una stringa'], ["int('4')", 'int', 'conversione da stringa a intero'], ['str(4)', 'str', 'conversione a stringa'], ['2 ** 3', 'int', 'potenza tra due int'], ['3 == 3.0', 'bool', 'un confronto produce True o False'], ["float('3')", 'float', 'conversione a float'], ["'a' + 'b'", 'str', 'concatenazione di stringhe'], ['7.0 // 2', 'float', 'con un operando float il risultato è float'], ['not True', 'bool', '`not` produce un valore booleano'], ['round(3.7)', 'int', '`round` senza cifre restituisce un intero']]);
+  return { q: `Di che tipo è il valore dell'espressione ${C(e)}?`, o: opts(C(t), ['`int`', '`float`', '`str`', '`bool`']), e: `È di tipo ${t}: ${w}.` };
+});
+G('i-base', 'cifre', () => {
+  const n = ri(123, 9876), [e, v] = pick([[`${n} % 10`, n % 10], [`${n} // 10`, Math.floor(n / 10)], [`${n} % 100`, n % 100], [`${n} // 100`, Math.floor(n / 100)]]);
+  return { q: `Quanto vale ${C(e)}?`, o: po(v, [n % 10, Math.floor(n / 10), n % 100, Math.floor(n / 100), { f: n / 10 }, { f: n / 100 }, +String(n)[0]].filter(x => py(x) !== py(v)), 4), e: '`% 10` isola l\'ultima cifra, `// 10` la elimina; con 100 si lavora sulle ultime due cifre.' };
+});
+G('i-base', 'fstring', () => {
+  let x, d; do { x = ri(10000, 999999) / 10000; d = ri(1, 3); } while (Math.round(x * 10 ** (d + 1)) % 10 === 5 || Math.round(x * 10 ** (d + 1)) % 10 === 0 || Math.round(x * 10000) % 10 === 0);
+  const ok = x.toFixed(d), tr = (Math.floor(x * 10 ** d) / 10 ** d).toFixed(d), up = (Math.ceil(x * 10 ** d) / 10 ** d).toFixed(d);
+  return { q: `Che cosa produce ${C(`f'{${x}:.${d}f}'`)}?`, o: opts(C(`'${ok}'`), uniq([tr, up, x.toFixed(d + 1), x.toFixed(Math.max(0, d - 1)), String(x)].filter(s => s !== ok).map(s => C(`'${s}'`))), 4), e: `${C('.' + d + 'f')} significa float con ${d} ${d === 1 ? 'decimale' : 'decimali'}, arrotondato (non troncato).` };
+});
+G('i-base', 'int-round', () => {
+  const k = ri(1, 30), fr = pick([0.2, 0.3, 0.7, 0.8, 0.9, 0.1]), x = +(k + fr).toFixed(1), [fn, v] = pick([['int', Math.trunc(x)], ['round', Math.round(x)]]);
+  return { q: `Che cosa restituisce ${C(`${fn}(${x})`)}?`, o: po(v, [Math.trunc(x), Math.round(x), Math.trunc(x) + 1, { f: x }, Math.trunc(x) - 1].filter(y => py(y) !== py(v)), 4), e: '`int()` tronca la parte decimale; `round()` arrotonda all\'intero più vicino.' };
+});
+G('i-base', 'print-sep', () => {
+  const a = pick(['a', 'x', 'uno', '1']), b = pick(['b', 'y', 'due', '2']), sep = pick(['-', '', ', ', '/', '+']);
+  return { q: `Che cosa stampa ${C(`print('${a}', '${b}', sep='${sep}')`)}?`, o: opts(a + sep + b, uniq([a + ' ' + b, a + b, a + ' ' + sep + ' ' + b, `'${a}'${sep}'${b}'`, a + sep + b + sep].filter(s => s !== a + sep + b)), 4), e: '`sep` è la stringa messa tra gli argomenti, al posto dello spazio di default.' };
+});
+
+// ---------- 3. Stringhe ----------
+const PAROLE = ['Python', 'Torino', 'computer', 'chimica', 'stringa', 'Politecnico', 'programma', 'esame', 'binario', 'tastiera'];
+G('i-str', 'slice', () => {
+  const s = pick(PAROLE), n = s.length, a = ri(0, 3), b = ri(a + 2, Math.min(n, a + 5)), k = ri(2, 3);
+  const [e, v] = pick([[`s[${a}:${b}]`, slice(s, a, b)], [`s[${a}:]`, slice(s, a, null)], [`s[:${b}]`, slice(s, null, b)], [`s[-${k}:]`, slice(s, -k, null)], [`s[::2]`, slice(s, null, null, 2)], [`s[::-1]`, slice(s, null, null, -1)], [`s[1::2]`, slice(s, 1, null, 2)], [`s[:-${k}]`, slice(s, null, -k)], [`s[${a}]`, s[a]], [`s[-${k}]`, s[n - k]]]);
+  return { q: `Con ${C(`s = '${s}'`)}, quanto vale ${C(e)}?`, o: po(v, [slice(s, a, b), slice(s, a, b + 1), slice(s, a + 1, b + 1), slice(s, a + 1, null), slice(s, null, b + 1), slice(s, -k + 1, null), slice(s, -k, null), slice(s, null, -k), slice(s, null, null, 2), slice(s, 1, null, 2), s[a + 1], s[a], s[n - k], s[n - k + 1] || s[0], s].filter(x => x !== v && x !== ''), 4), e: 'In `s[inizio:fine:passo]` l\'inizio è incluso e la fine esclusa; gli indici partono da 0 e quelli negativi contano dalla fine.' };
+});
+G('i-str', 'metodi', () => {
+  const s = pick(['banana', 'mississippi', 'cocco', 'abracadabra', 'programma', 'anagramma']), c = pick(s.split('')), up = s[0].toUpperCase() + s.slice(1);
+  const cnt = s.split(c).length - 1;
+  const [e, v] = pick([[`'${s}'.count('${c}')`, cnt], [`'${s}'.find('${c}')`, s.indexOf(c)], [`'${s}'.rfind('${c}')`, s.lastIndexOf(c)], [`len('${s}')`, s.length], [`'${s}'.upper()`, s.toUpperCase()], [`'${s}'.capitalize()`, up], [`'${s}'.replace('${c}', '')`, s.split(c).join('')], [`'${s}'.find('z')`, -1], [`'${up}'.lower()`, s]]);
+  const cands = typeof v === 'number' ? [cnt, s.indexOf(c), s.lastIndexOf(c), s.length, s.indexOf(c) + 1, s.length - 1, -1, 0, cnt + 1] : [s.toUpperCase(), up, s, s.split(c).join(''), s.replace(c, ''), s.split(c).join(c.toUpperCase()), s.slice(1)];
+  return { q: `Che cosa restituisce ${C(e)}?`, o: po(v, cands.filter(x => x !== v), 4), e: '`count` conta le occorrenze; `find` dà l\'indice della prima (−1 se manca), `rfind` dell\'ultima; `replace` sostituisce tutte le occorrenze.' };
+});
+G('i-str', 'confronto', () => {
+  const [a, op, b] = pick([['casa', '<', 'cosa'], ['Zebra', '<', 'ape'], ['ape', '<', 'Zebra'], ['10', '<', '9'], ['abc', '==', 'ABC'], ['abc', '<', 'abcd'], ['mela', '>', 'melo'], ['a', '>', 'B'], ['9', '<', 'A'], ['pera', '!=', 'Pera'], ['ciao', '==', 'ciao'], ['b', '<', 'abc'], ['Roma', '<', 'Rome'], ['z', '>', 'aaa']]);
+  const v = op === '<' ? a < b : op === '>' ? a > b : op === '==' ? a === b : a !== b;
+  return { q: `Quanto vale ${C(`'${a}' ${op} '${b}'`)}?`, o: opts(C(py(v)), [C(py(!v)), 'Dà errore', '`None`']), e: 'Ordine lessicografico sui codici dei caratteri: cifre, poi maiuscole, poi minuscole. Decide il primo carattere diverso; se una stringa è prefisso dell\'altra, la più corta viene prima.' };
+});
+G('i-str', 'split-len', () => {
+  const [e, v, w] = pick([["'uno due tre'.split()", 3, 'tre parole'], ["'a,b,,c'.split(',')", 4, 'la doppia virgola produce un campo vuoto'], ["'a  b   c'.split()", 3, 'senza argomenti gli spazi multipli contano come uno'], ["'2026-11-24'.split('-')", 3, 'tre campi'], ["'ciao'.split()", 1, 'una sola parola'], ["'a;b;c;'.split(';')", 4, 'dopo l\'ultimo separatore c\'è un campo vuoto'], ["'a b'.split(',')", 1, 'il separatore non compare: un solo pezzo'], ["'x:y:z:w'.split(':')", 4, 'quattro campi'], ["'  a b  '.split()", 2, 'gli spazi ai lati vengono ignorati']]);
+  return { q: `Quanti elementi ha la lista restituita da ${C(e)}?`, o: opts(String(v), [v - 1, v + 1, v + 2, v - 2].filter(x => x >= 0).map(String)), e: `${v}: ${w}.` };
+});
+G('i-str', 'ord-chr', () => {
+  const base = pick([['A', 65], ['a', 97], ['0', 48]]), k = ri(1, 5), c = String.fromCharCode(base[1] + k);
+  return Math.random() < 0.5
+    ? { q: `Sapendo che ${C(`ord('${base[0]}')`)} vale ${base[1]}, quanto vale ${C(`ord('${c}')`)}?`, o: opts(String(base[1] + k), [base[1] + k + 1, base[1] + k - 1, k, base[1] - k].map(String)), e: `I codici sono consecutivi: '${c}' viene ${k} ${k === 1 ? 'posto' : 'posti'} dopo '${base[0]}'.` }
+    : { q: `Sapendo che ${C(`ord('${base[0]}')`)} vale ${base[1]}, che cosa restituisce ${C(`chr(${base[1] + k})`)}?`, o: po(c, [String.fromCharCode(base[1] + k + 1), String.fromCharCode(base[1] + k - 1), String(k), String(base[1] + k)], 4), e: `\`chr\` va dal codice al carattere: ${k} ${k === 1 ? 'posto' : 'posti'} dopo '${base[0]}' c'è '${c}'.` };
+});
+
+// ---------- 4. Decisioni ----------
+G('i-if', 'booleane', () => {
+  const x = ri(0, 9), y = ri(0, 9);
+  const [e, v] = pick([[`x > 5 and y < 3`, x > 5 && y < 3], [`x > 5 or y < 3`, x > 5 || y < 3], [`not x == y`, x !== y], [`x != y and x < y`, x !== y && x < y], [`not (x > 3 and y > 3)`, !(x > 3 && y > 3)], [`x % 2 == 0 or y % 2 == 0`, x % 2 === 0 || y % 2 === 0], [`0 < x < y`, 0 < x && x < y], [`x >= y or x == 0 and y > 5`, x >= y || (x === 0 && y > 5)], [`not x > y and not y > x`, !(x > y) && !(y > x)], [`x + y > 9 and x != 0`, x + y > 9 && x !== 0]]);
+  return { q: `Con ${C(`x = ${x}`)} e ${C(`y = ${y}`)}, quanto vale ${C(e)}?`, o: opts(C(py(v)), [C(py(!v)), 'Dà errore', '`None`']), e: 'Precedenze: prima i confronti, poi `not`, poi `and`, poi `or`. `and` è vero solo se lo sono entrambe le condizioni; `or` se lo è almeno una.' };
+});
+G('i-if', 'catena-elif', () => {
+  const v = ri(0, 10), sep = Math.random() < 0.4;
+  const out = sep ? [v >= 8 ? 'A' : null, v >= 6 ? 'B' : null, v >= 4 ? 'C' : null].filter(Boolean) : [v >= 8 ? 'A' : v >= 6 ? 'B' : v >= 4 ? 'C' : 'D'];
+  const k = sep ? 'if' : 'elif', code = `x = ${v}\nif x >= 8:\n    print('A')\n${k} x >= 6:\n    print('B')\n${k} x >= 4:\n    print('C')` + (sep ? '' : `\nelse:\n    print('D')`);
+  const f = a => a.length ? a.join(' ') : 'Nulla';
+  return { q: `Che cosa stampa?\n${C(code)}`, o: opts(f(out), uniq(['A', 'B', 'C', 'D', 'A B', 'B C', 'A B C', 'Nulla'].filter(s => s !== f(out) && (sep || s !== 'Nulla'))), 4), e: sep ? 'Sono `if` separati: ogni condizione viene valutata e ogni blocco con condizione vera viene eseguito.' : 'In una catena `if` / `elif` / `else` si esegue solo il blocco della prima condizione vera.' };
+});
+G('i-if', 'de-morgan', () => {
+  const [e, ok, w] = pick([['not (a and b)', '(not a) or (not b)', ['(not a) and (not b)', 'a or b', 'not a and b']], ['not (a or b)', '(not a) and (not b)', ['(not a) or (not b)', 'a and b', 'not a or b']], ['not (x > 0 and y > 0)', 'x <= 0 or y <= 0', ['x <= 0 and y <= 0', 'x < 0 or y < 0', 'x > 0 or y > 0']], ['not (x < 0 or x > 100)', 'x >= 0 and x <= 100', ['x >= 0 or x <= 100', 'x > 0 and x < 100', 'x < 0 and x > 100']], ['not (x == 1 or x == 2)', 'x != 1 and x != 2', ['x != 1 or x != 2', 'x == 1 and x == 2', 'x != 3']]]);
+  return { q: `A quale espressione equivale ${C(e)}?`, o: opts(C(ok), w.map(C)), e: 'Leggi di De Morgan: negando un `and` si ottiene un `or` delle negazioni, e viceversa. La negazione di `>` è `<=`.' };
+});
+
+// ---------- 5. Cicli ----------
+G('i-cicli', 'range', () => {
+  const a = ri(0, 5), st = pick([1, 1, 2, 3]), k = ri(3, 6), b = a + st * k - ri(0, st - 1), vals = []; for (let i = a; i < b; i += st) vals.push(i);
+  const call = a === 0 && st === 1 ? `range(${b})` : st === 1 ? `range(${a}, ${b})` : `range(${a}, ${b}, ${st})`;
+  const [dom, v, c] = pick([['Quanti valori genera', vals.length, [vals.length + 1, vals.length - 1, b - a, b]], ['Qual è l\'ultimo valore generato da', vals[vals.length - 1], [b, b - 1 === vals[vals.length - 1] ? b + 1 : b - 1, vals[vals.length - 1] + st, vals[vals.length - 2]]], ['Quanto vale la somma dei valori generati da', vals.reduce((x, y) => x + y, 0), [vals.reduce((x, y) => x + y, 0) + b, vals.reduce((x, y) => x + y, 0) - a || 1, vals.reduce((x, y) => x + y, 0) + st, vals.length]]]);
+  return { q: `${dom} ${C(call)}?`, o: opts(String(v), uniq(c.concat([v + 1, v - 1, v + 2]).filter(x => x !== v && x >= 0).map(String))), e: `I valori sono: ${vals.join(', ')}. L'estremo finale è escluso.` };
+});
+G('i-cicli', 'while-trace', () => {
+  const n0 = ri(8, 30), d = ri(2, 5), t = ri(0, 4); let n = n0, giri = 0; while (n > t) { n -= d; giri++; }
+  const giriQ = Math.random() < 0.4;
+  const code = `n = ${n0}\n${giriQ ? 'giri = 0\n' : ''}while n > ${t}:\n    n = n - ${d}${giriQ ? '\n    giri = giri + 1' : ''}\nprint(${giriQ ? 'giri' : 'n'})`, v = giriQ ? giri : n;
+  return { q: `Che cosa stampa?\n${C(code)}`, o: opts(String(v), uniq((giriQ ? [giri + 1, giri - 1, Math.floor(n0 / d), n0 - t] : [n + d, t, n - d, 0, n + 1]).concat([v + 2, v - 2]).filter(x => x !== v).map(String))), e: `Il ciclo continua finché n > ${t}: fa ${giri} ${giri === 1 ? 'giro' : 'giri'} e n finisce a ${n}.` };
+});
+G('i-cicli', 'somma-ciclo', () => {
+  const a = ri(0, 4), b = a + ri(3, 6), modo = pick(['tutti', 'pari', 'conta']); let tot = 0;
+  for (let i = a; i < b; i++) { if (modo === 'tutti') tot += i; else if (modo === 'pari') { if (i % 2 === 0) tot += i; } else if (i % 2 === 1) tot += 1; }
+  const body = modo === 'tutti' ? '    t = t + i' : modo === 'pari' ? '    if i % 2 == 0:\n        t = t + i' : '    if i % 2 == 1:\n        t = t + 1';
+  let all = 0; for (let i = a; i <= b; i++) all += i;
+  return { q: `Che cosa stampa?\n${C(`t = 0\nfor i in range(${a}, ${b}):\n${body}\nprint(t)`)}`, o: opts(String(tot), uniq([all, tot + b, tot + 1, tot - 1, b - a, tot + 2, tot + a + 1].filter(x => x !== tot && x >= 0).map(String))), e: `i assume i valori da ${a} a ${b - 1} (${b} è escluso). Risultato: ${tot}.` };
+});
+G('i-cicli', 'annidati', () => {
+  const m = ri(2, 5), n = ri(2, 5), tri = Math.random() < 0.4, v = tri ? m * (m + 1) / 2 : m * n;
+  return { q: `Quante volte viene eseguita la ${C('print')}?\n${C(`for i in range(${m}):\n    for j in range(${tri ? 'i + 1' : n}):\n        print('*')`)}`, o: opts(String(v), uniq((tri ? [m * m, m, m * (m - 1) / 2, m + 1] : [m + n, m, n, m * n + 1]).concat([v + 1, v - 1, v + 2]).filter(x => x !== v && x > 0).map(String))), e: tri ? `Il ciclo interno fa 1, 2, …, ${m} giri: in totale ${v}.` : `Per ognuno dei ${m} giri esterni, il ciclo interno ne fa ${n}: ${m} × ${n} = ${v}.` };
+});
+G('i-cicli', 'break-continue', () => {
+  const n = ri(4, 7), k = ri(1, n - 2), br = Math.random() < 0.5, out = []; for (let i = 0; i < n; i++) { if (i === k) { if (br) break; else continue; } out.push(i); }
+  const all = []; for (let i = 0; i < n; i++) all.push(i);
+  return { q: `Che cosa stampa?\n${C(`for i in range(${n}):\n    if i == ${k}:\n        ${br ? 'break' : 'continue'}\n    print(i, end=' ')`)}`, o: opts(out.join(' '), uniq([all.slice(0, k).join(' '), all.filter(x => x !== k).join(' '), all.slice(0, k + 1).join(' '), all.join(' '), all.slice(k + 1).join(' '), String(k)].filter(s => s !== out.join(' ') && s !== ''))), e: br ? `Con \`break\` il ciclo si interrompe quando i vale ${k}.` : `Con \`continue\` si salta solo il giro in cui i vale ${k}.` };
+});
+
+// ---------- 6. Liste ----------
+const rl = (n = 5) => { const a = []; while (a.length < n) { const x = ri(1, 30); if (!a.includes(x)) a.push(x); } return a; };
+G('i-liste', 'indici-slice', () => {
+  const v = rl(ri(5, 6)), n = v.length, a = ri(0, 2), b = ri(a + 2, n - 1), k = ri(1, 3);
+  const [e, r] = pick([[`v[${a}]`, v[a]], [`v[-${k}]`, v[n - k]], [`v[${a}:${b}]`, slice(v, a, b)], [`v[:${b}]`, slice(v, null, b)], [`v[${b}:]`, slice(v, b, null)], [`v[::2]`, slice(v, null, null, 2)], [`len(v[${a}:${b}])`, b - a], [`v[-${k}:]`, slice(v, -k, null)]]);
+  const cands = Array.isArray(r) ? [slice(v, a, b), slice(v, a, b + 1), slice(v, a + 1, b + 1), slice(v, null, b + 1), slice(v, b + 1, null), slice(v, b, null), slice(v, null, b), slice(v, 1, null, 2), slice(v, -k - 1, null), slice(v, -k + 1 || n, null)] : [v[a], v[a + 1], v[n - k], v[n - k - 1], v[n - k + 1] !== undefined ? v[n - k + 1] : v[0], b - a, b - a + 1, b, a];
+  return { q: `Con ${C(`v = ${py(v)}`)}, quanto vale ${C(e)}?`, o: po(r, cands.filter(x => py(x) !== py(r) && py(x) !== '[]'), 4), e: 'Gli indici partono da 0; quelli negativi contano dalla fine; negli slice la fine è esclusa.' };
+});
+G('i-liste', 'metodi', () => {
+  const v = rl(4), x = ri(40, 60), i = ri(1, 2), w = v.slice();
+  const [op, res, e] = pick([
+    [`v.append(${x})`, v.concat([x]), '`append` aggiunge in fondo'],
+    [`v.insert(${i}, ${x})`, v.slice(0, i).concat([x], v.slice(i)), '`insert` inserisce all\'indice indicato e fa scalare gli altri'],
+    [`v.pop()`, v.slice(0, -1), '`pop()` rimuove l\'ultimo elemento'],
+    [`v.pop(${i})`, v.slice(0, i).concat(v.slice(i + 1)), '`pop(i)` rimuove l\'elemento di indice i'],
+    [`v.remove(${v[i]})`, v.filter(y => y !== v[i]), '`remove` cerca il valore e ne toglie la prima occorrenza'],
+    [`v.sort()`, w.slice().sort((p, q) => p - q), '`sort` ordina sul posto in senso crescente'],
+    [`v.reverse()`, w.slice().reverse(), '`reverse` inverte l\'ordine'],
+    [`v.sort(reverse=True)`, w.slice().sort((p, q) => q - p), 'con `reverse=True` l\'ordine è decrescente'],
+    [`v[${i}] = ${x}`, v.map((y, j) => j === i ? x : y), 'l\'assegnazione sostituisce l\'elemento di quell\'indice'],
+    [`del v[${i}]`, v.slice(0, i).concat(v.slice(i + 1)), '`del` elimina l\'elemento di quell\'indice']]);
+  const cands = [v.concat([x]), [x].concat(v), v.slice(0, i).concat([x], v.slice(i)), v.slice(0, i + 1).concat([x], v.slice(i + 1)), v.slice(0, -1), v.slice(1), v.slice(0, i).concat(v.slice(i + 1)), v.slice(0, i + 1).concat(v.slice(i + 2)), w.slice().sort((p, q) => p - q), w.slice().sort((p, q) => q - p), w.slice().reverse(), v.map((y, j) => j === i ? x : y), v];
+  return { q: `Che cosa stampa?\n${C(`v = ${py(v)}\n${op}\nprint(v)`)}`, o: po(res, mix(cands).filter(c => py(c) !== py(res)), 4), e: `${e[0].toUpperCase() + e.slice(1)}.` };
+});
+G('i-liste', 'alias-copia', () => {
+  const v = rl(3), x = ri(50, 99), [how, alias] = pick([['b = a', true], ['b = list(a)', false], ['b = a[:]', false], ['b = a.copy()', false], ['b = a', true]]);
+  const res = alias ? [x, v[1], v[2]] : v;
+  return { q: `Che cosa stampa?\n${C(`a = ${py(v)}\n${how}\nb[0] = ${x}\nprint(a)`)}`, o: po(res, [alias ? v : [x, v[1], v[2]], [x], [x, x, x], [v[0], x, v[2]]], 3), e: alias ? '`b = a` crea un alias: due nomi per la stessa lista, quindi cambia anche `a`.' : 'Qui `b` è una copia: una lista nuova con gli stessi elementi, quindi `a` non cambia.' };
+});
+G('i-liste', 'comprehension', () => {
+  const n = ri(4, 6), v = rl(5), [code, res] = pick([[`[x * 2 for x in range(${n})]`, [...Array(n).keys()].map(x => x * 2)], [`[x ** 2 for x in range(1, ${n})]`, [...Array(n - 1).keys()].map(x => (x + 1) ** 2)], [`[x for x in ${py(v)} if x % 2 == 0]`, v.filter(x => x % 2 === 0)], [`[x for x in ${py(v)} if x > 15]`, v.filter(x => x > 15)], [`[x + 1 for x in ${py(v.slice(0, 3))}]`, v.slice(0, 3).map(x => x + 1)], [`[len(s) for s in ['a', 'bb', 'ccc']]`, [1, 2, 3]], [`[x for x in range(${n * 2}) if x % 3 == 0]`, [...Array(n * 2).keys()].filter(x => x % 3 === 0)]]);
+  const c = [[...Array(n).keys()].map(x => x * 2), [...Array(n + 1).keys()].map(x => x * 2), [...Array(n).keys()].map(x => (x + 1) * 2), [...Array(n - 1).keys()].map(x => (x + 1) ** 2), [...Array(n).keys()].map(x => x ** 2), [...Array(n).keys()].map(x => (x + 1) ** 2), v.filter(x => x % 2 === 0), v.filter(x => x % 2 === 1), v.filter(x => x > 15), v.filter(x => x <= 15), v.slice(0, 3).map(x => x + 1), v.slice(0, 3), [1, 2, 3], ['a', 'bb', 'ccc'], [...Array(n * 2).keys()].filter(x => x % 3 === 0), [...Array(n * 2).keys()].filter(x => x % 3 === 0 && x > 0), v, res.concat([res.length ? res[res.length - 1] + 1 : 1]), res.slice(1)];
+  return { q: `Che cosa produce ${C(code)}?`, o: po(res, mix(c).filter(x => py(x) !== py(res)), 4), e: 'Equivale a: lista vuota, ciclo `for`, eventuale `if`, e `append` dell\'espressione a ogni giro.' };
+});
+G('i-liste', 'funzioni-lista', () => {
+  const v = rl(4), s = v.reduce((a, b) => a + b, 0), [e, r] = pick([[`sum(v)`, s], [`max(v)`, Math.max(...v)], [`min(v)`, Math.min(...v)], [`len(v)`, 4], [`v.index(${v[2]})`, 2], [`${v[1]} in v`, true], [`${Math.max(...v) + 1} in v`, false], [`sorted(v)[0]`, Math.min(...v)], [`v[0] + v[-1]`, v[0] + v[3]], [`len(v + v)`, 8], [`max(v) - min(v)`, Math.max(...v) - Math.min(...v)]]);
+  const c = typeof r === 'boolean' ? [!r, r ? 1 : 0, null] : [s, Math.max(...v), Math.min(...v), 4, 2, 3, v[2], v[0] + v[3], v[0], v[3], 8, Math.max(...v) - Math.min(...v), r + 1, r - 1];
+  return { q: `Con ${C(`v = ${py(v)}`)}, quanto vale ${C(e)}?`, o: po(r, c.filter(x => py(x) !== py(r)), 4), e: '`sum`, `max`, `min` e `len` lavorano sull\'intera lista; `index` dà la posizione di un valore; `in` verifica se è presente.' };
+});
+
+// ---------- 7. Tabelle ----------
+G('i-tab', 'accesso', () => {
+  const R = ri(2, 3), Cn = ri(3, 4), t = []; let k = ri(1, 5); for (let i = 0; i < R; i++) { const r = []; for (let j = 0; j < Cn; j++) { r.push(k); k += ri(1, 3); } t.push(r); }
+  const i = ri(0, R - 1), j = ri(0, Cn - 1), col = t.map(r => r[j]), sumr = t[i].reduce((a, b) => a + b, 0);
+  const [e, r] = pick([[`t[${i}][${j}]`, t[i][j]], [`t[${i}]`, t[i]], [`len(t)`, R], [`len(t[0])`, Cn], [`t[-1][0]`, t[R - 1][0]], [`t[0][-1]`, t[0][Cn - 1]], [`sum(t[${i}])`, sumr], [`t[${i}][${j}] + t[0][0]`, t[i][j] + t[0][0]], [`[riga[${j}] for riga in t]`, col]]);
+  const jj = Math.min(j, R - 1), ii = Math.min(i, Cn - 1);
+  const c = Array.isArray(r) ? [t[i], t[(i + 1) % R], col, t.map(r2 => r2[(j + 1) % Cn]), t[0], t[R - 1], t[i].slice(1)] : [t[i][j], t[jj][ii], t[(i + 1) % R][j], t[i][(j + 1) % Cn], R, Cn, R * Cn, t[R - 1][0], t[0][Cn - 1], t[R - 1][Cn - 1], t[0][0], sumr, col.reduce((a, b) => a + b, 0), r + 1];
+  return { q: `Con ${C(`t = ${py(t)}`)}, quanto vale ${C(e)}?`, o: po(r, c.filter(x => py(x) !== py(r)), 4), e: 'In `t[i][j]` il primo indice è la riga, il secondo la colonna. `len(t)` conta le righe, `len(t[0])` le colonne.' };
+});
+G('i-tab', 'dimensioni', () => {
+  const R = ri(2, 6), Cn = ri(2, 6), [d, v] = pick([['Quanti elementi contiene in tutto', R * Cn], ['Quanto vale `len(t)` per', R], ['Quanto vale `len(t[0])` per', Cn], ['Qual è l\'ultimo indice valido di riga per', R - 1], ['Qual è l\'ultimo indice valido di colonna per', Cn - 1]]);
+  return { q: `${d} una tabella ${C('t')} di ${R} righe e ${Cn} colonne?`, o: opts(String(v), uniq([R * Cn, R, Cn, R - 1, Cn - 1, R + Cn, v + 1, v + 2, v + 3].filter(x => x !== v).map(String))), e: 'Righe: indici da 0 a `len(t) - 1`. Colonne: da 0 a `len(t[0]) - 1`. Elementi totali: righe × colonne.' };
+});
+G('i-tab', 'copie', () => {
+  const a = ri(1, 9), x = ri(50, 99), [how, cambia, w] = pick([['b = t', true, '`b` è un alias: stessa lista esterna e stesse righe'], ['b = list(t)', true, 'la copia superficiale crea una nuova lista esterna, ma le righe sono condivise'], ['b = t[:]', true, 'lo slice è una copia superficiale: le righe sono condivise'], ['b = copy.deepcopy(t)', false, 'la copia profonda duplica anche le righe'], ['b = [list(riga) for riga in t]', false, 'ogni riga viene copiata: è una copia profonda scritta a mano']]);
+  return { q: `Che cosa stampa? (il modulo ${C('copy')} è già importato)\n${C(`t = [[${a}, 0], [0, 0]]\n${how}\nb[0][0] = ${x}\nprint(t[0][0])`)}`, o: opts(String(cambia ? x : a), [String(cambia ? a : x), '0', 'Dà errore']), e: `${w[0].toUpperCase() + w.slice(1)}.` };
+});
+
+// ---------- 8. Tuple ----------
+G('i-tuple', 'operazioni', () => {
+  const v = rl(4), T = { tup: v }, [e, r] = pick([[`t[0]`, v[0]], [`t[-1]`, v[3]], [`t[1:3]`, { tup: v.slice(1, 3) }], [`len(t)`, 4], [`t + (0,)`, { tup: v.concat([0]) }], [`max(t)`, Math.max(...v)], [`t[:2]`, { tup: v.slice(0, 2) }], [`sum(t)`, v.reduce((a, b) => a + b, 0)], [`t.index(${v[2]})`, 2]]);
+  const c = r && r.tup ? [{ tup: v.slice(1, 3) }, { tup: v.slice(1, 4) }, { tup: v.slice(0, 2) }, { tup: v.slice(0, 3) }, { tup: v.concat([0]) }, { tup: [0].concat(v) }, v.slice(1, 3), v.slice(0, 2), v.concat([0])] : [v[0], v[1], v[2], v[3], 4, 3, 2, Math.max(...v), Math.min(...v), v.reduce((a, b) => a + b, 0), r + 1];
+  return { q: `Con ${C(`t = ${py(T)}`)}, quanto vale ${C(e)}?`, o: po(r, c.filter(x => py(x) !== py(r)), 4), e: 'Sulle tuple valgono indici, slice, `len`, `sum`, `max`, `in`, `count`, `index`, `+` e `*`: lo slice e la concatenazione danno una nuova tupla.' };
+});
+G('i-tuple', 'spacchettamento', () => {
+  const a = ri(1, 9), b = ri(10, 19), c = ri(20, 29), [code, r] = pick([[`x, y = (${a}, ${b})\nprint(y)`, b], [`x, y = ${a}, ${b}\nx, y = y, x\nprint(x)`, b], [`p = (${a}, ${b}, ${c})\nx, y, z = p\nprint(x + z)`, a + c], [`x, y = ${a}, ${b}\nx, y = y, x + y\nprint(y)`, a + b], [`t = (${a}, ${b})\nprint(t[0] + t[1])`, a + b], [`for i, v in enumerate([${b}, ${c}]):\n    pass\nprint(i, v)`, `1 ${c}`]]);
+  return { q: `Che cosa stampa?\n${C(code)}`, o: opts(String(r), uniq([a, b, c, a + b, a + c, b + c, `0 ${b}`, `1 ${c}`, `2 ${c}`, `(${a}, ${b})`].map(String).filter(s => s !== String(r) && (typeof r === 'string') === /\s|\(/.test(s))), 3), e: 'Nello spacchettamento ogni variabile a sinistra riceve l\'elemento corrispondente; la destra viene calcolata per intero prima di assegnare.' };
+});
+
+// ---------- 9. Funzioni ----------
+G('i-funz', 'default', () => {
+  const a = ri(2, 5), b = ri(2, 3), d = ri(1, 4);
+  const [call, r] = pick([[`f(${a})`, a * 10 + d], [`f(${a}, ${b})`, a * 10 + b], [`f(y=${b}, x=${a})`, a * 10 + b], [`f(x=${a})`, a * 10 + d], [`f(${a}) + f(${a}, 0)`, a * 20 + d]]);
+  return { q: `Che cosa stampa?\n${C(`def f(x, y=${d}):\n    return x * 10 + y\n\nprint(${call})`)}`, o: opts(String(r), uniq([a * 10 + d, a * 10 + b, b * 10 + a, a * 10, d * 10 + a, a * 20 + d, r + 1].filter(x => x !== r).map(String)).concat(['Errore'])), e: `Se il secondo argomento manca si usa il default y = ${d}; con gli argomenti nominali l'ordine non conta.` };
+});
+G('i-funz', 'parametri', () => {
+  const x = ri(2, 9), v = rl(3), k = ri(2, 4);
+  const [code, r, e] = pick([
+    [`def f(n):\n    n = n + ${k}\n\nx = ${x}\nf(x)\nprint(x)`, String(x), 'Riassegnare un parametro non cambia la variabile del chiamante.'],
+    [`def f(n):\n    n = n + ${k}\n    return n\n\nx = ${x}\nx = f(x)\nprint(x)`, String(x + k), 'Qui il valore restituito viene riassegnato a x.'],
+    [`def f(n):\n    return n + ${k}\n\nx = ${x}\nf(x)\nprint(x)`, String(x), 'Il valore restituito non viene usato: x resta com\'era.'],
+    [`def f(v):\n    v[0] = ${k}\n\na = ${py(v)}\nf(a)\nprint(a)`, py([k, v[1], v[2]]), 'Il parametro è un riferimento alla stessa lista: modificarne un elemento cambia la lista del chiamante.'],
+    [`def f(v):\n    v = [${k}]\n\na = ${py(v)}\nf(a)\nprint(a)`, py(v), 'Riassegnare l\'intero parametro non tocca la lista del chiamante.'],
+    [`def f(n):\n    print(n * ${k})\n\ny = f(${x})\nprint(y)`, `${x * k} e poi None`, 'La funzione stampa ma non restituisce nulla: y vale None.']]);
+  const c = r.includes('[') ? [py(v), py([k, v[1], v[2]]), py([k]), 'None', 'Errore'] : r.includes('None') ? [String(x * k), 'Solo None', `${x * k} due volte`] : [String(x), String(x + k), 'None', String(k), 'Errore'];
+  return { q: `Che cosa stampa?\n${C(code)}`, o: opts(r, c.filter(s => s !== r)), e };
+});
+G('i-funz', 'chiamate', () => {
+  const a = ri(2, 6), b = ri(2, 6);
+  const [code, r] = pick([[`def quad(x):\n    return x * x\n\nprint(quad(${a}) + quad(${b}))`, a * a + b * b], [`def quad(x):\n    return x * x\n\nprint(quad(quad(${Math.min(a, 3)})))`, Math.min(a, 3) ** 4], [`def mx(a, b):\n    if a > b:\n        return a\n    return b\n\nprint(mx(${a}, ${b}) * 2)`, Math.max(a, b) * 2], [`def f(a, b):\n    return a - b\n\nprint(f(${b}, ${a}))`, b - a], [`def somma(v):\n    t = 0\n    for x in v:\n        t = t + x\n    return t\n\nprint(somma([${a}, ${b}, 1]))`, a + b + 1], [`def pari(n):\n    return n % 2 == 0\n\nprint(pari(${a}))`, a % 2 === 0 ? 'True' : 'False']]);
+  const c = typeof r === 'string' ? [r === 'True' ? 'False' : 'True', String(a % 2), 'None'] : [a * a + b * b, (a + b) ** 2, a * b, Math.min(a, 3) ** 2, Math.min(a, 3) ** 3, Math.max(a, b), Math.min(a, b) * 2, a - b === r ? a + b : a - b, a + b, r + 1, r - 1];
+  return { q: `Che cosa stampa?\n${C(code)}`, o: opts(String(r), uniq(c.map(String).filter(s => s !== String(r)))), e: 'L\'espressione di chiamata vale quanto restituito da `return`; gli argomenti si abbinano ai parametri per posizione.' };
+});
+G('i-funz', 'scope', () => {
+  const g = ri(10, 50), l = ri(1, 9), conGlobal = Math.random() < 0.5;
+  return { q: `Che cosa stampa?\n${C(`x = ${g}\n\ndef f():\n${conGlobal ? '    global x\n' : ''}    x = ${l}\n\nf()\nprint(x)`)}`, o: opts(String(conGlobal ? l : g), [String(conGlobal ? g : l), 'None', 'Errore']), e: conGlobal ? 'Con `global x` l\'assegnazione agisce sulla variabile globale.' : 'Senza `global`, l\'assegnazione crea una variabile locale con lo stesso nome: quella globale non cambia.' };
+});
+
+// ---------- 10. File ----------
+G('i-file', 'modi', () => {
+  const [m, es, r] = pick([["'r'", true, 'Si legge dall\'inizio'], ["'r'", false, 'Si genera FileNotFoundError'], ["'w'", true, 'Il file viene svuotato'], ["'w'", false, 'Il file viene creato'], ["'a'", true, 'Si scrive dopo il contenuto esistente'], ["'a'", false, 'Il file viene creato']]);
+  return { q: `Che cosa succede aprendo con modo ${C(m)} un file che ${es ? 'esiste già' : 'non esiste'}?`, o: opts(r, mix(['Si legge dall\'inizio', 'Si genera FileNotFoundError', 'Il file viene svuotato', 'Il file viene creato', 'Si scrive dopo il contenuto esistente']).filter(x => x !== r)), e: "`'r'`: lettura, errore se manca. `'w'`: scrittura, crea il file o lo svuota. `'a'`: aggiunta in coda, crea il file se manca." };
+});
+G('i-file', 'pulizia-riga', () => {
+  const campi = mix(['Roma', '12', 'abc', '3.5', 'Ugo', '2024', 'x']).slice(0, 3), sep = pick([';', ',', ':']), riga = campi.join(sep);
+  const [e, r] = pick([[`'${riga}\\n'.rstrip().split('${sep}')`, campi], [`'${riga}\\n'.split('${sep}')`, [campi[0], campi[1], campi[2] + '\\n']], [`'${riga}\\n'.rstrip()`, riga], [`'  ${campi[0]} \\n'.strip()`, campi[0]], [`len('${riga}\\n'.rstrip().split('${sep}'))`, 3], [`'${riga}'.split('${sep}', 1)`, [campi[0], campi[1] + sep + campi[2]]], [`'${riga}'.split('${sep}')[1]`, campi[1]]]);
+  const c = Array.isArray(r) ? [campi, [campi[0], campi[1], campi[2] + '\\n'], [campi[0], campi[1] + sep + campi[2]], [riga], [campi[0], campi[1]]] : typeof r === 'number' ? [2, 4, 1, riga.length] : [riga, riga + '\\n', campi[0], campi[1], campi[2], '  ' + campi[0], campi.join('')];
+  return { q: `Che cosa restituisce ${C(e)}?`, o: po(r, c.filter(x => py(x) !== py(r)), 3), e: '`rstrip()` toglie l\'a-capo finale; `split(sep)` divide sui separatori; con un numero massimo di divisioni il resto della riga resta nell\'ultimo elemento.' };
+});
+G('i-file', 'somma-file', () => {
+  const v = rl(3), modo = pick(['somma', 'conta', 'max']), r = modo === 'somma' ? v[0] + v[1] + v[2] : modo === 'conta' ? 3 : Math.max(...v);
+  const body = modo === 'somma' ? 't = 0\nfor riga in infile:\n    t = t + int(riga)' : modo === 'conta' ? 't = 0\nfor riga in infile:\n    t = t + 1' : 't = int(infile.readline())\nfor riga in infile:\n    if int(riga) > t:\n        t = int(riga)';
+  return { q: `Il file ${C('dati.txt')} contiene tre righe: ${v.join(', ')}. Che cosa stampa?\n${C(`infile = open('dati.txt')\n${body}\ninfile.close()\nprint(t)`)}`, o: opts(String(r), uniq([v[0] + v[1] + v[2], 3, Math.max(...v), Math.min(...v), v.join(''), v[0], v[2], 2].map(String).filter(s => s !== String(r)))), e: modo === 'somma' ? 'Ogni riga viene convertita in intero (l\'a-capo non dà fastidio a `int`) e sommata.' : modo === 'conta' ? 'Il ciclo fa un giro per ogni riga del file.' : 'La prima riga inizializza il massimo; il ciclo prosegue dalle righe successive, perché la lettura è sequenziale.' };
+});
+G('i-file', 'metodi-lettura', () => {
+  const [m, r] = pick([['infile.readline()', 'La riga successiva, compreso l\'a-capo'], ['infile.read()', 'L\'intero file come un\'unica stringa'], ['infile.readlines()', 'Una lista di stringhe, una per riga'], ['infile.read(1)', 'Il carattere successivo'], ['testo.splitlines()', 'La lista delle righe, senza gli a-capo']]);
+  return { q: `Che cosa restituisce ${C(m)}?`, o: opts(r, mix(['La riga successiva, compreso l\'a-capo', 'L\'intero file come un\'unica stringa', 'Una lista di stringhe, una per riga', 'Il carattere successivo', 'La lista delle righe, senza gli a-capo', 'Il numero di righe del file']).filter(x => x !== r)), e: '`readline` una riga, `read` tutto il file, `read(n)` n caratteri, `readlines` la lista delle righe con i loro a-capo.' };
+});
+
+// ---------- 11. Eccezioni ----------
+G('i-ecc', 'quale-eccezione', () => {
+  const [code, ex] = pick([["int('abc')", 'ValueError'], ["float('x1')", 'ValueError'], ["'a' + 1", 'TypeError'], ["len(5)", 'TypeError'], ["[1, 2, 3][7]", 'IndexError'], ["'ciao'[10]", 'IndexError'], ["10 / 0", 'ZeroDivisionError'], ["10 % 0", 'ZeroDivisionError'], ["print(variabile_mai_definita)", 'NameError'], ["open('non_esiste.txt', 'r')", 'FileNotFoundError'], ["[1, 2].remove(9)", 'ValueError'], ["[1, 2].index(9)", 'ValueError'], ["'abc'.index('z')", 'ValueError'], ["(1, 2)[0] = 5", 'TypeError'], ["'abc'[0] = 'x'", 'TypeError'], ["{'a': 1}['b']", 'KeyError'], ["3 + '4'", 'TypeError']]);
+  return { q: `Quale eccezione genera ${C(code)}?`, o: opts(C(ex), mix(['ValueError', 'TypeError', 'IndexError', 'ZeroDivisionError', 'NameError', 'FileNotFoundError', 'KeyError']).filter(x => x !== ex).map(C), 4), e: 'ValueError: valore del tipo giusto ma non accettabile. TypeError: tipi incompatibili. IndexError: indice fuori intervallo. NameError: nome non definito. KeyError: chiave inesistente.' };
+});
+G('i-ecc', 'flusso', () => {
+  const [src, tipo] = pick([["int('12')", null], ["int('x')", 'ValueError'], ["10 / 0", 'ZeroDivisionError'], ["[1, 2][5]", 'IndexError'], ["10 / 2", null]]), fin = Math.random() < 0.5;
+  const gest = tipo === null || tipo === 'ValueError' || tipo === 'ZeroDivisionError';
+  const out = []; if (tipo === null) out.push('A'); else if (tipo === 'ValueError') out.push('B'); else if (tipo === 'ZeroDivisionError') out.push('C'); if (fin) out.push('F');
+  const res = gest ? out.join(' ') : (fin ? 'F, poi il programma termina con IndexError' : 'Nulla: il programma termina con IndexError');
+  const code = `try:\n    x = ${src}\n    print('A')\nexcept ValueError:\n    print('B')\nexcept ZeroDivisionError:\n    print('C')` + (fin ? `\nfinally:\n    print('F')` : '');
+  return { q: `Che cosa stampa?\n${C(code)}`, o: opts(res, uniq(['A', 'B', 'C', 'A F', 'B F', 'C F', 'A B', 'A B C', 'F', 'F, poi il programma termina con IndexError', 'Nulla: il programma termina con IndexError'].filter(s => s !== res && (fin || !s.includes('F'))))), e: (tipo === null ? 'Nessuna eccezione: si stampa A e gli `except` vengono saltati.' : gest ? `Si verifica ${tipo}: il resto del \`try\` viene abbandonato e si esegue l'\`except\` corrispondente.` : 'Nessun `except` corrisponde a IndexError: l\'eccezione risale e il programma termina.') + (fin ? ' Il blocco `finally` viene eseguito in ogni caso.' : '') };
+});
+G('i-ecc', 'prevenire-gestire', () => {
+  const [caso, r] = pick([['un indice che potrebbe uscire dai limiti della lista', 'Prevenire con un `if`'], ['un divisore che potrebbe valere zero', 'Prevenire con un `if`'], ['un file che potrebbe non esistere', 'Gestire con `try` / `except`'], ['un testo digitato dall\'utente che potrebbe non essere un numero', 'Gestire con `try` / `except`'], ['un valore da cercare che potrebbe non essere nella lista prima di `remove`', 'Prevenire con un `if`']]);
+  return { q: `Come conviene trattare ${caso}?`, o: opts(r, ['Prevenire con un `if`', 'Gestire con `try` / `except`', 'Ignorare il problema', 'Usare una variabile globale'].filter(x => x !== r)), e: 'Gli errori prevedibili con un controllo semplice si prevengono; quelli che dipendono dall\'esterno (file, input dell\'utente) si gestiscono.' };
+});
+
 // Livello di difficoltà: 1 facile, 2 media, 3 difficile
 (function () {
-  var EASY = 'simboli prefissi passaggi classifica-materia famiglie ione-tipico elettroni-valenza lettera-sottolivello serie-spettrali classe-composto anioni tipo-legame legge-nome tipo-colloide leghe allotropi prefissi-carbonio ph-classifica forte-debole endo-eso celle-cubiche tipo-solido cifre-significative kelvin gruppi-funzionali elettrodi-polo neutroni vant-hoff ordine-totale unita-k nome-idrocarburo'.split(' ');
-  var HARD = 'limitante-acqua combustione-metano percentuale bilanciamento gay-lussac graham crioscopia ebullioscopia osmotica bragg raggio-lato costante-k temperatura-spontanea delta-g hess-formazione kc k-inversa titolazione fem spontanea faraday-carica pv-nrt moli-pv massa-molare-densita dalton tempo-dimezzamento ea-inversa ordine-mo incrocio energia-interna calore-passaggio massa-media isomeri-alcani le-chatelier kp-kc stechiometria-moli'.split(' ');
+  var EASY = 'simboli prefissi passaggi classifica-materia famiglie ione-tipico elettroni-valenza lettera-sottolivello serie-spettrali classe-composto anioni tipo-legame legge-nome tipo-colloide leghe allotropi prefissi-carbonio ph-classifica forte-debole endo-eso celle-cubiche tipo-solido cifre-significative kelvin gruppi-funzionali elettrodi-polo neutroni vant-hoff ordine-totale unita-k nome-idrocarburo tipo-espressione modi metodi-lettura quale-eccezione dimensioni prevenire-gestire print-sep ord-chr'.split(' ');
+  var HARD = 'limitante-acqua combustione-metano percentuale bilanciamento gay-lussac graham crioscopia ebullioscopia osmotica bragg raggio-lato costante-k temperatura-spontanea delta-g hess-formazione kc k-inversa titolazione fem spontanea faraday-carica pv-nrt moli-pv massa-molare-densita dalton tempo-dimezzamento ea-inversa ordine-mo incrocio energia-interna calore-passaggio massa-media isomeri-alcani le-chatelier kp-kc stechiometria-moli overflow-ca2 ca2-codifica ca2-valore catena-elif while-trace somma-ciclo annidati break-continue comprehension copie parametri scope flusso alias-copia somma-file de-morgan'.split(' ');
   GENS.forEach(function (g) { g.lv = EASY.indexOf(g.id) >= 0 ? 1 : HARD.indexOf(g.id) >= 0 ? 3 : 2; });
   var UNITA = /(\bmol\b|\bg\b|kJ|\batm\b|\bmL\b|\bL\b|\bK\b|°C|\bM\b|%|\bkg\b|\bnm\b|\bpm\b|\bV\b|\bmin\b)/;
   var FACILE = /^(Qual è (il simbolo|l'unità|il nome|la formula|la geometria|il gruppo)|Come si chiama|Chi |Che cos'è|Che forma|A quale (gruppo|potenza)|Quale (stato|famiglia))/;
@@ -1987,6 +2779,7 @@ G('organica', 'isomeri-alcani', () => {
     var q = x.q, n = q.length, tot = x.o.reduce(function (s, o) { return s + o.length; }, 0) / x.o.length, p = 0;
     if (/\d/.test(q) && UNITA.test(q) && n > 60) p += 3;
     if (/^Perché/.test(q)) p += 2;
+    if (q.indexOf('\n') >= 0) p += 2.5;
     if (/\b(NON|ERRATA|FALSA)\b/.test(q)) p += 2;
     if (/(Bilanci|Calcola|relazione|espressione|ordine (crescente|decrescente)|rispetto a)/.test(q)) p += 1.5;
     if (x.o.length === 5) p += 0.8;
@@ -2015,7 +2808,14 @@ var TOPICS=[
  ['termo','Td','Termodinamica','Dai quiz'],['equil','Eq','Equilibrio chimico','Dai quiz'],
  ['acidi','Ab','Acidi e basi','Dai quiz'],['elettro','Ec','Elettrochimica','Dai quiz'],
  ['organica','Or','Chimica organica','Dai quiz']
-].map(function(a,i){return {id:a[0],name:a[2],src:a[3],no:i<6?String(i+1):i===6?'7–8':String(i+2)};});
+].map(function(a,i){return {id:a[0],subj:'chimica',name:a[2],src:a[3],no:i<6?String(i+1):i===6?'7–8':String(i+2)};}).concat([
+ ['i-dati','Rappresentazione dei dati'],['i-base','Fondamenti di Python'],['i-str','Stringhe'],['i-if','Decisioni: if, elif, else'],
+ ['i-cicli','Cicli: while e for'],['i-liste','Liste'],['i-tab','Tabelle'],['i-tuple','Tuple'],['i-funz','Funzioni'],
+ ['i-file','File di testo'],['i-ecc','Eccezioni']
+].map(function(a,i){return {id:a[0],subj:'informatica',name:a[1],src:'Appunti, cap. '+(i+1),no:String(i+1)};}));
+var SUBJ=[['chimica','Chimica'],['informatica','Informatica']], TSUBJ={};
+TOPICS.forEach(function(t){TSUBJ[t.id]=t.subj;});
+function subjOf(s){return s.subj||TSUBJ[s.topic]||'chimica';}
 var TNAME={misto:'Misto, tutte le sezioni',errori:'Ripasso errori',esame:'Simulazione del test'};
 TOPICS.forEach(function(t){TNAME[t.id]=t.name;});
 var PER_SESSION=9, EXAM_N=15, EXAM_SEC=25*60;
@@ -2023,15 +2823,17 @@ var PER_SESSION=9, EXAM_N=15, EXAM_SEC=25*60;
 function hash(s){var h=5381;for(var i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))>>>0;return h.toString(36);}
 BANK.forEach(function(x){x.id='s'+hash(x.q+'|'+x.o[0]);});
 var BYID={};BANK.forEach(function(x){BYID[x.id]=x;});
-var GBYID={};GENS.forEach(function(g){GBYID['g:'+g.id]=g;});
+GENS.forEach(function(g){g.gid='g:'+g.t+'/'+g.id;});
+var GBYID={};GENS.forEach(function(g){GBYID[g.gid]=g;});
 
 /* ---------- archivio locale ---------- */
 var KEY='chimicaquiz.v1', storageOK=true;
-var db={sessions:[],wrong:[],seen:{},tstat:{},lv:0};
+var db={sessions:[],wrong:[],seen:{},tstat:{},lv:0,subj:'chimica'};
 try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&p.sessions)db=Object.assign(db,p);}}catch(e){storageOK=false;}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){storageOK=false;}}
 
 /* ---------- utilità ---------- */
+function fmt(s){return esc(s).replace(/`([^`]+)`/g,function(m,c){return c.indexOf('\n')>=0?'<code class="blk">'+c+'</code>':'<code>'+c+'</code>';});}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function rnd(n){return Math.floor(Math.random()*n);}
 function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=rnd(i+1);var t=a[i];a[i]=a[j];a[j]=t;}return a;}
@@ -2055,8 +2857,9 @@ function materialize(src,id){
 }
 function pool(topic){
   var out=[];
-  BANK.forEach(function(x){if(!topic||x.t===topic)out.push({id:x.id,src:x});});
-  GENS.forEach(function(g){if(!topic||g.t===topic){out.push({id:'g:'+g.id,src:g});out.push({id:'g:'+g.id,src:g,again:1});}});
+  function okT(t){return topic?t===topic:TSUBJ[t]===db.subj;}
+  BANK.forEach(function(x){if(okT(x.t))out.push({id:x.id,src:x});});
+  GENS.forEach(function(g){if(okT(g.t)){out.push({id:g.gid,src:g});out.push({id:g.gid,src:g,again:1});}});
   return out;
 }
 function draw(topic,n,lv){
@@ -2069,7 +2872,7 @@ function draw(topic,n,lv){
 function start(mode,topic){
   var items, lv=(mode==='sez'||mode==='misto')?(db.lv||0):0;
   if(mode==='errori'){
-    var ids=shuffle(db.wrong.filter(function(id){return BYID[id]||GBYID[id];})).slice(0,PER_SESSION);
+    var ids=shuffle(wrongIds()).slice(0,PER_SESSION);
     items=ids.map(function(id){return materialize(BYID[id]||GBYID[id],id);});
   } else if(mode==='esame') items=draw(null,EXAM_N);
   else items=draw(mode==='misto'?null:topic,PER_SESSION,lv);
@@ -2079,6 +2882,7 @@ function start(mode,topic){
   clearInterval(timer);timer=setInterval(tick,1000);
   window.scrollTo(0,0);
 }
+function wrongIds(){return db.wrong.filter(function(id){var x=BYID[id]||GBYID[id];return x&&TSUBJ[x.t]===db.subj;});}
 function elapsed(){return (Date.now()-S.t0)/1000;}
 function tick(){
   if(view!=='quiz'||!S)return;
@@ -2099,7 +2903,7 @@ function submit(){
     if(st==='ok'){if(w>=0)db.wrong.splice(w,1);}else if(w<0)db.wrong.push(it.id);
   });
   S.res={ok:ok,ko:ko,blank:blank,sec:sec};
-  db.sessions.push({ts:Date.now(),mode:S.mode,lv:S.lv,topic:S.topic,n:S.items.length,ok:ok,ko:ko,blank:blank,sec:sec});
+  db.sessions.push({ts:Date.now(),subj:db.subj,mode:S.mode,lv:S.lv,topic:S.topic,n:S.items.length,ok:ok,ko:ko,blank:blank,sec:sec});
   save();view='review';render();window.scrollTo(0,0);
 }
 
@@ -2114,13 +2918,22 @@ var view='home', S=null, timer=null, wipeAsk=false;
 var app=document.getElementById('app');
 function header(){
   var inQuiz=view==='quiz';
-  return '<header class="top"><div class="brand"><i></i>Chimica Quiz</div>'+
+  return '<header class="top"><div class="brand"><i></i>Quiz per Test</div>'+
     (inQuiz?'':'<nav class="tabs" aria-label="Pagine"><button data-go="home"'+(view==='home'?' aria-current="page"':'')+'>Sezioni</button><button data-go="storico"'+(view==='storico'?' aria-current="page"':'')+'>Storico</button><button data-act="logout">Esci</button></nav>')+
     '</header>';
 }
+function subjSwitch(){
+  var h='<div class="subj" role="group" aria-label="Materia">';
+  SUBJ.forEach(function(m){
+    var nt=TOPICS.filter(function(t){return t.subj===m[0];}).length, nq=BANK.filter(function(x){return TSUBJ[x.t]===m[0];}).length;
+    h+='<button data-subj="'+m[0]+'" aria-pressed="'+(db.subj===m[0])+'"><b>'+m[1]+'</b><span>'+nt+' sezioni · '+nq+' domande</span></button>';
+  });
+  return h+'</div>';
+}
 function home(){
-  var a=agg(db.sessions), nWrong=db.wrong.filter(function(id){return BYID[id]||GBYID[id];}).length;
-  var h=header();
+  var mine=db.sessions.filter(function(s){return subjOf(s)===db.subj;});
+  var a=agg(mine), nWrong=wrongIds().length;
+  var h=header()+subjSwitch();
   h+='<div class="kpis">'+
     '<div class="kpi"><b>'+a.count+'</b><span>sessioni completate</span></div>'+
     '<div class="kpi"><b>'+(a.count?it(a.pct,0)+'%':'–')+'</b><span>risposte giuste</span></div>'+
@@ -2132,7 +2945,7 @@ function home(){
   h+='<div class="seg" role="group" aria-label="Difficoltà">';
   LV.forEach(function(n,i){h+='<button data-lv="'+i+'" aria-pressed="'+(lv===i)+'">'+(i?n:'Tutti')+'</button>';});
   h+='</div><div class="grid">';
-  TOPICS.forEach(function(t){
+  TOPICS.filter(function(t){return t.subj===db.subj;}).forEach(function(t){
     var nq=BANK.filter(function(x){return x.t===t.id&&(!lv||x.lv===lv);}).length, ng=GENS.filter(function(g){return g.t===t.id&&(!lv||g.lv===lv);}).length;
     var ss=db.sessions.filter(function(s){return s.mode==='sez'&&s.topic===t.id;}), last=ss[ss.length-1], ts=db.tstat[t.id];
     var pct=ts&&ts.r?Math.round(ts.c/ts.r*100):0;
@@ -2145,7 +2958,7 @@ function home(){
     '<button class="tile special" data-start="errori"'+(nWrong?'':' disabled')+'><span class="sym">↺</span><span class="nm">Ripasso errori</span><span class="meta">'+(nWrong?nWrong+' domand'+(nWrong===1?'a':'e')+' da rivedere':'Nessun errore da rivedere')+'</span></button>'+
     '<button class="tile special" data-start="esame"><span class="sym">25′</span><span class="nm">Simulazione del test</span><span class="meta">'+EXAM_N+' domande, soglia 6 su 9</span></button>'+
     '</div>';
-  h+='<p class="note">'+BANK.length+' domande e '+GENS.length+' tipi di esercizio con dati sempre diversi. '+(storageOK?'Lo storico resta salvato su questo dispositivo.':'Questo browser non permette di salvare lo storico: i dati valgono solo finché la pagina resta aperta.')+'</p>';
+  h+='<p class="note">In tutto '+BANK.length+' domande e '+GENS.length+' tipi di esercizio con dati sempre diversi. '+(storageOK?'Lo storico resta salvato su questo dispositivo.':'Questo browser non permette di salvare lo storico: i dati valgono solo finché la pagina resta aperta.')+'</p>';
   return h;
 }
 function quiz(){
@@ -2154,8 +2967,8 @@ function quiz(){
   h+='<div class="narrow"><div class="qhead"><h2>'+esc(TNAME[S.topic])+'</h2><span class="muted small">Domanda '+(S.i+1)+' di '+n+'</span><span class="clock" id="clock" aria-label="'+(S.limit?'Tempo rimasto':'Tempo trascorso')+'">0:00</span></div>';
   h+='<div class="dots" role="group" aria-label="Vai alla domanda">';
   S.items.forEach(function(x,i){h+='<button data-jump="'+i+'" class="'+(i===S.i?'cur ':'')+(x.sel>=0?'done':'')+'" aria-label="Domanda '+(i+1)+(x.sel>=0?', con risposta':', senza risposta')+'">'+(i+1)+'</button>';});
-  h+='</div><div class="card"><span class="tag">'+esc(t?t.name:'')+' · '+LV[q.lv]+'</span><h3>'+esc(q.q)+'</h3><div class="opts">';
-  q.o.forEach(function(o,i){h+='<button class="opt'+(q.sel===i?' sel':'')+'" data-opt="'+i+'" aria-pressed="'+(q.sel===i)+'"><span class="k">'+LETTERS[i]+'</span><span>'+esc(o)+'</span></button>';});
+  h+='</div><div class="card"><span class="tag">'+esc(t?t.name:'')+' · '+LV[q.lv]+'</span><h3>'+fmt(q.q)+'</h3><div class="opts">';
+  q.o.forEach(function(o,i){h+='<button class="opt'+(q.sel===i?' sel':'')+'" data-opt="'+i+'" aria-pressed="'+(q.sel===i)+'"><span class="k">'+LETTERS[i]+'</span><span>'+fmt(o)+'</span></button>';});
   h+='</div></div>';
   if(S.ask==='quit') h+='<div class="confirm" role="alert"><p>Vuoi abbandonare? La sessione non verrà registrata.</p><button class="btn" data-act="quit-yes">Abbandona</button><button class="btn ghost" data-act="ask-no">Continua</button></div>';
   else if(S.ask==='submit'){var miss=S.items.filter(function(x){return x.sel<0;}).length;
@@ -2180,14 +2993,14 @@ function review(){
   var order=S.items.map(function(x,i){return {x:x,i:i};}).sort(function(a,b){return (a.x.st==='ok')-(b.x.st==='ok')||a.i-b.i;});
   order.forEach(function(p){
     var x=p.x, lab={ok:'Giusta',ko:'Sbagliata',blank:'Senza risposta'}[x.st];
-    h+='<article class="rev '+x.st+'"><div class="rh"><span class="pill '+x.st+'">'+lab+'</span><span>Domanda '+(p.i+1)+' · '+esc(TNAME[x.t]||'')+' · '+LV[x.lv]+'</span></div><h4>'+esc(x.q)+'</h4>';
-    if(x.st==='ko')h+='<div class="ans bad"><span class="lb">La tua risposta</span><span>'+LETTERS[x.sel]+') '+esc(x.o[x.sel])+'</span></div>';
-    h+='<div class="ans good"><span class="lb">Risposta giusta</span><span>'+LETTERS[x.ok]+') '+esc(x.o[x.ok])+'</span></div>';
-    if(x.st==='ok')h+='<details class="why"><summary>Perché</summary><p>'+esc(x.e)+'</p></details>';
-    else h+='<div class="corr"><b>Correzione</b>'+esc(x.e)+'</div>';
+    h+='<article class="rev '+x.st+'"><div class="rh"><span class="pill '+x.st+'">'+lab+'</span><span>Domanda '+(p.i+1)+' · '+esc(TNAME[x.t]||'')+' · '+LV[x.lv]+'</span></div><h4>'+fmt(x.q)+'</h4>';
+    if(x.st==='ko')h+='<div class="ans bad"><span class="lb">La tua risposta</span><span>'+LETTERS[x.sel]+') '+fmt(x.o[x.sel])+'</span></div>';
+    h+='<div class="ans good"><span class="lb">Risposta giusta</span><span>'+LETTERS[x.ok]+') '+fmt(x.o[x.ok])+'</span></div>';
+    if(x.st==='ok')h+='<details class="why"><summary>Perché</summary><p>'+fmt(x.e)+'</p></details>';
+    else h+='<div class="corr"><b>Correzione</b>'+fmt(x.e)+'</div>';
     h+='</article>';
   });
-  var nWrong=db.wrong.filter(function(id){return BYID[id]||GBYID[id];}).length;
+  var nWrong=wrongIds().length;
   h+='<div class="actions">'+
     (S.mode==='sez'?'<button class="btn primary" data-start="sez" data-topic="'+S.topic+'">Altra sessione su questa sezione</button>':'<button class="btn primary" data-start="'+(S.mode==='errori'&&!nWrong?'misto':S.mode)+'">Altra sessione</button>')+
     (nWrong&&S.mode!=='errori'?'<button class="btn" data-start="errori">Ripassa gli errori ('+nWrong+')</button>':'')+
@@ -2195,7 +3008,8 @@ function review(){
   return h;
 }
 function storico(){
-  var a=agg(db.sessions), h=header();
+  var mine=db.sessions.filter(function(s){return subjOf(s)===db.subj;});
+  var a=agg(mine), h=header()+subjSwitch();
   h+='<div class="sech"><h2>Storico delle sessioni</h2></div>';
   h+='<div class="kpis">'+
     '<div class="kpi"><b>'+a.count+'</b><span>sessioni registrate</span></div>'+
@@ -2205,23 +3019,23 @@ function storico(){
     '<div class="kpi"><b>'+(a.count?it(a.pct,0)+'%':'–')+'</b><span>risposte giuste ('+a.ok+' su '+a.n+')</span></div></div>';
   if(!a.count){h+='<div class="empty">Non hai ancora completato sessioni. Scegli una sezione e rispondi alle '+PER_SESSION+' domande: qui compariranno risultato e tempo di ogni sessione.</div>';return h;}
   h+='<div class="sech"><h2>Per sezione</h2></div><div class="tbl"><table><thead><tr><th>Sezione</th><th class="n">Sessioni</th><th class="n">Media giuste</th><th class="n">Migliore</th><th class="n">Tempo medio</th></tr></thead><tbody>';
-  var keys=TOPICS.map(function(t){return t.id;}).concat(['misto','errori','esame']);
+  var keys=TOPICS.filter(function(t){return t.subj===db.subj;}).map(function(t){return t.id;}).concat(['misto','errori','esame']);
   keys.forEach(function(k){
-    var ss=db.sessions.filter(function(s){return s.topic===k;});if(!ss.length)return;
+    var ss=mine.filter(function(s){return s.topic===k;});if(!ss.length)return;
     var g=agg(ss), best=ss.reduce(function(m,s){return Math.max(m,s.ok/s.n);},0);
     h+='<tr><td>'+esc(TNAME[k])+'</td><td class="n">'+g.count+'</td><td class="n">'+it(g.pct,0)+'%</td><td class="n">'+it(best*100,0)+'%</td><td class="n">'+mmss(g.avgSec)+'</td></tr>';
   });
   h+='</tbody></table></div><div class="sech"><h2>Tutte le sessioni</h2><span class="muted small">dalla più recente</span></div><div class="tbl"><table><thead><tr><th>Data</th><th>Sezione</th><th>Livello</th><th class="n">Giuste</th><th class="n">Sbagliate</th><th class="n">Vuote</th><th class="n">Tempo</th><th class="n">Per domanda</th></tr></thead><tbody>';
-  db.sessions.slice().reverse().slice(0,200).forEach(function(s){
+  mine.slice().reverse().slice(0,200).forEach(function(s){
     h+='<tr><td class="mono">'+when(s.ts)+'</td><td>'+esc(TNAME[s.topic]||s.topic)+'</td><td>'+(s.lv?LV[s.lv]:'Tutti')+'</td><td class="n">'+s.ok+'/'+s.n+'</td><td class="n">'+s.ko+'</td><td class="n">'+s.blank+'</td><td class="n">'+mmss(s.sec)+'</td><td class="n">'+it(s.sec/s.n,0)+' s</td></tr>';
   });
   h+='</tbody></table></div>';
-  h+=wipeAsk?'<div class="confirm" role="alert"><p>Cancellare tutte le sessioni, gli errori da ripassare e le statistiche? Non si può annullare.</p><button class="btn" data-act="wipe-yes">Cancella tutto</button><button class="btn ghost" data-act="wipe-no">Annulla</button></div>'
+  h+=wipeAsk?'<div class="confirm" role="alert"><p>Cancellare tutte le sessioni di entrambe le materie, gli errori da ripassare e le statistiche? Non si può annullare.</p><button class="btn" data-act="wipe-yes">Cancella tutto</button><button class="btn ghost" data-act="wipe-no">Annulla</button></div>'
     :'<button class="btn ghost" data-act="wipe">Cancella lo storico</button>';
   return h;
 }
 function login(){
-  return '<form class="login" id="loginform" autocomplete="off"><div class="brand"><i></i>Chimica Quiz</div><h1>Accedi</h1><p>Inserisci le credenziali per entrare.</p>'+
+  return '<form class="login" id="loginform" autocomplete="off"><div class="brand"><i></i>Quiz per Test</div><h1>Accedi</h1><p>Inserisci le credenziali per entrare.</p>'+
     '<label for="lu">Nome utente</label><input id="lu" name="lu" type="text" autocapitalize="none" autocorrect="off" spellcheck="false" required>'+
     '<label for="lp">Password</label><input id="lp" name="lp" type="password" required>'+
     (loginErr?'<div class="err" role="alert">Nome utente o password non corretti.</div>':'')+
@@ -2247,6 +3061,7 @@ app.addEventListener('click',function(ev){
   if(!authed)return;
   if(d.act==='logout'){authed=false;loginErr=false;try{localStorage.removeItem(AUTH_KEY);}catch(e){}render();return;}
   if(d.lv!=null){db.lv=+d.lv;save();render();return;}
+  if(d.subj){db.subj=d.subj;save();render();return;}
   if(d.start){start(d.start,d.topic);return;}
   if(view==='quiz'){
     if(d.opt!=null){var q=S.items[S.i],i=+d.opt;q.sel=q.sel===i?-1:i;S.ask=null;render();tick();return;}
@@ -2255,7 +3070,7 @@ app.addEventListener('click',function(ev){
   }
   if(d.act==='wipe'){wipeAsk=true;render();}
   else if(d.act==='wipe-no'){wipeAsk=false;render();}
-  else if(d.act==='wipe-yes'){db={sessions:[],wrong:[],seen:{},tstat:{},lv:db.lv||0};save();wipeAsk=false;render();}
+  else if(d.act==='wipe-yes'){db={sessions:[],wrong:[],seen:{},tstat:{},lv:db.lv||0,subj:db.subj};save();wipeAsk=false;render();}
 });
 function act(a){
   if(!a)return;
