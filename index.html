@@ -200,6 +200,10 @@ html.aimode header.top{flex:none;margin-bottom:6px}
 .msg.ai .av .ic{width:15px;height:15px}
 .msg.ai .tx{flex:1;min-width:0;white-space:pre-wrap;padding-top:1px}
 .msg.ai .tx code.blk{margin:8px 0}
+.aistat{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:5px;overflow-wrap:anywhere}
+.aistat b{font-weight:600;color:var(--ink)}
+.aistat .ok{color:var(--ok)}.aistat .ko{color:var(--ko)}
+.aistat small{display:block;font-size:11px;opacity:.8}
 .aiwait{font-size:13px;color:var(--muted)}
 .msg .mh{display:block;font-size:1.06em;font-weight:650;letter-spacing:-.01em}
 .msg sup,.msg sub{font-size:.72em;line-height:0}
@@ -3271,17 +3275,17 @@ function storico(){
 /* ---------- assistente AI ---------- */
 var AI_KEY='quizpertest.ai';
 var AI={prov:'free',mfree:'auto',mor:'openrouter/free',key:'',msgs:[],busy:false,draft:'',
-  cool:{},list:{free:['openai-fast','grok-4.1-mini:free','step-3.5-flash:free'],or:['openrouter/free']},loaded:{}};
+  cool:{},stat:{},list:{free:['openai-fast','grok-4.1-mini:free','step-3.5-flash:free'],or:['openrouter/free']},loaded:{}};
 try{var ap=JSON.parse(localStorage.getItem(AI_KEY)||'null');if(ap){AI.prov=ap.prov==='or'?'or':'free';AI.mfree=(ap.v2&&ap.mfree)||AI.mfree;AI.mor=ap.mor||AI.mor;AI.key=ap.key||'';}}catch(e){}
 function aiSave(){try{localStorage.setItem(AI_KEY,JSON.stringify({v2:1,prov:AI.prov,mfree:AI.mfree,mor:AI.mor,key:AI.key}));}catch(e){}}
-var AI_OVH='https://oai.endpoints.kepler.ai.cloud.ovh.net/v1', AI_KILO='https://api.kilo.ai/api/gateway', AI_NET=/Failed to fetch|NetworkError|Load failed/i;
-var AI_OVHM=['gpt-oss-120b','Meta-Llama-3_3-70B-Instruct','Qwen3.8-27B','gpt-oss-20b'];
+var AI_OVH='https://oai.endpoints.kepler.ai.cloud.ovh.net/v1', AI_KILO='https://api.kilo.ai/api/gateway', AI_NET=/Failed to fetch|NetworkError|Load failed/i, AI_LIM=/limit|rate|429|quota|busy|too many|capacity/i;
+var AI_OVHM=['gpt-oss-120b','Meta-Llama-3_3-70B-Instruct','gpt-oss-20b'];
 // Percorsi senza chiave, alternati per servizio. gap = secondi di pausa dopo una risposta, secondo i limiti dichiarati da ciascun servizio.
 function aiRoutes(){
   var R=[], kl=AI.list.free;
   function a(base,model,gap){if(model)R.push({base:base,model:model,gap:gap});}
   a(AI_FREE[0],kl[0]||'openai-fast',20);a(AI_OVH,AI_OVHM[0],31);a(AI_KILO,'kilo-auto/free',2);a(AI_FREE[1],'openai-fast',46);
-  a(AI_OVH,AI_OVHM[1],31);a(AI_FREE[0],kl[1],20);a(AI_OVH,AI_OVHM[2],31);a(AI_FREE[0],kl[2],20);a(AI_OVH,AI_OVHM[3],31);
+  a(AI_OVH,AI_OVHM[1],31);a(AI_FREE[0],kl[1],20);a(AI_OVH,AI_OVHM[2],31);a(AI_FREE[0],kl[2],20);
   return R;
 }
 var AI_FREE=['https://keylessai.thryx.workers.dev/v1','https://text.pollinations.ai/openai','https://api.airforce/v1'], AI_OR='https://openrouter.ai/api/v1';
@@ -3322,6 +3326,13 @@ function aiLoadModels(prov){
     if(ids.length){AI.list[prov]=ids;var sel=document.getElementById('aimodel');if(sel&&AI.prov===prov)sel.innerHTML=aiOptions();}
   }).catch(function(){});
 }
+function aiStatus(){
+  var ks=Object.keys(AI.stat);if(!ks.length)return '';
+  var h='<div class="aistat"><b>Ultimo esito dei servizi</b>';
+  ks.forEach(function(k){var x=AI.stat[k], p=k.split('|'), host=p[0].replace(/^https?:\/\//,'').split('/')[0];
+    h+='<div><span class="'+(x.s==='ok'?'ok':'ko')+'">'+x.s+'</span> '+esc(host)+' · '+esc(p[1])+(x.m&&x.s!=='ok'?'<small>'+esc(x.m.slice(0,140))+'</small>':'')+'</div>';});
+  return h+'</div>';
+}
 function aiCur(){return AI.prov==='or'?AI.mor:AI.mfree;}
 function aiLabel(id){return id==='openrouter/free'||id==='auto'?'Automatico':id;}
 function aiOptions(){
@@ -3333,11 +3344,12 @@ function aiOptions(){
 }
 function keepDraft(fn){var t=document.getElementById('aiq');if(t)AI.draft=t.value;fn();}
 // Chiamata in streaming: la risposta compare mentre viene scritta. Se il servizio risponde tutto insieme, funziona lo stesso.
-function aiCall(base,headers,model,onChunk){
+function aiCall(base,headers,model,onChunk,handle){
   var ctl=window.AbortController?new AbortController():null, slow=false, any=false, oc=onChunk;
   onChunk=function(a){any=true;oc(a);};
-  var to=setTimeout(function(){slow=true;if(ctl)ctl.abort();},120000), first=setTimeout(function(){if(!any){slow=true;if(ctl)ctl.abort();}},25000);
+  var to=setTimeout(function(){slow=true;if(ctl)ctl.abort();},120000), first=setTimeout(function(){if(!any){slow=true;if(ctl)ctl.abort();}},20000);
   function fin(){clearTimeout(to);clearTimeout(first);}
+  if(handle)handle.abort=function(){if(ctl)ctl.abort();};
   var msgs=[{role:'system',content:AI_SYS}].concat(AI.msgs.map(function(m){return {role:m.r==='user'?'user':'assistant',content:m.t};}));
   var url=/\/openai$/.test(base)?base:base+'/chat/completions';
   function fromJson(tx){var j=null;try{j=JSON.parse(tx);}catch(e){}return j;}
@@ -3414,39 +3426,64 @@ function aiSend(text){
     if(AI.mfree!=='auto')add(AI_FREE[0],h,AI.mfree,20);
     ready.concat(paused).slice(0,8).forEach(function(r){add(r.base,h,r.model,r.gap);});
   }
+  // Tentativi in parallelo sfalsati: se un servizio non inizia a scrivere entro 7 s parte anche il successivo; vale il primo che risponde.
   function runChain(){
-    var errs=[], i=0, t0=Date.now();
-    function next(){
-      if(i>=tries.length||Date.now()-t0>80000){var er=new Error(errs[errs.length-1]||'Nessun modello disponibile');er.all=errs;throw er;}
-      var t=tries[i++];
-      return aiCall(t.base,t.h,t.model,onChunk).then(function(ans){AI.cool[t.k]=Date.now()+t.gap*1000;return ans;},function(e){
-        if(got)throw e;                       // risposta già iniziata: non si riparte da capo
-        var m=String(e&&e.message||e);errs.push(m);
-        var sec=/(?:retry|every|ogni)[^0-9]{0,20}(\d{1,3})\s*s/i.exec(m);
-        AI.cool[t.k]=Date.now()+(sec?Math.min(+sec[1]+1,120):AI_NET.test(m)?600:/timeout/.test(m)?120:60)*1000;
-        if(AI.prov==='or'&&/401|invalid|No auth|User not found/i.test(m)){var ek=new Error('La chiave OpenRouter non è valida. Controllala nel menu del modello.');ek.fatal=1;throw ek;}
-        return next();
-      });
-    }
-    return next();
+    return new Promise(function(resolve,reject){
+      var errs=[], i=0, live=[], winner=null, over=false, hedge=null, t0=Date.now();
+      function end(fn,v){if(over)return;over=true;clearTimeout(hedge);live.forEach(function(c){if(c!==winner&&c.abort)c.abort();});fn(v);}
+      function note(t,st,m){AI.stat[t.k]={s:st,m:m||'',at:Date.now()};}
+      function launch(){
+        if(over||winner)return;
+        if(i>=tries.length||Date.now()-t0>50000){if(!live.length){var er=new Error(errs[errs.length-1]||'Nessun modello disponibile');er.all=errs;end(reject,er);}return;}
+        var t=tries[i++], me={};live.push(me);
+        clearTimeout(hedge);hedge=setTimeout(launch,7000);
+        aiCall(t.base,t.h,t.model,function(acc){
+          if(over||(winner&&winner!==me))return;
+          if(!winner){winner=me;clearTimeout(hedge);live.forEach(function(c){if(c!==me&&c.abort)c.abort();});}
+          onChunk(acc);
+        },me).then(function(ans){
+          if(winner&&winner!==me)return;
+          winner=me;AI.cool[t.k]=Date.now()+t.gap*1000;note(t,'ok');end(resolve,ans);
+        },function(e){
+          live.splice(live.indexOf(me),1);
+          if(over||(winner&&winner!==me))return;
+          if(winner===me){end(reject,e);return;}   // risposta già iniziata: non si riparte da capo
+          var m=String(e&&e.message||e);errs.push(m);
+          var sec=/(?:retry|every|ogni)[^0-9]{0,20}(\d{1,3})\s*s/i.exec(m), lim=sec||AI_LIM.test(m), net=AI_NET.test(m);
+          AI.cool[t.k]=Date.now()+(sec?Math.min(+sec[1]+1,120):net?600:/timeout/.test(m)?120:60)*1000;
+          note(t,lim?'limite':net?'non raggiungibile':/timeout/.test(m)?'lento':'errore',m);
+          if(AI.prov==='or'&&/401|invalid|No auth|User not found/i.test(m)){var ek=new Error('La chiave OpenRouter non è valida. Controllala nel menu del modello.');ek.fatal=1;end(reject,ek);return;}
+          launch();
+        });
+      }
+      launch();
+    });
   }
-  function waitFor(errs){ // se tutti chiedono di aspettare pochi secondi, si aspetta e si riprova una volta
-    var best=0;(errs||[]).forEach(function(m){var x=/(?:retry|riprova)[^0-9]{0,20}(\d{1,3})\s*s/i.exec(m)||/(?:every|ogni)\s+(\d{1,3})\s*s/i.exec(m);if(x){var v=+x[1];if(!best||v<best)best=v;}});
-    return best&&best<=60?best:0;
+  function waitFor(errs){ // secondi da aspettare prima di riprovare, 0 se non è un problema di limiti
+    var best=0, lim=false;(errs||[]).forEach(function(m){if(AI_LIM.test(m))lim=true;var x=/(?:retry|every|ogni)[^0-9]{0,20}(\d{1,3})\s*s/i.exec(m);if(x){lim=true;var v=+x[1];if(!best||v<best)best=v;}});
+    if(!lim)return 0;
+    var soon=0, now=Date.now();tries.forEach(function(t){var c=AI.cool[t.k]||0;if(c>now&&c-now<120000&&(!soon||c<soon))soon=c;});
+    var w=soon?Math.ceil((soon-now)/1000):best||30;
+    return Math.max(3,Math.min(w,60));
   }
-  var p=runChain().catch(function(e){
-    var w=!e.fatal&&!got&&waitFor(e.all);
-    if(!w)throw e;
-    var left=w+1, st=document.createElement('div');st.className='aiwait';st.setAttribute('role','status');tx.appendChild(st);
-    function show(){st.textContent='I modelli gratuiti sono al limite: riprovo da solo tra '+left+' s';}
-    show();var iv=setInterval(function(){left--;if(left>0)show();},1000);
-    return new Promise(function(res){setTimeout(res,(w+1)*1000);}).then(function(){clearInterval(iv);if(st.parentNode)st.parentNode.removeChild(st);return runChain();});
-  });
+  var rounds=0;
+  function attempt(){
+    return runChain().catch(function(e){
+      var w=!e.fatal&&!got&&rounds<2&&waitFor(e.all);
+      if(!w)throw e;
+      rounds++;
+      var left=w+1, st=document.createElement('div');st.className='aiwait';st.setAttribute('role','status');tx.appendChild(st);
+      function show(){st.textContent='I modelli gratuiti sono al limite: riprovo da solo tra '+left+' s';}
+      show();var iv=setInterval(function(){left--;if(left>0)show();},1000);
+      return new Promise(function(res){setTimeout(res,(w+1)*1000);}).then(function(){clearInterval(iv);if(st.parentNode)st.parentNode.removeChild(st);return attempt();});
+    });
+  }
+  var p=attempt();
   p.then(function(ans){AI.msgs.push({r:'ai',t:ans});})
    .catch(function(e){var m=String(e&&e.message||e), all=(e&&e.all||[]).concat(m).join(' | ');
      var errs=e&&e.all&&e.all.length?e.all:[m], net=errs.every(function(x){return AI_NET.test(x)||/abort/i.test(x);});
-     AI.msgs.push({r:'err',t:e&&e.fatal?m:net?'Non riesco a collegarmi ai servizi AI. Controlla la connessione e riprova. Se stai usando la pagina dentro Claude, la chat funziona solo dalla versione su GitHub o dall\'app per PC.':/limit|rate|429|quota|busy|every \d+ s/i.test(all)?'In questo momento tutti i modelli gratuiti sono al limite. Riprova tra un minuto.':/timeout/.test(all)?'I modelli gratuiti non stanno rispondendo in questo momento. Riprova tra poco.':'Nessun modello è riuscito a rispondere ('+m+'). Riprova tra poco.'});})
-   .then(function(){AI.busy=false;AI.el=null;if(view==='ai'){aiFill();aiGrow();var q=document.getElementById('aiq');if(q&&window.matchMedia('(pointer:fine)').matches)q.focus();}});
+     AI.msgs.push({r:'err',t:e&&e.fatal?m:net?'Non riesco a collegarmi ai servizi AI. Controlla la connessione e riprova. Se stai usando la pagina dentro Claude, la chat funziona solo dalla versione su GitHub o dall\'app per PC.':/limit|rate|429|quota|busy|every \d+ s/i.test(all)?'I servizi gratuiti senza chiave hanno raggiunto il limite per la tua connessione. Riprova tra un paio di minuti oppure, per non avere più attese, apri il menu del modello in alto e usa OpenRouter con una chiave gratuita.':/timeout/.test(all)&&!AI_LIM.test(all)?'I modelli gratuiti non stanno rispondendo in questo momento. Riprova tra poco.':'Nessun modello è riuscito a rispondere ('+m+'). Riprova tra poco.'});})
+   .then(function(){AI.busy=false;AI.el=null;var pn=document.querySelector('.aiset .panel'), os=pn&&pn.querySelector('.aistat');if(os)os.parentNode.removeChild(os);if(pn&&AI.prov==='free')pn.insertAdjacentHTML('beforeend',aiStatus());if(view==='ai'){aiFill();aiGrow();var q=document.getElementById('aiq');if(q&&window.matchMedia('(pointer:fine)').matches)q.focus();}});
 }
 function aiView(){
   aiLoadModels(AI.prov);
@@ -3455,7 +3492,7 @@ function aiView(){
     '<div class="seg" role="group" aria-label="Servizio"><button type="button" data-aiprov="free" aria-pressed="'+(prov==='free')+'">Senza chiave</button><button type="button" data-aiprov="or" aria-pressed="'+(prov==='or')+'">OpenRouter</button></div>'+
     '<select id="aimodel" aria-label="Modello">'+aiOptions()+'</select>'+
     (prov==='or'?'<input id="aikey" type="password" autocomplete="off" placeholder="Chiave OpenRouter (sk-or-…)" value="'+esc(AI.key)+'" aria-label="Chiave OpenRouter">':'')+
-    '<p class="note">'+(prov==='or'?'La chiave è gratuita e resta salvata solo su questo dispositivo. <a href="https://openrouter.ai/settings/keys" target="_blank" rel="noopener">Creane una su openrouter.ai</a>.':'Servizi pubblici gratuiti gestiti da terzi (Pollinations, OVHcloud, Kilo). In automatico ogni risposta usa un servizio diverso, per non fermarsi ai limiti di ciascuno; la conversazione resta la stessa.')+'</p></div></details>'+
+    '<p class="note">'+(prov==='or'?'La chiave è gratuita e resta salvata solo su questo dispositivo. <a href="https://openrouter.ai/settings/keys" target="_blank" rel="noopener">Creane una su openrouter.ai</a>.':'Servizi pubblici gratuiti gestiti da terzi (Pollinations, OVHcloud, Kilo). In automatico ogni risposta usa un servizio diverso, per non fermarsi ai limiti di ciascuno; la conversazione resta la stessa.')+'</p>'+aiStatus()+'</div></details>'+
     '<button type="button" class="ainew" data-act="ai-new">'+ic('plus')+'Nuova chat</button></div>';
   h+='<div id="chatlog" aria-live="polite"></div>';
   h+='<form class="composer" id="aiform"><textarea id="aiq" rows="1" placeholder="Scrivi un messaggio" aria-label="Messaggio">'+esc(AI.draft)+'</textarea><button id="aisend" type="submit" aria-label="Invia" disabled>'+ic('up')+'</button></form>';
