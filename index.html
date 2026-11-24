@@ -200,6 +200,7 @@ html.aimode header.top{flex:none;margin-bottom:6px}
 .msg.ai .av .ic{width:15px;height:15px}
 .msg.ai .tx{flex:1;min-width:0;white-space:pre-wrap;padding-top:1px}
 .msg.ai .tx code.blk{margin:8px 0}
+.aiwait{font-size:13px;color:var(--muted)}
 .msg .mh{display:block;font-size:1.06em;font-weight:650;letter-spacing:-.01em}
 .msg sup,.msg sub{font-size:.72em;line-height:0}
 .msg.ai.err .tx{color:var(--ko)}
@@ -3323,7 +3324,10 @@ function aiOptions(){
 function keepDraft(fn){var t=document.getElementById('aiq');if(t)AI.draft=t.value;fn();}
 // Chiamata in streaming: la risposta compare mentre viene scritta. Se il servizio risponde tutto insieme, funziona lo stesso.
 function aiCall(base,headers,model,onChunk){
-  var ctl=window.AbortController?new AbortController():null, to=setTimeout(function(){if(ctl)ctl.abort();},120000);
+  var ctl=window.AbortController?new AbortController():null, slow=false, any=false, oc=onChunk;
+  onChunk=function(a){any=true;oc(a);};
+  var to=setTimeout(function(){slow=true;if(ctl)ctl.abort();},120000), first=setTimeout(function(){if(!any){slow=true;if(ctl)ctl.abort();}},25000);
+  function fin(){clearTimeout(to);clearTimeout(first);}
   var msgs=[{role:'system',content:AI_SYS}].concat(AI.msgs.map(function(m){return {role:m.r==='user'?'user':'assistant',content:m.t};}));
   var url=/\/openai$/.test(base)?base:base+'/chat/completions';
   function fromJson(tx){var j=null;try{j=JSON.parse(tx);}catch(e){}return j;}
@@ -3354,7 +3358,7 @@ function aiCall(base,headers,model,onChunk){
     var rd=r.body.getReader(), dec=new TextDecoder();
     function pump(){return rd.read().then(function(x){if(x.done)return done();eat(dec.decode(x.value,{stream:true}));return pump();});}
     return pump();
-  });
+  }).then(function(v){fin();return v;},function(e){fin();if(slow)throw new Error('timeout: il modello non ha risposto in tempo');throw e;});
 }
 function aiMsgHtml(m){
   return m.r==='user'?'<div class="msg user">'+esc(m.t)+'</div>':'<div class="msg ai'+(m.r==='err'?' err':'')+'"><span class="av" aria-hidden="true">'+ic('spark')+'</span><div class="tx">'+(m.r==='err'?esc(m.t):aiFmt(m.t))+'</div></div>';
@@ -3365,6 +3369,7 @@ function aiFill(){
   if(!AI.msgs.length&&!AI.busy){
     log.innerHTML='<div class="aiempty"><h2>Come posso aiutarti?</h2><div class="chips">'+(AI_SUG[db.subj]||AI_SUG.chimica).map(function(t){return '<button type="button" data-sug="'+esc(t)+'">'+esc(t)+'</button>';}).join('')+'</div></div>';
   } else log.innerHTML=AI.msgs.map(aiMsgHtml).join('');
+  if(AI.busy&&AI.el)log.appendChild(AI.el);
   aiBottom();
 }
 function aiBottom(){var log=document.getElementById('chatlog');if(log)log.scrollTop=log.scrollHeight;}
@@ -3378,9 +3383,9 @@ function aiSend(text){
   if(t){t.value='';}
   aiFill();aiGrow();
   var el=document.createElement('div');el.className='msg ai';el.innerHTML='<span class="av" aria-hidden="true">'+ic('spark')+'</span><div class="tx"><span class="dots3" role="status" aria-label="Sto scrivendo"><i></i><i></i><i></i></span></div>';
-  if(log){log.appendChild(el);aiBottom();}
+  AI.el=el;if(log){log.appendChild(el);aiBottom();}
   var tx=el.querySelector('.tx'), got=false;
-  function onChunk(acc){got=true;var near=log&&(log.scrollHeight-log.scrollTop-log.clientHeight<120);tx.innerHTML=aiFmt(acc);if(near)aiBottom();}
+  function onChunk(acc){got=true;log=document.getElementById('chatlog');var near=log&&(log.scrollHeight-log.scrollTop-log.clientHeight<120);tx.innerHTML=aiFmt(acc);if(near)aiBottom();}
   // Catena di tentativi: se un modello è al limite o non risponde si passa al successivo, senza dirlo.
   // La conversazione resta la stessa, perché a ogni richiesta viene inviata tutta la cronologia.
   var h={'Content-Type':'application/json'}, tries=[], seenT={};
@@ -3395,12 +3400,11 @@ function aiSend(text){
     else if(AI.last&&ms.indexOf(AI.last)>0)ms=[AI.last].concat(ms);
     ms.slice(0,6).forEach(function(id){add(AI_FREE[0],h,id);});
     add(AI_FREE[1],h,'openai-fast');
-    ms.filter(function(id){return /:free$/.test(id);}).slice(0,3).forEach(function(id){add(AI_FREE[2],h,id);});
   }
   function runChain(){
-    var errs=[], i=0;
+    var errs=[], i=0, t0=Date.now();
     function next(){
-      if(i>=tries.length){var er=new Error(errs[errs.length-1]||'Nessun modello disponibile');er.all=errs;throw er;}
+      if(i>=tries.length||Date.now()-t0>80000){var er=new Error(errs[errs.length-1]||'Nessun modello disponibile');er.all=errs;throw er;}
       var t=tries[i++];
       return aiCall(t.base,t.h,t.model,onChunk).then(function(ans){if(AI.prov==='free')AI.last=t.model;return ans;},function(e){
         if(got)throw e;                       // risposta già iniziata: non si riparte da capo
@@ -3412,18 +3416,21 @@ function aiSend(text){
     return next();
   }
   function waitFor(errs){ // se tutti chiedono di aspettare pochi secondi, si aspetta e si riprova una volta
-    var best=0;(errs||[]).forEach(function(m){var x=/(?:retry|riprova)[^0-9]{0,20}(\d{1,3})\s*s/i.exec(m);if(x){var v=+x[1];if(!best||v<best)best=v;}});
+    var best=0;(errs||[]).forEach(function(m){var x=/(?:retry|riprova)[^0-9]{0,20}(\d{1,3})\s*s/i.exec(m)||/(?:every|ogni)\s+(\d{1,3})\s*s/i.exec(m);if(x){var v=+x[1];if(!best||v<best)best=v;}});
     return best&&best<=60?best:0;
   }
   var p=runChain().catch(function(e){
     var w=!e.fatal&&!got&&waitFor(e.all);
     if(!w)throw e;
-    return new Promise(function(res){setTimeout(res,(w+1)*1000);}).then(runChain);
+    var left=w+1, st=document.createElement('div');st.className='aiwait';st.setAttribute('role','status');tx.appendChild(st);
+    function show(){st.textContent='I modelli gratuiti sono al limite: riprovo da solo tra '+left+' s';}
+    show();var iv=setInterval(function(){left--;if(left>0)show();},1000);
+    return new Promise(function(res){setTimeout(res,(w+1)*1000);}).then(function(){clearInterval(iv);if(st.parentNode)st.parentNode.removeChild(st);return runChain();});
   });
   p.then(function(ans){AI.msgs.push({r:'ai',t:ans});})
-   .catch(function(e){var m=String(e&&e.message||e);
-     AI.msgs.push({r:'err',t:e&&e.fatal?m:/Failed to fetch|NetworkError|Load failed|abort/i.test(m)?'Non riesco a collegarmi ai servizi AI. Controlla la connessione e riprova. Se stai usando la pagina dentro Claude, la chat funziona solo dalla versione su GitHub o dall\'app per PC.':/limit|rate|429|quota|busy/i.test(m)?'In questo momento tutti i modelli gratuiti sono al limite. Riprova tra un minuto.':'Nessun modello è riuscito a rispondere ('+m+'). Riprova tra poco.'});})
-   .then(function(){AI.busy=false;if(view==='ai'){aiFill();aiGrow();var q=document.getElementById('aiq');if(q&&window.matchMedia('(pointer:fine)').matches)q.focus();}});
+   .catch(function(e){var m=String(e&&e.message||e), all=(e&&e.all||[]).concat(m).join(' | ');
+     AI.msgs.push({r:'err',t:e&&e.fatal?m:/Failed to fetch|NetworkError|Load failed|abort/i.test(m)?'Non riesco a collegarmi ai servizi AI. Controlla la connessione e riprova. Se stai usando la pagina dentro Claude, la chat funziona solo dalla versione su GitHub o dall\'app per PC.':/limit|rate|429|quota|busy|every \d+ s/i.test(all)?'In questo momento tutti i modelli gratuiti sono al limite. Riprova tra un minuto.':/timeout/.test(all)?'I modelli gratuiti non stanno rispondendo in questo momento. Riprova tra poco.':'Nessun modello è riuscito a rispondere ('+m+'). Riprova tra poco.'});})
+   .then(function(){AI.busy=false;AI.el=null;if(view==='ai'){aiFill();aiGrow();var q=document.getElementById('aiq');if(q&&window.matchMedia('(pointer:fine)').matches)q.focus();}});
 }
 function aiView(){
   aiLoadModels(AI.prov);
